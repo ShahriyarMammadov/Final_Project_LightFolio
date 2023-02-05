@@ -8,6 +8,11 @@
 #section1 {
   font-family: "Playfair Display", serif;
   margin-top: -85px;
+
+  @media only screen and (max-width: 900px) {
+    text-align: center;
+  }
+
   .backGroundImage {
     background-image: url("../../../assets//images/section1-backgroundImage.jpg");
     width: 100%;
@@ -38,15 +43,29 @@
     }
   }
 }
+
 #section2 {
+  .headerText {
+    @media only screen and (max-width: 900px) {
+      padding: 80px 50px;
+    }
+
+    p {
+      width: 52%;
+      text-align: center;
+      margin: 0 auto;
+    }
+  }
   .cardBackImage {
     position: relative;
+
     .colorImg {
       position: relative;
       background-color: #f5f5f5;
       width: 65vw;
       height: 450px;
       margin: 0 auto;
+      z-index: -1;
 
       .borderImg {
         width: 100%;
@@ -59,16 +78,17 @@
     }
 
     .imageCard {
-      position: absolute;
       @include flexBox;
-      top: 50px;
       gap: 30px;
       width: 100%;
+      padding: 0 2%;
+      margin-top: -400px;
 
       .card {
+        width: 20%;
         a {
           img {
-            width: 17vw;
+            width: 100%;
             transition: all 0.6s;
             &:hover {
               margin-top: -20px;
@@ -84,6 +104,135 @@
             font-size: 12px;
             margin-top: 0;
           }
+        }
+
+        @media only screen and (max-width: 900px) {
+          width: 100%;
+          &.card1 {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  .pageAndFont {
+    padding-top: 150px;
+    padding-bottom: 60px;
+    font-family: "Playfair Display", serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    @include flexBox();
+    gap: 2%;
+    border-bottom: 1px solid grey;
+
+    .cardPageAndFont {
+      @include flexBox();
+      gap: 20px;
+
+      .number {
+        font-size: 32px;
+      }
+
+      .text {
+        .header {
+          a {
+            text-decoration: none;
+            color: rgb(33, 37, 41);
+
+            &:hover {
+              text-decoration: underline;
+            }
+            h5 {
+              font-weight: 500;
+              font-size: 24px;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#section3 {
+  padding-bottom: 180px;
+  .headerText {
+    padding: 15px 0;
+    p {
+      font-family: "Poppins", sans-serif;
+      font-size: 10px;
+    }
+  }
+
+  .logoImage {
+    max-width: 1200px;
+    margin: 0 auto;
+    @include flexBox(space-between);
+
+    .image {
+      width: 12%;
+      img {
+        opacity: 0.8;
+        width: 100%;
+      }
+    }
+  }
+
+  .proofPhotos {
+    margin-top: 40px;
+    background-image: url("../../../assets/images/photo-proofing-model.jpg");
+    width: 100%;
+    height: 75vh;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+    background-attachment: fixed;
+
+    .text {
+      max-width: 1200px;
+      width: 450px;
+      margin: 0 auto;
+      margin-left: 60%;
+      padding-top: 6%;
+
+      h1 {
+        color: white;
+        width: 85%;
+      }
+      p {
+        color: rgb(221, 221, 221);
+        padding-bottom: 25px;
+      }
+      a {
+        @extend %secondary-button;
+      }
+    }
+
+    .littleCardImage {
+      max-width: 1200px;
+      margin: 70px auto;
+      @include flexBox(flex-end, center);
+      gap: 10px;
+
+      .littleCard {
+        background-color: white;
+        padding: 10px;
+        width: 15%;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+        img {
+          width: 100%;
+          border-radius: 10px;
+        }
+        &.card1 {
+          transform: rotate(-4deg);
+        }
+        &.card2 {
+          margin-top: -60px;
+        }
+        &.card3 {
+          transform: rotate(6deg);
         }
       }
     }

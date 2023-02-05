@@ -131,6 +131,7 @@ const Header = () => {
           </Link>
         </div>
       </div>
+      <i className="fa-solid fa-bars"></i>
     </header>
   );
 };
