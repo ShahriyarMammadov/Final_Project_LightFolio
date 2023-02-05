@@ -1,0 +1,23 @@
+@import "../utils/variables";
+
+h1 {
+  font-size: 54px;
+  font-weight: 400;
+  margin: 0;
+}
+h2 {
+  font-size: 48px;
+  font-weight: 400;
+  margin: 0;
+}
+h3 {
+  font-size: 40px;
+  font-weight: 400;
+  margin: 0;
+}
+
+p {
+  font-size: 18px;
+  font-weight: 400;
+  color: $secondary-color;
+}

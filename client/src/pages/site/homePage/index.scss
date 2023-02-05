@@ -1,0 +1,91 @@
+@import "../../../assets//sass//base/typography";
+@import "../../../assets/sass//components/button";
+@import "../../../assets/sass/base/typography";
+@import "../../../assets/sass/utils/mixins";
+@import "../../../assets/sass/utils/variables";
+@import "../../../assets/sass/base/global";
+
+#section1 {
+  font-family: "Playfair Display", serif;
+  margin-top: -85px;
+  .backGroundImage {
+    background-image: url("../../../assets//images/section1-backgroundImage.jpg");
+    width: 100%;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+
+    .text {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 14%;
+
+      span {
+        font-size: 56px !important;
+        color: #deb060;
+      }
+
+      p {
+        padding-bottom: 20px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      a {
+        @extend %secondary-button;
+      }
+    }
+  }
+}
+#section2 {
+  .cardBackImage {
+    position: relative;
+    .colorImg {
+      position: relative;
+      background-color: #f5f5f5;
+      width: 65vw;
+      height: 450px;
+      margin: 0 auto;
+
+      .borderImg {
+        width: 100%;
+        height: 450px;
+        position: absolute;
+        border: 1px solid #ddd;
+        top: 10px;
+        left: 10px;
+      }
+    }
+
+    .imageCard {
+      position: absolute;
+      @include flexBox;
+      top: 50px;
+      gap: 30px;
+      width: 100%;
+
+      .card {
+        a {
+          img {
+            width: 17vw;
+            transition: all 0.6s;
+            &:hover {
+              margin-top: -20px;
+              box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+                rgba(0, 0, 0, 0.23) 0px 6px 6px;
+            }
+          }
+        }
+        .text {
+          text-align: center;
+          p {
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}
