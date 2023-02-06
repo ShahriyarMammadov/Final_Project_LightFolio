@@ -1,5 +1,6 @@
 import React from "react";
 import "./index.scss";
+import { Helmet } from "react-helmet";
 import { TypeAnimation } from "react-type-animation";
 import { Link } from "react-router-dom";
 import image1 from "../../../assets/images/cardImage1.jpg";
@@ -15,10 +16,19 @@ import stripe from "../../../assets/images/logo_stripe.gif";
 import coverImg1 from "../../../assets/images/cover-model-1.jpg";
 import coverImg2 from "../../../assets/images/cover-model-2.jpg";
 import coverImg3 from "../../../assets/images/cover-model-3.jpg";
+import digitalImage from "../../../assets/images/digital downloads photo.jpg";
+import galleryImage from "../../../assets/images/gallery-directory.jpg";
+import beachModel from "../../../assets/images/beachModel.png";
+import onlineSales from "../../../assets/images/online-sales.jpg";
+import worldPhotographer from "../../../assets/images/world-photographers.jpg";
 
 const HomePage = () => {
   return (
     <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>LightFolio: Client Photo Gallery for PhotoGraphers</title>
+      </Helmet>
       <section id="section1">
         <div className="backGroundImage">
           <div className="text">
@@ -209,7 +219,7 @@ const HomePage = () => {
             </p>
 
             <Link to={"/photo-proofing"}>
-              <i class="fa-solid fa-right-long"></i> PROOF PHOTOS
+              <i className="fa-solid fa-right-long"></i> PROOF PHOTOS
             </Link>
           </div>
           <div className="littleCardImage">
@@ -223,6 +233,109 @@ const HomePage = () => {
               <img src={coverImg3} alt="" />
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="section4">
+        <div className="left">
+          <img src={digitalImage} alt="" />
+        </div>
+        <div className="right">
+          <p className="delivery">DELIVERY</p>
+          <Link to={"/"}>
+            <h2>Digital Downloads</h2>
+          </Link>
+          <div className="text">
+            <p>
+              Conveniently deliver photos to your clients online. With every
+              photo gallery, control file size and restrict access with a
+              personalized password--all at the click of a button.
+            </p>
+          </div>
+          <Link to={"/"} className="clientBTn">
+            <i className="fa-solid fa-right-long"></i> CLIENT DOWNLOADS
+          </Link>
+        </div>
+      </section>
+
+      <section id="section5">
+        <div className="right">
+          <p className="delivery">PORTAL</p>
+          <Link to={"/"}>
+            <h2>A mini website for your photo galleries</h2>
+          </Link>
+          <div className="text">
+            <p>
+              Organize your client photo galleries into a central repository.
+              This gives your clients an easy way to find all of your published
+              online galleries. Customize your directory by choosing from
+              <Link to={"/themes"}>several themes</Link> and use the SEO
+              settings to improve your search engine rankings.
+            </p>
+          </div>
+          <Link to={"/"} className="clientBTn">
+            <i className="fa-solid fa-right-long"></i> GALLERY DIRECTORIES
+          </Link>
+        </div>
+        <div className="left">
+          <img src={galleryImage} alt="" />
+        </div>
+      </section>
+
+      <section id="section6">
+        <div className="left">
+          <img src={beachModel} alt="" />
+        </div>
+        <div className="right">
+          <p className="delivery">ANALYTICS</p>
+          <h2>Photo gallery activity reports</h2>
+          <div className="text">
+            <p>
+              Quickly identify which images have been viewed, how many times,
+              and which images have been downloaded and/or favorited. Lightfolio
+              analytics gives you insight into all your online gallery traffic.
+            </p>
+          </div>
+          <Link to={"/"} className="clientBTn">
+            <i className="fa-solid fa-right-long"></i> VISITOR ANALYTICS
+          </Link>
+        </div>
+      </section>
+
+      <section id="section7">
+        <div className="right">
+          <p className="delivery">SALES</p>
+          <Link to={"/online-store"}>
+            <h2>Sell Online</h2>
+          </Link>
+          <div className="text">
+            <p>
+              Allow your clients to purchase prints, digital downloads and more.
+              Process your own orders or integrate with our{" "}
+              <Link to={"/lab-partners"}>photo lab partners</Link>. Set your own
+              pricing, minimum orders, shipping rates and create coupons.
+            </p>
+          </div>
+          <Link to={"/online-store"} className="clientBTn">
+            <i className="fa-solid fa-right-long"></i> ONLINE SALES
+          </Link>
+        </div>
+        <div className="left">
+          <img src={onlineSales} alt="" />
+        </div>
+      </section>
+
+      <section id="section8">
+        <div className="headerText">
+          <h2>Global Network </h2>
+          <p>
+            Create your <Link to={"/signup"}>free online photo gallery</Link>{" "}
+            and join photographers in 110+ countries around the globe.{" "}
+            <Link to={"/signup"}>Join your peers today</Link>.
+          </p>
+        </div>
+        <div className="image">
+          <img src={worldPhotographer} alt="" />
         </div>
       </section>
     </div>

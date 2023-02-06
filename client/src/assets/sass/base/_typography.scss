@@ -1,18 +1,19 @@
 @import "../utils/variables";
 
 h1 {
-  font-size: 54px;
-  font-weight: 400;
+  font-size: 54px !important;
+  font-weight: 400 !important;
   margin: 0;
 }
 h2 {
-  font-size: 48px;
-  font-weight: 400;
+  font-size: 48px !important;
+  font-weight: 400 !important ;
   margin: 0;
+  font-family: "Playfair Display", serif;
 }
 h3 {
-  font-size: 40px;
-  font-weight: 400;
+  font-size: 40px !important;
+  font-weight: 400 !important;
   margin: 0;
 }
 

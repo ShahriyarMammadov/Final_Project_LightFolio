@@ -125,9 +125,22 @@ header {
     color: white;
     padding: 8px;
     border-radius: 10px;
+    z-index: 5000;
 
     @media only screen and (max-width: 900px) {
       display: block;
     }
+  }
+}
+.chakra-modal__body {
+  display: flex !important;
+  flex-direction: column !important;
+
+  a {
+    margin-top: 15px;
+  }
+
+  .home {
+    margin-top: 0;
   }
 }
