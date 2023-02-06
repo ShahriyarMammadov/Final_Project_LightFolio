@@ -284,10 +284,10 @@ const AccordionComponent = () => {
             </AccordionButton>
           </h2>
           <AccordionPanel pb={4}>
-            Please reach out with other question at: 
+            Please reach out with other question at:
             <span
               onClick={(e) => {
-                window.location.href = "mailto:example@email.com";
+                window.location.href = "mailto:hello@lightfolio.com";
               }}
             >
               hello@lightfolio.com
