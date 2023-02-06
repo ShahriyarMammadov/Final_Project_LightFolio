@@ -21,6 +21,8 @@ import galleryImage from "../../../assets/images/gallery-directory.jpg";
 import beachModel from "../../../assets/images/beachModel.png";
 import onlineSales from "../../../assets/images/online-sales.jpg";
 import worldPhotographer from "../../../assets/images/world-photographers.jpg";
+import faq from "../../../assets/images/faq.jpg";
+import AccordionComponent from "../../../components/accordion";
 
 const HomePage = () => {
   return (
@@ -336,6 +338,66 @@ const HomePage = () => {
         </div>
         <div className="image">
           <img src={worldPhotographer} alt="" />
+        </div>
+
+        <div className="headerText">
+          <h2>More Lightfolio Products</h2>
+          <p>
+            <i>
+              {"{ Lightfolio is a suite of online tools for photographers }"}
+            </i>
+          </p>
+        </div>
+
+        <div className="detailCard">
+          <div className="card">
+            <div className="icon">
+              <i className="fa-solid fa-database"></i>
+            </div>
+            <div className="text">
+              <Link to={"/crm-for-photographers"}>CRM for Photographers</Link>{" "}
+              Studio management software helps you get a handle on your
+              photography business. Lightfolio Studio Manager lets you book
+              clients online and helps you keep your calendar organized.
+            </div>
+          </div>
+          <div className="card">
+            <div className="icon">
+              <i className="fa-solid fa-file-contract"></i>
+            </div>
+            <div className="text">
+              <Link to={"/photography-contracts"}>Photography Contracts</Link>{" "}
+              Use our intuitive form builder. Use our templates as a starting
+              point and customize and tailor them to your needs, or simply build
+              from scratch. Add your logo and customize colors and layout.
+            </div>
+          </div>
+          <div className="card">
+            <div className="icon">
+              <i className="fa-solid fa-file-invoice"></i>
+            </div>
+            <div className="text">
+              <Link to={"/photography-invoices"}>Photography Invoices</Link>{" "}
+              Getting the form in the hands of your clients is easy. Post a link
+              on your social media profile, embed the form directly on your
+              website or send an email with a unique, trackable link.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="section9">
+        <div className="right">
+          <p className="delivery">FAQ</p>
+
+          <h2>Questions about client galleries?</h2>
+
+          <div className="text">
+            <img src={faq} alt="" />
+          </div>
+        </div>
+        <div className="left">
+          <AccordionComponent />
         </div>
       </section>
     </div>
