@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import image from "../../../assets/images/client-downloads.jpg";
 import "./index.scss";
@@ -6,6 +7,10 @@ import "./index.scss";
 const DigitalDownloadsPage = () => {
   return (
     <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Client Photo Delivery - LightFolio</title>
+      </Helmet>
       <section id="downloadPage">
         <div className="section1">
           <div className="left">

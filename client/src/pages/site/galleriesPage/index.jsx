@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import galleryImg from "../../../assets/images/galleryPage.jpg";
 import "./index.scss";
@@ -6,6 +7,10 @@ import "./index.scss";
 const GalleriesPage = () => {
   return (
     <div id="galleriesPage">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Features - LightFolio</title>
+      </Helmet>
       <div className="headerText">
         <h2>Client Galleries - Feature List</h2>
         <p>

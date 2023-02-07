@@ -2,12 +2,13 @@
 @import "../../../assets/sass/utils/mixins";
 @import "../../../assets/sass/components/card";
 
-#downloadPage {
+#onlineStore {
   .section1 {
     background-color: #fbf6df;
     padding-top: 80px;
     @include flexBox();
     overflow: hidden;
+    height: 90vh;
 
     @media only screen and (max-width: 900px) {
       flex-direction: column;
@@ -45,8 +46,8 @@
     }
 
     .right {
-      width: 56%;
-      margin-right: -8%;
+      width: 58%;
+      margin-right: -10%;
 
       @media only screen and (max-width: 900px) {
         width: 90%;
@@ -64,8 +65,25 @@
 
   .section2 {
     padding: 120px 0;
+
+    .headerText {
+      padding-top: 0px;
+
+      p {
+        color: black;
+        padding-top: 25px;
+      }
+    }
     .cards {
       @extend %icon-card;
+      .text {
+        p {
+          a {
+            display: inline !important;
+            font-size: 16px !important;
+          }
+        }
+      }
     }
   }
 }

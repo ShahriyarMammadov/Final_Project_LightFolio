@@ -6,7 +6,9 @@ import DigitalDownloadsPage from "../pages/site/digitalDownloadPages";
 import ErrorPage from "../pages/site/errorPage";
 import GalleriesPage from "../pages/site/galleriesPage";
 import HomePage from "../pages/site/homePage";
+import OnlineStorePage from "../pages/site/onlineStorePage";
 import PricingPage from "../pages/site/pricingPage";
+import VisitorAnalytics from "../pages/site/visitorAnalyticsPage";
 
 const Router = () => {
   return (
@@ -20,6 +22,8 @@ const Router = () => {
           path="/deliver-photos-to-client"
           element={<DigitalDownloadsPage />}
         />
+        <Route path="/visitor-analytics" element={<VisitorAnalytics />} />
+        <Route path="/online-store" element={<OnlineStorePage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Footer />
