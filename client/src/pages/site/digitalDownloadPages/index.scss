@@ -1,0 +1,71 @@
+@import "../../../assets/sass/components/button";
+@import "../../../assets/sass/utils/mixins";
+@import "../../../assets/sass/components/card";
+
+#downloadPage {
+  .section1 {
+    background-color: #fbf6df;
+    padding-top: 80px;
+    @include flexBox();
+    overflow: hidden;
+
+    @media only screen and (max-width: 900px) {
+      flex-direction: column;
+    }
+
+    .left {
+      max-width: 1200;
+      margin: 0 auto;
+      width: 450px;
+
+      @media only screen and (max-width: 900px) {
+        width: 95%;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 54px;
+      }
+
+      p {
+        padding-top: 30px;
+        font-size: 28px;
+        color: black;
+        line-height: 33.3px;
+        font-weight: 500;
+      }
+      .link {
+        margin-top: 40px;
+        a {
+          @extend %secondary-button;
+          padding: 10px 40px;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .right {
+      width: 56%;
+      margin-right: -8%;
+
+      @media only screen and (max-width: 900px) {
+        width: 90%;
+        margin-right: 0;
+        height: 60%;
+        margin-top: 60px;
+      }
+
+      img {
+        width: 100vw;
+        height: 100%;
+      }
+    }
+  }
+
+  .section2 {
+    padding: 120px;
+    .cards {
+      @extend %icon-card;
+    }
+  }
+}
