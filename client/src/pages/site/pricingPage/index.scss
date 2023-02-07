@@ -1,0 +1,202 @@
+@import "../../../assets/sass/components/button";
+
+#pricing {
+  .headerText {
+    font-family: "Playfair Display", serif !important;
+    background-color: #222222;
+    max-width: inherit;
+    padding: 120px 0;
+    h2 {
+      color: white;
+      font-weight: 700 !important;
+      font-size: 42px !important;
+    }
+    p {
+      font-family: "Poppins", sans-serif;
+      margin-top: 20px;
+    }
+  }
+  .tabHeader {
+    i {
+      display: block;
+      padding: 40px 0;
+    }
+  }
+  .tabComponent {
+    .chakra-tabs__tab {
+      margin-top: 40px;
+      color: #888888;
+      font-weight: 700;
+      font-family: "Poppins", sans-serif;
+
+      &:hover {
+        color: black;
+      }
+    }
+    .css-1ss3utg[aria-selected="true"] {
+      margin-left: 20px;
+      background-color: #222222;
+      color: white;
+    }
+    .chakra-tabs__tablist {
+      display: flex;
+      justify-content: center;
+
+      @media only screen and (max-width: 425px) {
+        flex-direction: column;
+      }
+    }
+    .chakra-tabs__tab-panel {
+      max-width: 1300px;
+      margin: 0 auto;
+      .tabHeader {
+        text-align: center;
+      }
+    }
+    table {
+      border: 1px solid grey;
+
+      @media only screen and (max-width: 900px) {
+      }
+      p {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 21px;
+      }
+      tr {
+        &.headertd {
+          text-align: center;
+          td {
+            font-size: 40px;
+            font-weight: 700;
+
+            span {
+              font-weight: 700;
+              font-size: 16px;
+              color: rgb(51, 51, 51);
+              line-height: 12px;
+            }
+          }
+          span {
+            font-size: 12px;
+          }
+        }
+        &.storagetr {
+          td {
+            span {
+              color: rebeccapurple;
+              text-decoration: underline;
+              font-weight: 700;
+              font-size: 14px;
+              color: black;
+              line-height: 21px;
+            }
+          }
+        }
+
+        &.colourHeader {
+          text-align: center;
+          color: #3fc380;
+          font-weight: 600;
+
+          td {
+            font-size: 15px;
+            i {
+              font-size: 15px;
+              background-color: transparent;
+              color: #3fc380;
+            }
+          }
+        }
+
+        &.underlinetd {
+          td {
+            text-decoration: underline;
+            font-weight: 700;
+            font-size: 18px;
+            padding: 20px 15px;
+          }
+        }
+
+        th {
+          padding: 20px 0;
+          font-size: 24px;
+          border: 1px solid grey;
+        }
+        td {
+          width: 20%;
+          padding: 8px 15px;
+          border-right: 1px solid grey;
+          font-size: 14px;
+
+          i {
+            color: white;
+            background-color: #3fc380;
+            padding: 4px;
+            font-size: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+          }
+          a {
+            @extend %pricing-button;
+            border-radius: 6px;
+            display: block;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+
+  #section2 {
+    .headerText {
+      background-color: white;
+      padding-bottom: 0;
+      h2 {
+        color: #222222;
+      }
+    }
+
+    .textCard {
+      padding: 0 5%;
+      display: flex;
+      justify-content: center;
+      max-width: 1300px;
+      margin: 0 auto;
+      gap: 10px;
+      font-family: "Poppins", sans-serif;
+
+      @media only screen and (max-width: 425px) {
+        flex-direction: column;
+      }
+
+      .left,
+      .right {
+        .card {
+          margin-top: 80px;
+        }
+        h4 {
+          color: rgb(85, 85, 85);
+          font-weight: 700;
+        }
+        .card {
+          p {
+            color: rgb(51, 51, 51);
+            font-weight: 400;
+            padding-top: 10px;
+            font-size: 16px;
+            span {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+
+      .right {
+        .salesCard {
+          margin-top: 100px;
+        }
+      }
+    }
+  }
+}

@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <header
       style={{
-        background: useLocation().pathname === "/" ? "transparent" : "red",
+        background: useLocation().pathname === "/" ? "transparent" : "white",
       }}
     >
       <div id="header">
