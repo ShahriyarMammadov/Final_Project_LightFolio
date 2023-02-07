@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 const ErrorPage = () => {
   return (
     <div>
-      <p class="zoom-area">
+      <p className="zoom-area">
         <b>Page Not Found.</b>{" "}
       </p>
-      <section class="error-container">
+      <section className="error-container">
         <span>
           <span>4</span>
         </span>
@@ -17,7 +17,7 @@ const ErrorPage = () => {
           <span>4</span>
         </span>
       </section>
-      <div class="link-container">
+      <div className="link-container">
         <Link to={"/"}>GO TO HOME</Link>
       </div>
     </div>

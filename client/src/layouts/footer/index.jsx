@@ -143,7 +143,7 @@ const Footer = () => {
           </nav>
         </div>
 
-        <div className="navCard">
+        <div className="navCard support">
           <div className="header">
             <h5>SUPPORT</h5>
           </div>

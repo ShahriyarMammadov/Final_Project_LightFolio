@@ -19,6 +19,10 @@ const Header = () => {
     <header
       style={{
         background: useLocation().pathname === "/" ? "transparent" : "white",
+        // boxShadow:
+        //   useLocation().pathname === "/"
+        //     ? "white"
+        //     : "rgba(0, 0, 0, 0.2) 0px 20px 30px; !important",
       }}
     >
       <div id="header">
