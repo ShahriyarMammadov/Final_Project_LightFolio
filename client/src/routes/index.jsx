@@ -5,10 +5,12 @@ import Header from "../layouts/header";
 import DigitalDownloadsPage from "../pages/site/digitalDownloadPages";
 import ErrorPage from "../pages/site/errorPage";
 import GalleriesPage from "../pages/site/galleriesPage";
+import GalleryDirectoriesPage from "../pages/site/galleryDirectoriesPage";
 import HomePage from "../pages/site/homePage";
 import OnlineStorePage from "../pages/site/onlineStorePage";
 import PricingPage from "../pages/site/pricingPage";
 import ProofingPage from "../pages/site/proofingPage";
+import ThemesPage from "../pages/site/themesPage";
 import VisitorAnalytics from "../pages/site/visitorAnalyticsPage";
 
 const Router = () => {
@@ -26,6 +28,11 @@ const Router = () => {
         <Route path="/visitor-analytics" element={<VisitorAnalytics />} />
         <Route path="/online-store" element={<OnlineStorePage />} />
         <Route path="/photo-proofing" element={<ProofingPage />} />
+        <Route
+          path="/gallery-directories"
+          element={<GalleryDirectoriesPage />}
+        />
+        <Route path="/themes" element={<ThemesPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Footer />

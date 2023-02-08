@@ -9,7 +9,7 @@ const OnlineStorePage = () => {
     <div id="onlineStore">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Online STore - LightFolio</title>
+        <title>Online Store - LightFolio</title>
       </Helmet>
       <section id="onlinePage">
         <div className="section1">
