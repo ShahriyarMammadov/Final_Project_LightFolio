@@ -1,0 +1,235 @@
+@import "../../../assets/sass/utils/mixins";
+@import "../../../assets/sass/components/button";
+@import "../../../assets/sass/components/imageandText";
+
+#proofing {
+  .section1 {
+    background-color: #faf5ec;
+    padding-bottom: 60px;
+
+    .left {
+      text-align: center;
+      width: 40%;
+
+      @media only screen and (max-width: 900px) {
+        width: 90%;
+      }
+
+      p {
+        font-size: 16px;
+        color: grey;
+        padding-top: 0;
+      }
+
+      h1 {
+        font-size: 48px !important;
+        line-height: 57px;
+      }
+      .headerTxt {
+        p {
+          color: #ddb06e;
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 24px;
+        }
+      }
+    }
+
+    .right {
+      position: relative;
+      .image {
+        position: absolute;
+        left: -60px;
+        top: 140px;
+
+        @media only screen and (max-width: 426px) {
+          display: none;
+        }
+
+        img {
+          background-color: white;
+          padding: 10px;
+          border-radius: 20px;
+          padding-bottom: 40px;
+          width: 35%;
+          box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+
+        i {
+          position: absolute;
+          font-size: 28px;
+          color: red;
+          top: 260px;
+          left: 15px;
+        }
+      }
+    }
+  }
+
+  .sec2 {
+    max-width: 1200px;
+    margin: 0 auto;
+    .cards {
+      @include flexBox();
+      gap: 10px;
+
+      @media only screen and (max-width: 900px) {
+        flex-direction: column;
+        .card {
+          padding-top: 40px;
+        }
+        .images {
+          display: none;
+        }
+      }
+      .card {
+        font-family: "Poppins", sans-serif;
+        text-align: center;
+        h4 {
+          font-weight: 700;
+          span {
+            display: inline-block;
+            background-color: black;
+            color: white;
+            width: 20px;
+            font-size: 12px;
+            text-align: center;
+            padding: 1px;
+            border-radius: 50%;
+          }
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+      .images {
+        img {
+          width: 90%;
+
+          &.arrowTop1 {
+            transform: rotateX(180deg);
+          }
+        }
+      }
+    }
+
+    .videos {
+      margin-top: 40px;
+      .video {
+        gap: 40px;
+        @include flexBox();
+        video {
+          box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+          height: fit-content;
+          width: 40%;
+          &.adminVideo {
+            width: 30%;
+            height: fit-content;
+          }
+        }
+      }
+
+      p {
+        text-align: center;
+        padding-top: 40px;
+        font-size: 14px;
+        line-height: 21px;
+        font-family: "poppins", serif;
+        font-weight: 700;
+      }
+    }
+  }
+  .colour {
+    .color {
+      display: flex;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 0;
+      gap: 50px;
+
+      @media only screen and (max-width: 900px) {
+        flex-direction: column;
+        .right {
+          width: 100%;
+          margin: 0 auto;
+        }
+
+        .left {
+          margin: 0 auto;
+          text-align: center;
+          width: 100% !important;
+        }
+      }
+
+      .left {
+        width: 50%;
+
+        .text {
+          p {
+            font-size: 16px;
+            color: black;
+            padding: 20px 0;
+          }
+        }
+
+        a {
+          @extend %secondary-button;
+          display: inline-block;
+          padding: 8px 20px;
+        }
+      }
+
+      .right {
+        width: 50%;
+      }
+    }
+  }
+  .sec {
+    padding-top: 0;
+    align-items: center;
+    .left {
+      width: 60%;
+    }
+
+    .right {
+      padding-top: 160px;
+      img {
+        width: 65%;
+        height: 100%;
+      }
+    }
+  }
+
+  .section4 {
+    padding-top: 100px;
+    .headerText {
+      max-width: inherit;
+      p {
+        padding-top: 30px;
+      }
+    }
+  }
+  .headerText {
+    padding-bottom: 0;
+  }
+  .cards {
+    .card {
+      a {
+        display: inline !important;
+      }
+
+      .text {
+        h4 {
+          font-weight: 700;
+          color: black !important;
+          font-size: 20px !important;
+        }
+      }
+    }
+  }
+  .colour {
+    background-color: #f5f8fb;
+  }
+}

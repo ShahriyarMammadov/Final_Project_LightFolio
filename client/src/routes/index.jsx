@@ -8,6 +8,7 @@ import GalleriesPage from "../pages/site/galleriesPage";
 import HomePage from "../pages/site/homePage";
 import OnlineStorePage from "../pages/site/onlineStorePage";
 import PricingPage from "../pages/site/pricingPage";
+import ProofingPage from "../pages/site/proofingPage";
 import VisitorAnalytics from "../pages/site/visitorAnalyticsPage";
 
 const Router = () => {
@@ -24,6 +25,7 @@ const Router = () => {
         />
         <Route path="/visitor-analytics" element={<VisitorAnalytics />} />
         <Route path="/online-store" element={<OnlineStorePage />} />
+        <Route path="/photo-proofing" element={<ProofingPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Footer />
