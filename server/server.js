@@ -1,26 +1,38 @@
 const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const authRoutes = require("./Routes/AuthRoutes");
+const cookieParser = require("cookie-parser");
+
 const app = express();
-
-app.set("view-engine", "ejs");
-
-app.use(express.urlencoded({ extended: false }));
-
-app.get("/", (req, res) => {
-  res.render("index.ejs", { name: "Shahriyar" });
+const port = 3000;
+app.listen(port, () => {
+  console.log("server islediiiiii .. . . .");
 });
 
-app.get("/login", (req, res) => {
-  res.render("login.ejs");
-});
+mongoose
+  .connect(
+    "mongodb+srv://ShahriyarMammadov:sehriyar123@cluster0.xjblasa.mongodb.net/?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
+    console.log("connect");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
-app.get("/register", (req, res) => {
-  res.render("register.ejs");
-});
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    method: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
-app.post("/login", (req, res) => {});
- 
-app.post("/register", (req, res) => {
-  req.body.email;
-});
-
-app.listen(3000);
+app.use(cookieParser());
+app.use(express.json());
+app.use("/", authRoutes);

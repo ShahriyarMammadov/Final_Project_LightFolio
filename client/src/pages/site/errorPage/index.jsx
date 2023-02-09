@@ -1,10 +1,14 @@
 import React from "react";
 import "./index.scss";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const ErrorPage = () => {
   return (
     <div>
+      <Helmet>
+        <title>Page Not Found...</title>
+      </Helmet>
       <p className="zoom-area">
         <b>Page Not Found.</b>{" "}
       </p>

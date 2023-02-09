@@ -1,0 +1,62 @@
+@import "../../../assets/sass/components/button";
+
+#login {
+  display: flex;
+  .left {
+    background-image: url("../../../assets/images/login-background.jpg");
+    width: 60vw;
+    height: 100vh;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .text {
+      margin-top: 28%;
+      h2 {
+        margin: 0 auto;
+        width: 40%;
+        color: white;
+
+        span {
+          font-weight: 900;
+        }
+      }
+
+      p {
+        width: 40%;
+        margin: 0 auto;
+        color: white;
+      }
+    }
+  }
+
+  .right {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    form {
+      width: 300px;
+
+      input {
+        margin-top: 20px;
+        border: 1px solid grey;
+        width: 100%;
+        padding: 8px;
+      }
+
+      div {
+        color: red;
+      }
+
+      button {
+        @extend %secondary-button;
+        display: inline-block;
+        width: 100%;
+        margin-top: 20px;
+      }
+    }
+  }
+}

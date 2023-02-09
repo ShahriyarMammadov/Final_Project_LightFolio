@@ -7,11 +7,13 @@ import ErrorPage from "../pages/site/errorPage";
 import GalleriesPage from "../pages/site/galleriesPage";
 import GalleryDirectoriesPage from "../pages/site/galleryDirectoriesPage";
 import HomePage from "../pages/site/homePage";
+import LoginPage from "../pages/admin/login";
 import OnlineStorePage from "../pages/site/onlineStorePage";
 import PricingPage from "../pages/site/pricingPage";
 import ProofingPage from "../pages/site/proofingPage";
 import ThemesPage from "../pages/site/themesPage";
 import VisitorAnalytics from "../pages/site/visitorAnalyticsPage";
+import SignupPage from "../pages/admin/signup";
 
 const Router = () => {
   return (
@@ -33,6 +35,8 @@ const Router = () => {
           element={<GalleryDirectoriesPage />}
         />
         <Route path="/themes" element={<ThemesPage />} />
+        <Route path="/admin/login" element={<LoginPage />} />
+        <Route path="/admin/signup" element={<SignupPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Footer />

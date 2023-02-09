@@ -1,0 +1,77 @@
+@import "../../../assets/sass/components/button";
+
+#signUpPage {
+  background-image: url("../../../assets/images/signup-background.jpg");
+  width: 98.9vw;
+  height: 100vh;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-top: 40px;
+  font-family: "Playfair Display", serif;
+
+  .form {
+    width: 30%;
+    margin: 0 auto;
+    padding: 25px 20px;
+    margin: auto;
+    background: rgba(38, 38, 38, 0.8);
+
+    a {
+      text-decoration: underline;
+
+      &:hover {
+        color: white;
+      }
+    }
+
+    .headerTxt {
+      text-align: center;
+      color: white;
+
+      h3 {
+        font-size: 32px !important;
+      }
+
+      p {
+        font-family: "Poppins", sans-serif;
+      }
+    }
+
+    form {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid grey;
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: 500;
+        border-radius: 10px;
+      }
+
+      div {
+        color: red;
+        font-family: "Poppins", sans-serif;
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 5px;
+        background-color: #198754;
+        width: 100%;
+        font-size: 24px;
+        transition: all 0.8s;
+        color: white;
+        border-radius: 10px;
+
+        &:hover {
+          background-color: #0e6e41;
+        }
+      }
+    }
+  }
+}

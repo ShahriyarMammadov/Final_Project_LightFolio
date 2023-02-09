@@ -140,8 +140,8 @@ const Header = () => {
         </div>
 
         <div className="signupLogin">
-          <Link to={"/login"}>LOGIN</Link>
-          <Link to={"/signup"} className="signUp">
+          <Link to={"/admin/login"}>LOGIN</Link>
+          <Link to={"/admin/signup"} className="signUp">
             Sign Up
           </Link>
         </div>
