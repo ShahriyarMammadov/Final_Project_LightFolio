@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import LoginSchema from "./schema/index";
+import axios from "axios";
 import "./schema/index";
 import "./index.scss";
 import { Helmet } from "react-helmet";
@@ -8,6 +9,23 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/images/title-logo.png";
 
 const LoginPage = () => {
+  const handleLoginAuth = async (values) => {
+    try {
+      let { data } = await axios.post(
+        "http://localhost:3000/login",
+        {
+          email: "sehriyarmemmedovvv4@gmail.com",
+          password: "sehriyar123",
+        },
+        { withCredentials: true }
+      );
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div id="login">
       <Helmet>
@@ -35,7 +53,19 @@ const LoginPage = () => {
           }}
           validationSchema={LoginSchema}
           onSubmit={(values) => {
-            console.log(values);
+            handleLoginAuth(values);
+            try {
+              axios.post(
+                "http://localhost:3000",
+                {
+                  email: "sehriyarmemmedovvv4@gmail.com",
+                  password: "sehriyar123",
+                },
+                { withCredentials: true }
+              );
+            } catch (error) {
+              console.log(error);
+            }
           }}
         >
           {({ errors, touched }) => (

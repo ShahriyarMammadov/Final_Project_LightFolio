@@ -1,5 +1,5 @@
-import { login, register } from "../controllers/authControllers";
-import { checkUser } from "../middlewares/authMiddlewares";
+const { login, register } = require("../controllers/authControllers");
+const { checkUser } = require("../middlewares/authMiddlewares");
 
 const router = require("express").Router();
 

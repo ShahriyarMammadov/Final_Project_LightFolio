@@ -3,8 +3,23 @@ import React from "react";
 import "./index.scss";
 import { Link } from "react-router-dom";
 import signupSchema from "./schema/index";
+import axios from "axios";
 
 const SignupPage = () => {
+  const handleSignupAuth = (values) => {
+    console.log(values);
+    try {
+      axios.post("http://localhost:3000/register", values, {
+        headers: {
+          "Content-type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div id="signUpPage">
       <div className="form">
@@ -14,30 +29,30 @@ const SignupPage = () => {
         </div>
         <Formik
           initialValues={{
-            companyName: "",
+            // companyName: "",
             email: "",
-            fullName: "",
+            // fullName: "",
             password: "",
           }}
           validationSchema={signupSchema}
           onSubmit={(values) => {
-            console.log(values);
+            handleSignupAuth(values);
           }}
         >
           {({ errors, touched }) => (
             <Form>
-              <Field name="companyName" placeholder="Company Name" />
+              {/* <Field name="companyName" placeholder="Company Name" />
               {errors.companyName && touched.companyName ? (
                 <div>{errors.companyName}</div>
-              ) : null}
+              ) : null} */}
 
               <Field name="email" type="email" placeholder="Email" />
               {errors.email && touched.email ? <div>{errors.email}</div> : null}
 
-              <Field name="fullName" placeholder="Your Full Name" />
+              {/* <Field name="fullName" placeholder="Your Full Name" />
               {errors.fullName && touched.fullName ? (
                 <div>{errors.fullName}</div>
-              ) : null}
+              ) : null} */}
 
               <Field name="password" placeholder="Password" />
               {errors.password && touched.password ? (
