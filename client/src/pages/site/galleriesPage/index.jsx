@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import galleryImg from "../../../assets/images/galleryPage.jpg";
 import "./index.scss";
 

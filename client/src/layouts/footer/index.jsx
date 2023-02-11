@@ -1,11 +1,20 @@
 import React from "react";
 import "./index.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import footerLogo from "../../assets/images/footer-logo.png";
 
 const Footer = () => {
   return (
-    <footer>
+    <footer
+      style={{
+        display:
+          useLocation().pathname === "/admin/login" ||
+          useLocation().pathname === "/admin/signup" ||
+          useLocation().pathname === "/crm/dashboard"
+            ? "none"
+            : "block",
+      }}
+    >
       <div className="footerHeader">
         <div className="headerText">
           <h2>Join Now for FREE </h2>

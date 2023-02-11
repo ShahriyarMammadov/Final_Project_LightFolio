@@ -14,6 +14,8 @@ import ProofingPage from "../pages/site/proofingPage";
 import ThemesPage from "../pages/site/themesPage";
 import VisitorAnalytics from "../pages/site/visitorAnalyticsPage";
 import SignupPage from "../pages/admin/signup";
+import DashboardPage from "../pages/admin/dashboard";
+import AdminHome from "../pages/admin/adminHome";
 
 const Router = () => {
   return (
@@ -35,8 +37,12 @@ const Router = () => {
           element={<GalleryDirectoriesPage />}
         />
         <Route path="/themes" element={<ThemesPage />} />
+
+        {/* Admin  */}
         <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin/signup" element={<SignupPage />} />
+        {/* <Route path="/admin/signup" element={<SignupPage />} /> */}
+        <Route path="/crm/dashboard" element={<DashboardPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Footer />

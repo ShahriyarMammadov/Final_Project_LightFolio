@@ -5,7 +5,7 @@ import axios from "axios";
 import "./schema/index";
 import "./index.scss";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import logo from "../../../assets/images/title-logo.png";
 
 const LoginPage = () => {
@@ -81,6 +81,7 @@ const LoginPage = () => {
           )}
         </Formik>
       </div>
+      <Outlet />
     </div>
   );
 };

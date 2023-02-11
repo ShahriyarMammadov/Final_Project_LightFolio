@@ -19,10 +19,12 @@ const Header = () => {
     <header
       style={{
         background: useLocation().pathname === "/" ? "transparent" : "white",
-        // boxShadow:
-        //   useLocation().pathname === "/"
-        //     ? "white"
-        //     : "rgba(0, 0, 0, 0.2) 0px 20px 30px; !important",
+        display:
+          useLocation().pathname === "/admin/login" ||
+          useLocation().pathname === "/admin/signup" ||
+          useLocation().pathname === "/crm/dashboard"
+            ? "none"
+            : "flex",
       }}
     >
       <div id="header">

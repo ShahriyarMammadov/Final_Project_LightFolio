@@ -4,17 +4,14 @@ import "./index.scss";
 import { Link } from "react-router-dom";
 import signupSchema from "./schema/index";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 const SignupPage = () => {
-  const handleSignupAuth = (values) => {
+  const handleSignupAuth = async (values) => {
     console.log(values);
     try {
-      axios.post("http://localhost:3000/register", values, {
-        headers: {
-          "Content-type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
+      let { data } = await axios.post("http://localhost:3000/signup", values);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -22,6 +19,9 @@ const SignupPage = () => {
 
   return (
     <div id="signUpPage">
+      <Helmet>
+        <title>Create your free account - LightFolio</title>
+      </Helmet>
       <div className="form">
         <div className="headerTxt">
           <h3>Create your free Lightfolio account</h3>

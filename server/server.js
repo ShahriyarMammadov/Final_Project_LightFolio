@@ -11,10 +11,24 @@ app.use(express.json());
 app.use("/", authRoutes);
 // app.use(bodyParser.json());
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 app.use(
   cors({
-    method: ["GET", "POST"],
-    origin: "http://localhost:5173/",
+    method: ["GET", "POST", "DELETE", "PATCH", "PUT"],
+    origin: [
+      "http://localhost:5173/",
+      "http://localhost:3000/signup",
+      "http://127.0.0.0",
+      "http://104.142.122.231",
+    ],
     credentials: true,
   })
 );
