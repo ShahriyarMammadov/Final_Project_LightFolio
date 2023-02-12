@@ -11,6 +11,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is Required"],
   },
+  companyName: {
+    type: String,
+    required: [true, "companyName is required"],
+  },
+  fullName: {
+    type: String,
+    required: [true, "FullName is required"],
+  },
 });
 
 userSchema.pre("save", async function (next) {

@@ -1,26 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import LoginSchema from "./schema/index";
 import axios from "axios";
 import "./schema/index";
 import "./index.scss";
 import { Helmet } from "react-helmet";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/title-logo.png";
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
   const handleLoginAuth = async (values) => {
     try {
-      let { data } = await axios.post(
-        "http://localhost:3000/login",
-        {
-          email: "sehriyarmemmedovvv4@gmail.com",
-          password: "sehriyar123",
-        },
-        { withCredentials: true }
-      );
+      let { data } = await axios.post("http://localhost:3000/login", values, {
+        withCredentials: true,
+      });
 
-      console.log(data);
+      setError(data.errors);
+
+      if (data) {
+        if (data.errors) {
+          const { email, password } = data.errors;
+          if (email) {
+            // setEmail(email);
+          } else if (password) {
+            // setPassword(password);
+          }
+        } else {
+          navigate("/crm/dashboard");
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -70,12 +83,31 @@ const LoginPage = () => {
         >
           {({ errors, touched }) => (
             <Form>
-              <Field name="email" type="email" placeholder="Email Address" />
+              <Field
+                name="email"
+                type="email"
+                placeholder="Email Address"
+                style={
+                  errors.email && touched.email ? { borderColor: "red" } : null
+                }
+              />
               {errors.email && touched.email ? <div>{errors.email}</div> : null}
-              <Field name="password" placeholder="Password" />
+              {<div>{error.email}</div>}
+
+              <Field
+                name="password"
+                placeholder="Password"
+                style={
+                  errors.password && touched.password
+                    ? { borderColor: "red" }
+                    : null
+                }
+              />
               {errors.password && touched.password ? (
                 <div>{errors.password}</div>
               ) : null}
+              {<div>{error.password}</div>}
+
               <button type="submit">LOG IN</button>
             </Form>
           )}

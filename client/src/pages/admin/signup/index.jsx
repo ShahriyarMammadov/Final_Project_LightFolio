@@ -1,17 +1,29 @@
 import { Field, Form, Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import "./index.scss";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import signupSchema from "./schema/index";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
   const handleSignupAuth = async (values) => {
-    console.log(values);
     try {
-      let { data } = await axios.post("http://localhost:3000/signup", values);
-      console.log(data);
+      let { data } = await axios.post(
+        "http://localhost:3000/register",
+        values,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (data?.created) {
+        navigate("/admin/login");
+      }
+      setError(data.errors);
     } catch (error) {
       console.log(error);
     }
@@ -29,9 +41,9 @@ const SignupPage = () => {
         </div>
         <Formik
           initialValues={{
-            // companyName: "",
+            companyName: "",
             email: "",
-            // fullName: "",
+            fullName: "",
             password: "",
           }}
           validationSchema={signupSchema}
@@ -41,18 +53,23 @@ const SignupPage = () => {
         >
           {({ errors, touched }) => (
             <Form>
-              {/* <Field name="companyName" placeholder="Company Name" />
+              <Field name="companyName" placeholder="Company Name" />
               {errors.companyName && touched.companyName ? (
                 <div>{errors.companyName}</div>
-              ) : null} */}
+              ) : null}
 
               <Field name="email" type="email" placeholder="Email" />
               {errors.email && touched.email ? <div>{errors.email}</div> : null}
+              {error && (
+                <div>
+                  {error.email} <Link to={"/admin/login"}>Login</Link>
+                </div>
+              )}
 
-              {/* <Field name="fullName" placeholder="Your Full Name" />
+              <Field name="fullName" placeholder="Your Full Name" />
               {errors.fullName && touched.fullName ? (
                 <div>{errors.fullName}</div>
-              ) : null} */}
+              ) : null}
 
               <Field name="password" placeholder="Password" />
               {errors.password && touched.password ? (

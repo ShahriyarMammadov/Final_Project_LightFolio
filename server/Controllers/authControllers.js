@@ -1,25 +1,40 @@
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 
+// Get User BYID
+module.exports.getUser = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const user = await userModel.findById(id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+// -----------------------------------------------------
+
+// Create Token
 const maxAge = 3 * 24 * 60 * 60;
 
 const createToken = (id) => {
   return (
-    jwt.sign({ id }, "kishan sheth super secret key"),
+    jwt.sign({ id }, "secret"),
     {
       expiresIn: maxAge,
     }
   );
 };
+// -----------------------------------------------------
 
+// Email and Password error
 const handleErrors = (err) => {
   let errors = { email: "", password: "" };
 
   if (err.message === "Incorrect Email")
-    errors.email = "That email is not registered";
+    errors.email = "Email is not registered";
 
   if (err.message === "Incorrect password")
-    errors.email = "That password is inCorrect";
+    errors.password = "Password is incorrect";
 
   if (err.code === 11000) {
     errors.email = "Email is already registered";
@@ -33,29 +48,34 @@ const handleErrors = (err) => {
   }
   return errors;
 };
+// -----------------------------------------------------
 
+// Register
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, companyName, fullName } = req.body;
     const user = await userModel.create({
       email,
       password,
+      companyName,
+      fullName,
     });
     const token = createToken(user._id);
 
     res.cookie("jwt", token, {
       withCredentials: true,
-      // httpOnly: false,
       maxAge: maxAge * 1000,
     });
     res.status(201).json({ user: user._id, created: true });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     const errors = handleErrors(err);
     res.json({ errors, created: false });
   }
 };
+// -----------------------------------------------------
 
+// Login
 module.exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -64,7 +84,6 @@ module.exports.login = async (req, res, next) => {
 
     res.cookie("jwt", token, {
       withCredentials: true,
-      // httpOnly: false,
       maxAge: maxAge * 1000,
     });
     res.status(200).json({ user: user._id, created: true });
@@ -74,3 +93,4 @@ module.exports.login = async (req, res, next) => {
     res.json({ errors, created: false });
   }
 };
+// -----------------------------------------------------

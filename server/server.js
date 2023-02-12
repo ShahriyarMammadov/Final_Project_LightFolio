@@ -1,37 +1,20 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const authRoutes = require("./Routes/AuthRoutes");
+
+// const authRoutes = require("./Routes/AuthRoutes");
 const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 app.use(cookieParser());
 app.use(express.json());
-app.use("/", authRoutes);
-// app.use(bodyParser.json());
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
-app.use(
-  cors({
-    method: ["GET", "POST", "DELETE", "PATCH", "PUT"],
-    origin: [
-      "http://localhost:5173/",
-      "http://localhost:3000/signup",
-      "http://127.0.0.0",
-      "http://104.142.122.231",
-    ],
-    credentials: true,
-  })
-);
+const authRoutes = require("./Routes/AuthRoutes");
+
+authRoutes(app);
 
 mongoose.set("strictQuery", true);
 const port = 3000;
