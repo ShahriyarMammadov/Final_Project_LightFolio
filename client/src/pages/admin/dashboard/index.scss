@@ -1,4 +1,5 @@
 @import "../../../assets/sass/components/button";
+@import "../../../assets/sass/utils/mixins";
 
 #dashboard {
   .header {
@@ -194,6 +195,87 @@
 
       &.active {
         background-color: #f8eede;
+      }
+    }
+  }
+
+  .menu {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 5%;
+
+    .dashboardHeader {
+      @include flexBox(space-between, baseline);
+
+      h3 {
+        font-weight: 700 !important;
+        line-height: 38.4px;
+        font-size: 32px !important;
+      }
+
+      button {
+        @extend %primary-button;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+          rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+        border-radius: 5px;
+        padding: 11px 20px;
+        font-size: 13px;
+        line-height: 18px;
+
+        &:hover {
+          background-color: black;
+          color: white;
+        }
+      }
+    }
+  }
+}
+.chakra-modal__content {
+  width: 90% !important;
+  height: 85% !important;
+  margin-top: 40px !important;
+
+  .chakra-modal__header,
+  .chakra-modal__footer {
+    background-color: white;
+    color: black;
+
+    .next {
+      background-color: rgba(0, 0, 0, 0.734);
+      color: white;
+      transition: all 0.5s;
+
+      &:hover {
+        background-color: black;
+      }
+    }
+  }
+
+  .chakra-modal__body {
+    background-color: white;
+    color: black;
+
+    #form {
+      border: 0.5px solid rgb(212, 209, 209);
+      padding: 30px;
+      margin: 0 auto;
+      width: 60%;
+      input[type="date"] {
+        width: 25%;
+      }
+      input[type="text"] {
+        margin-left: 45px;
+        width: 70%;
+      }
+      .left {
+        width: 30%;
+
+        .chakra-form__helper-text {
+          a {
+            color: rgba(128, 128, 128, 0.759);
+            text-decoration: none !important;
+          }
+        }
       }
     }
   }

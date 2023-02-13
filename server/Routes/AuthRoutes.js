@@ -5,7 +5,7 @@ function userRouter(app) {
   app.post("/", checkUser);
   app.post("/register", register);
   app.post("/login", login);
-  app.get("/user", getUser);
+  app.get("/user/:id", getUser);
 }
 
 module.exports = userRouter;

@@ -13,8 +13,21 @@ app.use(express.json());
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 const authRoutes = require("./Routes/AuthRoutes");
+const userModel = require("./models/userModel");
 
 authRoutes(app);
+
+app.post("/uploads", async (req, res) => {
+  const body = req.body;
+
+  try {
+    const newimg = await userModel.images.create(body);
+    newimg.save();
+    res.status(201).json({ message: "yes new message" });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 mongoose.set("strictQuery", true);
 const port = 3000;

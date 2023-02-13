@@ -19,6 +19,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "FullName is required"],
   },
+  photos: [
+    {
+      image: {
+        type: Buffer,
+      },
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {

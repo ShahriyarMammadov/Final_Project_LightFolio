@@ -9,6 +9,7 @@ module.exports.checkUser = (req, res, next) => {
       if (err) {
         res.json({ err });
         next();
+        console.log(err);
       } else {
         const user = await User.findById(decodedToken.id);
 
