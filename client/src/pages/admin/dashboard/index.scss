@@ -2,8 +2,11 @@
 @import "../../../assets/sass/utils/mixins";
 
 #dashboard {
+  background-color: #f5f6fa;
   .header {
     position: fixed;
+    z-index: 2;
+    background-color: #ffffff;
     top: 0;
     right: 0;
     left: 0;
@@ -118,6 +121,7 @@
       }
     }
   }
+
   .chakra-menu__menu-list {
     i,
     span {
@@ -129,6 +133,8 @@
   }
 
   .leftNav {
+    z-index: 3;
+    background-color: #ffffff;
     margin-top: 60px;
     width: fit-content;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
@@ -136,6 +142,10 @@
     position: fixed;
     height: 100vh;
     left: 0;
+
+    @media only screen and (max-width: 767px) {
+      display: none;
+    }
 
     &:hover {
       .textNav {
@@ -202,10 +212,27 @@
   .menu {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 80px 5%;
+    padding: 80px 40px;
+
+    @media only screen and (max-width: 1260px) {
+      padding: 80px 10%;
+      padding-right: 2%;
+    }
+
+    @media only screen and (max-width: 767px) {
+      padding-left: 2%;
+    }
 
     .dashboardHeader {
       @include flexBox(space-between, baseline);
+
+      @media only screen and (max-width: 600px) {
+        flex-direction: column;
+        button {
+          width: 100%;
+          margin-top: 10px;
+        }
+      }
 
       h3 {
         font-weight: 700 !important;
@@ -229,46 +256,437 @@
       }
     }
   }
+
+  .galleryCardAndStudioVisit {
+    display: flex;
+    gap: 3%;
+    margin-top: 20px;
+
+    @media only screen and (max-width: 900px) {
+      flex-direction: column;
+    }
+
+    .galleryCards {
+      display: flex;
+      width: 65%;
+      gap: 20px;
+
+      @media only screen and (max-width: 900px) {
+        width: 100%;
+      }
+
+      @media only screen and (max-width: 600px) {
+        flex-direction: column;
+      }
+
+      a {
+        .card {
+          overflow: hidden;
+          position: relative;
+
+          .galleryImage {
+            height: 150px;
+            overflow: hidden;
+            img {
+              border-radius: 8px;
+              width: 100%;
+              height: 100%;
+              transition: all 1s;
+
+              &:hover {
+                transform: scale(1.2);
+              }
+            }
+          }
+
+          .expired {
+            position: absolute;
+            width: fit-content;
+            left: 40%;
+            top: 5%;
+            p {
+              border-radius: 6px;
+              padding: 2px;
+              background-color: red;
+              color: white;
+              font-size: 12px;
+            }
+          }
+
+          .galleryName {
+            @include flexBox(space-between, center);
+            padding-top: 10px;
+
+            p {
+              font-weight: 600;
+              font-size: 12px;
+              color: rgb(34, 34, 34);
+              line-height: 18px;
+              letter-spacing: 0;
+            }
+
+            .visitorAndImageLength {
+              color: rgb(170, 170, 170);
+              i {
+                padding: 0 4px;
+                font-size: 12px;
+              }
+              span {
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .studioManagerVisit {
+      background-color: #e4d6fe;
+      text-align: center;
+      padding: 10px;
+      padding-bottom: 0;
+      overflow: hidden;
+      width: 38%;
+      display: flex;
+
+      @media only screen and (max-width: 900px) {
+        width: 100%;
+      }
+
+      // &:hover {
+      //   .rightImage {
+      //     img {
+      //       height: 122%;
+      //       margin-bottom: -18%;
+      //     }
+      //   }
+      // }
+
+      .leftText {
+        width: 50%;
+
+        h5 {
+          font-weight: 700;
+          font-size: 16px;
+          line-height: 19.2px;
+          letter-spacing: 0;
+          padding: 10px 0;
+        }
+
+        h6 {
+          font-weight: 700;
+          font-size: 13px;
+          line-height: 15.6px;
+          padding-bottom: 4px;
+        }
+
+        p {
+          font-weight: 400;
+          font-size: 13px;
+        }
+
+        a {
+          font-size: 12px;
+          background-color: #cf005a;
+          color: white;
+          padding: 8px 10px;
+          display: inline-block;
+          margin-top: 20px;
+        }
+      }
+
+      .rightImage {
+        overflow: hidden;
+        width: 40%;
+        display: flex;
+        justify-content: flex-end;
+
+        img {
+          transition: all 1s;
+          margin-bottom: -20%;
+          width: 80%;
+        }
+      }
+    }
+  }
+
+  .dashboardSection2,
+  .dashboardSection3,
+  .dashboardSection4 {
+    display: flex;
+    gap: 3%;
+    margin-top: 2%;
+
+    @media only screen and (max-width: 900px) {
+      flex-direction: column;
+    }
+
+    .maps,
+    .visitorDetail,
+    .giphy {
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+      background-color: #ffffff;
+      width: 62%;
+      padding: 2% 0;
+      padding-bottom: 0;
+
+      @media only screen and (max-width: 900px) {
+        width: 100%;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .chakra-tabs__tablist {
+          margin-top: 20px;
+          flex-direction: column;
+        }
+      }
+
+      .headText {
+        padding: 0 3%;
+        h5 {
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 19.2px;
+        }
+        p {
+          font-size: 11px;
+          line-height: 16.5px;
+          padding: 10px 0;
+        }
+      }
+    }
+
+    .notification,
+    .orders {
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+      background-color: #ffffff;
+      padding: 10px;
+      width: 37%;
+
+      @media only screen and (max-width: 900px) {
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .headText {
+        padding: 10px;
+        h5 {
+          font-weight: 600;
+          font-size: 16px;
+        }
+
+        p {
+          font-size: 11px;
+        }
+      }
+
+      .alert {
+        .card {
+          display: flex;
+          cursor: pointer;
+          gap: 5%;
+          padding: 10px;
+          transition: all 0.3s;
+
+          &:hover {
+            background-color: lightgrey;
+
+            .icon {
+              i {
+                color: white;
+                background-color: #444444;
+              }
+            }
+          }
+
+          .icon {
+            i {
+              border-radius: 50%;
+              padding: 5px;
+              height: 35px;
+              font-size: 20px;
+              border: 0.5px solid grey;
+            }
+          }
+
+          .text {
+            h6 {
+              font-weight: 700;
+              font-size: 14px;
+            }
+            p {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .dashboardSection4 {
+    .giphy {
+      padding: 0;
+
+      p {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 15px;
+        padding: 8px 10px;
+      }
+
+      a {
+        div {
+          background: linear-gradient(
+              to bottom,
+              rgba(0, 0, 0, 0.4),
+              rgba(0, 0, 0, 0.4)
+            ),
+            url("../../../assets/images//dashboardHomeGiphy.gif");
+          background-repeat: no-repeat;
+          background-position: center center;
+          width: 100%;
+          height: 90%;
+          background-size: cover;
+
+          .text {
+            padding: 60px 0 0 60px;
+            color: white;
+
+            h6 {
+              font-weight: 700;
+              font-size: 14px;
+              line-height: 34px;
+            }
+
+            h5 {
+              font-size: 32px;
+              font-weight: 400;
+              line-height: 34px;
+            }
+
+            p {
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 34px;
+            }
+          }
+        }
+      }
+    }
+    .orders {
+      .alert {
+        .card {
+          display: block;
+          a {
+            color: #2180fd;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+          }
+          p {
+            font-weight: 400;
+            font-size: 9px;
+            line-height: 13.5px;
+          }
+          &:hover {
+            cursor: auto;
+            background-color: transparent;
+          }
+        }
+      }
+    }
+  }
 }
+
 .chakra-modal__content {
   width: 90% !important;
   height: 85% !important;
   margin-top: 40px !important;
 
+  .modalHeader {
+    text-align: center;
+    padding: 28px 0;
+    h5 {
+      font-weight: 700;
+      font-size: 28px;
+    }
+  }
+
   .chakra-modal__header,
   .chakra-modal__footer {
     background-color: white;
     color: black;
-
-    .next {
-      background-color: rgba(0, 0, 0, 0.734);
-      color: white;
-      transition: all 0.5s;
-
-      &:hover {
-        background-color: black;
-      }
-    }
   }
 
   .chakra-modal__body {
     background-color: white;
     color: black;
 
-    #form {
+    .chakra-button {
+      background-color: #444444 !important;
+      color: white;
+
+      @media only screen and (max-width: 600px) {
+        width: 100%;
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.775) !important;
+      }
+    }
+    form {
       border: 0.5px solid rgb(212, 209, 209);
       padding: 30px;
       margin: 0 auto;
       width: 60%;
-      input[type="date"] {
-        width: 25%;
+
+      @media only screen and (max-width: 900px) {
+        width: 100%;
+        padding: 0;
+
+        input {
+          width: 100% !important;
+          margin: 0 !important;
+        }
       }
-      input[type="text"] {
-        margin-left: 45px;
-        width: 70%;
+
+      .chakra-form-control {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-top: 15px;
+
+        @media only screen and (max-width: 600px) {
+          flex-direction: column;
+        }
+
+        a {
+          padding: 0;
+        }
+        input[type="dateTime-local"] {
+          width: 30%;
+        }
+        input[type="text"] {
+          margin-left: 30px;
+          width: 70%;
+        }
+      }
+
+      p {
+        color: #2180fd;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 21px;
+        cursor: pointer;
+        width: fit-content;
+        padding-top: 25px;
       }
       .left {
-        width: 30%;
+        width: 35%;
+
+        @media only screen and (max-width: 600px) {
+          width: 100%;
+        }
 
         .chakra-form__helper-text {
           a {
