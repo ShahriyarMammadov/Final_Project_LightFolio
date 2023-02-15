@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import "./index.scss";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,58 +27,16 @@ import {
 } from "@chakra-ui/react";
 import whatsNewImage from "../../../assets/images/dashboardWhatsNew.jpg";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { useCookies } from "react-cookie";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 const DashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [cookies, setCookie, removeCookie] = useCookies([]);
   const [latitude, setLatitude] = useState(30);
   const [longitude, setLongitude] = useState(30);
   const navigate = useNavigate();
 
-  // Authentification
-  useEffect(() => {
-    const verifyUser = async () => {
-      if (!cookies.jwt) {
-        navigate("/login");
-      } else {
-        const { data } = axios.post(
-          "http://localhost:3000/",
-          {},
-          {
-            withCredentials: true,
-          }
-        );
+  const userData = useSelector((state) => state.getAllUserDataReducer);
 
-        if (!data?.status) {
-          removeCookie("jwt");
-          // navigate("/login");
-        } else {
-          alert("hi");
-        }
-      }
-    };
-
-    verifyUser();
-  }, [cookies, navigate]);
-
-  const logout = () => {
-    removeCookie("jwt");
-    navigate("/");
-  };
-
-  // --------------------------------
-
-  // const userData = async () => {
-  //   let response = await axios.get("http://localhost:3000/user/");
-  //   console.log(response.data);
-  // };
-
-  // useEffect(() => {
-  //   userData();
-  // }, []);
 
   // Google Maps
   const containerStyle = {

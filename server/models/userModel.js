@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const Schema = mongoose.Schema
 
 const userSchema = new mongoose.Schema(
   {
@@ -20,7 +21,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "FullName is required"],
     },
-    galleries: [{ type: String }],
+    galleries: [{ type: Schema.Types.ObjectId, ref: "Gallery" }],
   },
   { timestamps: true }
 );

@@ -5,10 +5,13 @@ import logo from "../../../assets/images/logo_lightfolio_mark_gold.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./index.scss";
 import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
 
 const AdminHeader = () => {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const navigate = useNavigate();
+
+  const userData = useSelector((state) => state.getAllUserDataReducer);
 
   const logout = () => {
     removeCookie("jwt");
@@ -34,8 +37,14 @@ const AdminHeader = () => {
                 <div className="user">
                   <img src={userPhoto} alt="" />
                   <div className="name">
-                    <h6>Shahriyar</h6>
-                    <p>Shahriyar Mammadov</p>
+                    {userData.map((e) => {
+                      return (
+                        <>
+                          <h6>{e.companyName}</h6>
+                          <p>{e.fullName}</p>
+                        </>
+                      );
+                    })}
                   </div>
                 </div>
               </MenuButton>
@@ -43,7 +52,11 @@ const AdminHeader = () => {
                 <MenuItem>
                   <i className="fa-solid fa-gear"></i> <span>Settings</span>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/admin/user/");
+                  }}
+                >
                   <i className="fa-solid fa-user"></i>{" "}
                   <span>About Me + Email</span>
                 </MenuItem>
@@ -52,11 +65,7 @@ const AdminHeader = () => {
                   <span>Subscription</span>
                 </MenuItem>
                 <hr />
-                <MenuItem
-                  onClick={() => {
-                    logout();
-                  }}
-                >
+                <MenuItem onClick={logout}>
                   <i className="fa-solid fa-right-from-bracket"></i>
                   <span>Log Out</span>
                 </MenuItem>

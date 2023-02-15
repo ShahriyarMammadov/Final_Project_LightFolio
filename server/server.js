@@ -1,28 +1,31 @@
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
-const UserRoutes = require("./Routes/GetUserRoutes");
+const morgan = require("morgan");
 
-// const authRoutes = require("./Routes/AuthRoutes");
-const app = express();
+// Morgan, console -de response statuslari ve s. gormek ucun
+app.use(morgan("dev"));
+// -------------------------------------------------------
+
+// Cookie
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
-
 app.use(cookieParser());
+// -------------------------------------------------------
+
 app.use(express.json());
 
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
+// Authentification Routes
 const authRoutes = require("./Routes/AuthRoutes");
 const userModel = require("./models/userModel");
-
+const multer = require("multer");
 authRoutes(app);
-
-// app.use("/userData", UserRoutes);
+// -------------------------------------------------------
 
 app.post("/uploads", async (req, res) => {
   const body = req.body;
-
   try {
     const newimg = await userModel.images.create(body);
     newimg.save();
@@ -32,11 +35,38 @@ app.post("/uploads", async (req, res) => {
   }
 });
 
-mongoose.set("strictQuery", true);
+// Express js Server
 const port = 3000;
 app.listen(port, () => {
   console.log("server islediiiiii .. . . .");
 });
+// -------------------------------------------------------
+
+// TEST
+// const router = require("./Routes/PhotoRoutes");
+
+// app.use("/galleries", router);
+// app.use("/images", router);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/api/upload", upload.single("photo"), (req, res) => {
+  res.json({ message: "Photo uploaded successfully" });
+});
+
+// -------------------------------------------------------
+
+// DataBase mongoDB
+mongoose.set("strictQuery", true);
 
 mongoose
   .connect(
@@ -52,3 +82,4 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+// -------------------------------------------------------

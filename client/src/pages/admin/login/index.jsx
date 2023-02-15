@@ -19,7 +19,6 @@ const LoginPage = () => {
       let { data } = await axios.post("http://localhost:3000/login", values, {
         withCredentials: true,
       });
-
       setError(data.errors);
 
       if (data) {
@@ -92,7 +91,7 @@ const LoginPage = () => {
                 }
               />
               {errors.email && touched.email ? <div>{errors.email}</div> : null}
-              {<div>{error.email}</div>}
+              {<div>{error?.email}</div>}
 
               <Field
                 name="password"

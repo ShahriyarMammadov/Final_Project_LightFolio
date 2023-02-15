@@ -18,6 +18,7 @@ import DashboardPage from "../pages/admin/dashboard";
 // import AdminHome from "../pages/admin/adminHome";
 import MainRoot from "../components/site/";
 import AdminRoot from "../components/admin/";
+import AboutMePage from "../pages/admin/aboutMePage";
 
 const ROUTES = [
   {
@@ -73,6 +74,10 @@ const ROUTES = [
       {
         path: "",
         element: <DashboardPage />,
+      },
+      {
+        path: "user/",
+        element: <AboutMePage />,
       },
       {
         path: "*",

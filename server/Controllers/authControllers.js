@@ -1,14 +1,30 @@
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 
-// Get User BYID
-module.exports.getUser = async (req, res) => {
-  const { id } = req.body;
+// Update User BYID
+module.exports.updateUserData = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(id, req.body);
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+// -----------------------------------------------------
+
+//Get User BYid
+module.exports.getUserById = async (req, res) => {
+  const { id } = req.params;
   try {
     const user = await userModel.findById(id);
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 // -----------------------------------------------------
@@ -17,12 +33,7 @@ module.exports.getUser = async (req, res) => {
 const maxAge = 3 * 24 * 60 * 60;
 
 const createToken = (id) => {
-  return (
-    jwt.sign({ id }, "secret"),
-    {
-      expiresIn: maxAge,
-    }
-  );
+  return jwt.sign({ id }, "secret");
 };
 // -----------------------------------------------------
 
@@ -68,7 +79,7 @@ module.exports.register = async (req, res, next) => {
     });
     res.status(201).json({ user: user._id, created: true });
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     const errors = handleErrors(err);
     res.json({ errors, created: false });
   }
@@ -86,7 +97,7 @@ module.exports.login = async (req, res, next) => {
       withCredentials: true,
       maxAge: maxAge * 1000,
     });
-    res.status(200).json({ user: user._id, created: true });
+    res.status(200).json({ user: user, created: true });
   } catch (err) {
     console.log(err);
     const errors = handleErrors(err);
