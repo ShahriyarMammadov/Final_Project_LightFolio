@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../../assets/images/logo-dark.png";
+import logo from "../../../assets/images/logo-dark.png";
 import "./index.scss";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -19,12 +19,6 @@ const Header = () => {
     <header
       style={{
         background: useLocation().pathname === "/" ? "transparent" : "white",
-        display:
-          useLocation().pathname === "/admin/login" ||
-          useLocation().pathname === "/admin/signup" ||
-          useLocation().pathname === "/crm/dashboard"
-            ? "none"
-            : "flex",
       }}
     >
       <div id="header">
@@ -142,8 +136,8 @@ const Header = () => {
         </div>
 
         <div className="signupLogin">
-          <Link to={"/admin/login"}>LOGIN</Link>
-          <Link to={"/admin/signup"} className="signUp">
+          <Link to={"/login"}>LOGIN</Link>
+          <Link to={"/signup"} className="signUp">
             Sign Up
           </Link>
         </div>

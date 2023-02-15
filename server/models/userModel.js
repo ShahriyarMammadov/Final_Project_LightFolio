@@ -1,32 +1,29 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: [true, "Email is Required"],
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, "Password is Required"],
-  },
-  companyName: {
-    type: String,
-    required: [true, "companyName is required"],
-  },
-  fullName: {
-    type: String,
-    required: [true, "FullName is required"],
-  },
-  photos: [
-    {
-      image: {
-        type: Buffer,
-      },
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: [true, "Email is Required"],
+      unique: true,
     },
-  ],
-});
+    password: {
+      type: String,
+      required: [true, "Password is Required"],
+    },
+    companyName: {
+      type: String,
+      required: [true, "companyName is required"],
+    },
+    fullName: {
+      type: String,
+      required: [true, "FullName is required"],
+    },
+    galleries: [{ type: String }],
+  },
+  { timestamps: true }
+);
 
 userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();

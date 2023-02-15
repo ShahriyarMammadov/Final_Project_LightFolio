@@ -31,7 +31,7 @@ const LoginPage = () => {
             // setPassword(password);
           }
         } else {
-          navigate("/crm/dashboard");
+          navigate("/admin/");
         }
       }
     } catch (error) {

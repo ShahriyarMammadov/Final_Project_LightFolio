@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-import Router from "./routes";
 import networkErrorImage from "./assets/images/network error.png";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ROUTES from "./routes";
 
 function App() {
   const [online, setOnline] = useState(true);
@@ -13,10 +14,12 @@ function App() {
     setOnline(false);
   });
 
+  const router = createBrowserRouter(ROUTES);
+
   return (
     <div className="App">
       {online ? (
-        <Router />
+        <RouterProvider router={router}></RouterProvider>
       ) : (
         <>
           <img

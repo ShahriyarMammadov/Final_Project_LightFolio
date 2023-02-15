@@ -2,7 +2,7 @@ import React from "react";
 import "./index.scss";
 import { Helmet } from "react-helmet";
 import { TypeAnimation } from "react-type-animation";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import image1 from "../../../assets/images/cardImage1.jpg";
 import image2 from "../../../assets/images/cardImage2.jpg";
 import image3 from "../../../assets/images/cardImage3.jpg";
@@ -32,6 +32,7 @@ const HomePage = () => {
         <title>LightFolio: Client Photo Gallery for PhotoGraphers</title>
       </Helmet>
       <section id="section1">
+        <Outlet />
         <div className="backGroundImage">
           <div className="text">
             <h1>

@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const UserRoutes = require("./Routes/GetUserRoutes");
 
 // const authRoutes = require("./Routes/AuthRoutes");
 const app = express();
@@ -16,6 +17,8 @@ const authRoutes = require("./Routes/AuthRoutes");
 const userModel = require("./models/userModel");
 
 authRoutes(app);
+
+// app.use("/userData", UserRoutes);
 
 app.post("/uploads", async (req, res) => {
   const body = req.body;

@@ -23,6 +23,7 @@
     }
   }
   .tabComponent {
+    overflow: scroll;
     .chakra-tabs__tab {
       margin-top: 40px;
       color: #888888;

@@ -21,7 +21,7 @@ const SignupPage = () => {
       );
 
       if (data?.created) {
-        navigate("/admin/login");
+        navigate("/login");
       }
       setError(data.errors);
     } catch (error) {
@@ -62,7 +62,7 @@ const SignupPage = () => {
               {errors.email && touched.email ? <div>{errors.email}</div> : null}
               {error && (
                 <div>
-                  {error.email} <Link to={"/admin/login"}>Login</Link>
+                  {error.email} <Link to={"/login"}>Login</Link>
                 </div>
               )}
 

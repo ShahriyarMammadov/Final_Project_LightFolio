@@ -1,0 +1,132 @@
+@import "../../../assets/sass/components/button";
+@import "../../../assets/sass/utils/mixins";
+
+.adminHeader {
+  .header {
+    .chakra-menu__menu-list {
+      i,
+      span {
+        margin-top: 8px;
+      }
+      i {
+        width: 30px;
+      }
+    }
+    position: fixed;
+    z-index: 2;
+    background-color: #ffffff;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding: 12px 0;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    p {
+      font-size: 12px;
+      line-height: 18px;
+      letter-spacing: 0.5px;
+      font-weight: 400;
+    }
+    nav {
+      padding: 0 1%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .logo {
+        display: flex;
+        justify-content: space-between;
+
+        @media only screen and (max-width: 767px) {
+          width: 50%;
+        }
+        a {
+          width: fit-content;
+        }
+
+        @media only screen and (max-width: 767px) {
+          display: flex;
+          align-items: center;
+        }
+
+        .fa-bars {
+          display: none;
+          font-size: 22px;
+          color: grey;
+
+          @media only screen and (max-width: 767px) {
+            display: flex;
+          }
+        }
+      }
+
+      .navigator {
+        display: flex;
+        align-items: center;
+
+        p {
+          padding-right: 10px;
+
+          &:hover {
+            color: black;
+          }
+
+          @media only screen and (max-width: 1024px) {
+            &.pricing {
+              display: none;
+            }
+          }
+        }
+
+        a {
+          @extend %pricing-button;
+          display: inline-block;
+          padding: 8px;
+          width: 85px;
+          line-height: 18px;
+          letter-spacing: 1px;
+          text-align: center;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+            rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+          font-weight: 700;
+          font-size: 12px;
+          border-radius: 5px;
+          &:hover {
+            background-color: green;
+          }
+
+          @media only screen and (max-width: 900px) {
+            display: none;
+          }
+        }
+
+        .user {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding-left: 25px;
+          text-align: start;
+
+          @media only screen and (max-width: 900px) {
+            h6 {
+              display: none;
+            }
+            p {
+              display: none;
+            }
+          }
+
+          h6 {
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 19px;
+          }
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+}
