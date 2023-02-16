@@ -67,14 +67,9 @@ const LoginPage = () => {
           onSubmit={(values) => {
             handleLoginAuth(values);
             try {
-              axios.post(
-                "http://localhost:3000",
-                {
-                  email: "sehriyarmemmedovvv4@gmail.com",
-                  password: "sehriyar123",
-                },
-                { withCredentials: true }
-              );
+              axios.post("http://localhost:3000", values, {
+                withCredentials: true,
+              });
             } catch (error) {
               console.log(error);
             }

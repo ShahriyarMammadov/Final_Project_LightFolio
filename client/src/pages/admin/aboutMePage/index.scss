@@ -1,5 +1,111 @@
-#aboutMePage {
-  padding: 80px;
-  max-width: 1200px;
-  margin: 0 auto;
+@import "../../../assets/sass/utils/_variables.scss";
+@import "../../../assets/sass/components/button";
+
+.about {
+  background-color: $adminBackgroundColor;
+  height: 100vh;
+  #aboutMePage {
+    padding: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .aboutHeader {
+      h2 {
+        font-weight: 700 !important;
+        font-size: 32px !important;
+        line-height: 38.4px;
+        color: rgb(51, 51, 51);
+        letter-spacing: 1px;
+        font-family: "Roboto", sans-serif;
+      }
+    }
+
+    .contactInformation {
+      margin-top: 30px;
+      background-color: #ffffff;
+      padding: 20px;
+      width: 60%;
+
+      .contactHeader {
+        padding-bottom: 40px;
+
+        h4 {
+          font-weight: 600 !important;
+          color: rgb(68, 68, 68) !important;
+          line-height: 19.2px;
+        }
+      }
+
+      .contactFill {
+        display: flex;
+        gap: 30px;
+
+        .image {
+          width: 26%;
+          height: 140px;
+          position: relative;
+          border-radius: 50%;
+
+          &:hover {
+            border: 2px solid grey;
+          }
+
+          p {
+            position: absolute;
+            top: 40%;
+            left: 6%;
+            font-weight: 900;
+            cursor: pointer;
+          }
+
+          img {
+            transition: all 0.7s;
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+          }
+        }
+
+        .userInformation {
+          form {
+            .inputs {
+              display: flex;
+              gap: 20px;
+            }
+
+            .changeEmail {
+              p {
+                font-weight: 400 !important;
+                font-size: 12px !important;
+                line-height: 20px;
+              }
+
+              .email {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                input {
+                  width: 74%;
+                }
+
+                span {
+                  font-size: 16px;
+                  line-height: 20px;
+                  cursor: pointer;
+                }
+              }
+            }
+            button {
+              @extend %primary-button;
+            }
+          }
+        }
+      }
+    }
+  }
 }

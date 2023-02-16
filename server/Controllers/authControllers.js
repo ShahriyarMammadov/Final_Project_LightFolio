@@ -6,7 +6,7 @@ module.exports.updateUserData = async (req, res) => {
   const { id } = req.params;
   try {
     const updatedUser = await userModel.findByIdAndUpdate(id, req.body);
-    res.json(updatedUser);
+    res.json({ message: "Settings Saved" });
   } catch (error) {
     res.status(500).json({
       message: error.message,

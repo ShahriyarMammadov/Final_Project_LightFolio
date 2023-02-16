@@ -1,7 +1,4 @@
 import React from "react";
-// import { Route, Routes, Router } from "react-router-dom";
-// import Footer from "../layouts/footer";
-// import Header from "../layouts/header";
 import DigitalDownloadsPage from "../pages/site/digitalDownloadPages";
 import ErrorPage from "../pages/site/errorPage";
 import GalleriesPage from "../pages/site/galleriesPage";
@@ -15,7 +12,6 @@ import ThemesPage from "../pages/site/themesPage";
 import VisitorAnalytics from "../pages/site/visitorAnalyticsPage";
 import SignupPage from "../pages/admin/signup";
 import DashboardPage from "../pages/admin/dashboard";
-// import AdminHome from "../pages/admin/adminHome";
 import MainRoot from "../components/site/";
 import AdminRoot from "../components/admin/";
 import AboutMePage from "../pages/admin/aboutMePage";

@@ -37,14 +37,8 @@ const AdminHeader = () => {
                 <div className="user">
                   <img src={userPhoto} alt="" />
                   <div className="name">
-                    {userData.map((e) => {
-                      return (
-                        <>
-                          <h6>{e.companyName}</h6>
-                          <p>{e.fullName}</p>
-                        </>
-                      );
-                    })}
+                    <h6>{userData.companyName}</h6>
+                    <p>{userData.fullName}</p>
                   </div>
                 </div>
               </MenuButton>
