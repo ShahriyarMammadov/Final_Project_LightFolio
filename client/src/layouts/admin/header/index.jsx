@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import userPhoto from "../../../assets/images/title-logo.png";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import logo from "../../../assets/images/logo_lightfolio_mark_gold.png";
@@ -6,10 +6,13 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./index.scss";
 import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const AdminHeader = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [toggle, setToggle] = useState(false);
   const navigate = useNavigate();
+  let location = useLocation();
 
   const userData = useSelector((state) => state.getAllUserDataReducer);
 
@@ -17,6 +20,19 @@ const AdminHeader = () => {
     removeCookie("jwt");
     navigate("/");
   };
+  console.log(toggle);
+  useEffect(() => {
+    if (
+      location.pathname === "/admin/user/" ||
+      location.pathname === "/admin/businnes/" ||
+      location.pathname === "/admin/employees/" ||
+      location.pathname === "/admin/subscription/"
+    ) {
+      setToggle(true);
+    } else {
+      setToggle(false);
+    }
+  }, [location]);
 
   return (
     <div className="adminHeader">
@@ -28,7 +44,16 @@ const AdminHeader = () => {
               <img src={logo} alt="logo" />
             </Link>
           </div>
-
+          {toggle && (
+            <div className="settingsNav">
+              <nav>
+                <NavLink to={"/admin/business"}>Settings</NavLink>
+                <NavLink to={"/admin/user"}>About Me + Email</NavLink>
+                <NavLink to={"/admin/subscription"}>Subscription</NavLink>
+                <NavLink to={"/admin/employees"}>Team</NavLink>
+              </nav>
+            </div>
+          )}
           <div className="navigator">
             <p className="pricing">Add more storage now: </p>
             <NavLink to={"/"}>UPGRADE</NavLink>

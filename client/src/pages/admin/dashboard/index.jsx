@@ -37,7 +37,6 @@ const DashboardPage = () => {
 
   const userData = useSelector((state) => state.getAllUserDataReducer);
 
-
   // Google Maps
   const containerStyle = {
     width: "100%",
@@ -392,17 +391,31 @@ const DashboardPage = () => {
             </div>
             <hr />
             <div className="alert">
-              <Link to={"/crm/dashboard"}>
-                <div className="card">
-                  <div className="icon">
-                    <i className="fa-solid fa-signature"></i>
-                  </div>
-                  <div className="text">
-                    <h6>Test Client</h6>
-                    <p>completed Wedding Invoice (Demo)</p>
-                  </div>
-                </div>
-              </Link>
+              {userData.activity.length === 0 ? (
+                <h2>No Activity</h2>
+              ) : (
+                userData?.activity?.map((element) => {
+                  return (
+                    <Link to={"/crm/dashboard"}>
+                      <div className="card">
+                        <div className="icon">
+                          {element.activityName === "Password Changed" ? (
+                            <i className="fa-solid fa-unlock"></i>
+                          ) : element.activityName === "Email Changed" ? (
+                            <i className="fa-solid fa-envelope-open-text"></i>
+                          ) : (
+                            <i className="fa-solid fa-signature"></i>
+                          )}
+                        </div>
+                        <div className="text">
+                          <h6>{element.activityName}</h6>
+                          <p>{element.activityDate}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })
+              )}
             </div>
           </div>
         </section>

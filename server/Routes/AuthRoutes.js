@@ -5,16 +5,18 @@ const {
   getUserById,
   emailChanged,
   passwordChanged,
+  signatureChanged,
 } = require("../controllers/authControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
 function userRouter(app) {
+  app.get("/user/:id", getUserById);
   app.post("/", checkUser);
   app.post("/register", register);
   app.post("/login", login);
   app.patch("/email/:id", emailChanged);
   app.patch("/password/:id", passwordChanged);
-  app.get("/user/:id", getUserById);
+  app.patch("/signature/:id", signatureChanged);
   app.put("/user/:id", updateUserData);
 }
 

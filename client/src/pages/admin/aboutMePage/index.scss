@@ -8,6 +8,11 @@
     max-width: 1200px;
     margin: 0 auto;
 
+    @media only screen and (max-width: 767px) {
+      width: 100% !important;
+      padding: 80px 0 20px 0;
+    }
+
     .aboutHeader {
       h2 {
         font-weight: 700 !important;
@@ -17,12 +22,23 @@
         letter-spacing: 1px;
         font-family: "Roboto", sans-serif;
       }
+      @media only screen and (max-width: 900px) {
+        padding: 0 25px;
+      }
     }
 
     .contactInformation {
       margin-top: 30px;
       padding: 20px;
       width: 80%;
+
+      @media only screen and (max-width: 900px) {
+        width: 100% !important;
+      }
+
+      @media only screen and (max-width: 900px) {
+        padding: 0 25px;
+      }
 
       .contactHeader {
         padding-bottom: 40px;
@@ -39,9 +55,31 @@
         padding: 30px;
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
+        @media only screen and (max-width: 900px) {
+          width: 100% !important;
+        }
+
         .changePassword {
           display: flex;
           gap: 30px;
+
+          @media only screen and (max-width: 767px) {
+            flex-direction: column;
+
+            .image {
+              width: 30%;
+            }
+
+            .userInformation {
+              width: 100%;
+            }
+          }
+
+          @media only screen and (max-width: 380px) {
+            .image {
+              width: 65%;
+            }
+          }
         }
 
         .image {
@@ -80,6 +118,10 @@
             .inputs {
               display: flex;
               gap: 20px;
+
+              @media only screen and (max-width: 767px) {
+                flex-direction: column;
+              }
             }
 
             .changeEmail {
@@ -92,7 +134,14 @@
               .email {
                 display: flex;
                 align-items: center;
+                flex-wrap: wrap;
                 gap: 10px;
+
+                @media only screen and (max-width: 500px) {
+                  input {
+                    width: 100% !important;
+                  }
+                }
 
                 input {
                   width: 74%;
@@ -108,6 +157,7 @@
             button {
               @extend %primary-button;
               border-radius: 0%;
+              width: 100px;
             }
           }
           .changePassword {
@@ -146,6 +196,7 @@
             font-weight: 600;
           }
         }
+
         .sendingEmailText {
           padding-top: 30px;
           p {
@@ -168,6 +219,7 @@
           display: flex;
           align-items: center;
           justify-content: space-around;
+          flex-wrap: wrap;
 
           &:hover {
             background-color: #f5f6fa;
@@ -226,7 +278,7 @@
           button {
             background-color: #eeeeee;
             padding: 8px 5px;
-            width: 20%;
+            width: 150px;
             margin-left: 25%;
             cursor: pointer;
             border-radius: 5px;
@@ -234,10 +286,45 @@
             color: rgb(119, 119, 119);
             transition: all 0.3s;
 
+            @media only screen and (max-width: 340px) {
+              margin-left: 18%;
+            }
+
             &:hover {
               background-color: rgb(230, 224, 224);
             }
           }
+        }
+      }
+
+      .emailSignature {
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        margin-top: 40px;
+        padding: 30px;
+        background-color: #ffffff;
+
+        .textarea {
+          p {
+            padding: 10px 0 5px 0;
+            font-size: 13px;
+            line-height: 20px;
+            color: rgb(117, 117, 117);
+          }
+
+          textarea {
+            font-size: 16px;
+            line-height: 24px;
+            width: 100%;
+            height: 100px;
+            border: 1px solid grey;
+          }
+        }
+
+        button {
+          @extend %primary-button;
+          border-radius: 0%;
+          width: 100px;
+          padding: 8px 0 !important;
         }
       }
     }

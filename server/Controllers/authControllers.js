@@ -11,7 +11,12 @@ module.exports.updateUserData = async (req, res) => {
       email: req.body.email,
     });
     const updateActivity = await userModel.findByIdAndUpdate(id, {
-      $push: { activity: req.body.activity },
+      $push: {
+        activity: {
+          activityName: req.body.activity,
+          activityDate: req.body.activityDate,
+        },
+      },
     });
     res.json({ message: "Settings Saved" });
   } catch (error) {
@@ -40,9 +45,8 @@ module.exports.getUserById = async (req, res) => {
 module.exports.emailChanged = async (req, res) => {
   try {
     const { id } = req.params;
-    const { newEmail, password } = req.body;
+    const { newEmail, password, activity, activityDate } = req.body;
     const user = await userModel.findById(id);
-    console.log(id);
 
     if (!user) {
       throw Error("User not found");
@@ -52,12 +56,19 @@ module.exports.emailChanged = async (req, res) => {
     if (!passwordMatch) {
       throw Error("Incorrect password");
     }
-    console.log(user);
+
+    const existingUser = await userModel.findOne({ email: newEmail });
+    if (existingUser && existingUser._id.toString() !== id) {
+      throw Error("Email address already in use");
+    }
+
     const updatedUser = await userModel.findByIdAndUpdate(id, {
       email: newEmail,
     });
     const updateActivity = await userModel.findByIdAndUpdate(id, {
-      $push: { activity: req.body.activity },
+      $push: {
+        activity: { activityName: activity, activityDate: activityDate },
+      },
     });
     res.status(200).json({ message: "Email address changed successfully" });
   } catch (err) {
@@ -68,27 +79,64 @@ module.exports.emailChanged = async (req, res) => {
 // -----------------------------------------------------
 
 // Password Changed
-
 module.exports.passwordChanged = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let { currentPassword, newPassword, activity, activityDate } = req.body;
+    const user = await userModel.findById(id);
+    if (!user) {
+      throw Error("User not found!!!");
+    }
+
+    const isPasswordMatch = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
+
+    if (!isPasswordMatch) {
+      throw Error("Password is incorrect");
+    }
+
+    let updateActivity = await userModel.findByIdAndUpdate(id, {
+      $push: {
+        activity: { activityName: activity, activityDate: activityDate },
+      },
+    });
+
+    const newHashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = newHashedPassword;
+    const passwordUpdate = await user.save();
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+// -----------------------------------------------------
+
+// Signature Changed
+module.exports.signatureChanged = async (req, res) => {
   const { id } = req.params;
-  let { currentPassword, newPassword } = req.body;
-  const user = await userModel.findById(id);
-  if (!user) {
-    throw Error("User not found!!!");
+  const { activity, activityDate } = req.body;
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(id, {
+      signature: req.body.signature,
+    });
+
+    let updateActivity = await userModel.findByIdAndUpdate(id, {
+      $push: {
+        activity: { activityName: activity, activityDate: activityDate },
+      },
+    });
+    res.json({ message: "Settings Saved" });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
   }
-
-  const isPasswordMatch = await bcrypt.compare(currentPassword, user.password);
-
-  if (!isPasswordMatch) {
-    throw Error("Password is incorrect");
-  }
-
-  const newHashedPassword = await bcrypt.hash(newPassword, 10);
-  user.password = newHashedPassword;
-  const passwordUpdate = await user.save();
-
-  console.log(passwordUpdate);
-  res.status(200).json({ message: "Password updated successfully" });
 };
 
 // Create Token
@@ -157,11 +205,22 @@ module.exports.register = async (req, res) => {
       email: email,
       password: hashedPassword,
     });
+
     const result = await newUser.save();
     const { password, ...data } = result.toJSON();
-    res.status(200).send(data);
-  } catch (error) {
-    res.status(500).send({ message: error });
+
+    const token = createToken(newUser._id);
+
+    res.cookie("jwt", token, {
+      withCredentials: true,
+      maxAge: maxAge * 1000,
+    });
+
+    res.status(201).json({ user: newUser._id, created: true });
+  } catch (err) {
+    console.log(err);
+    const errors = handleErrors(err);
+    res.json({ errors, created: false });
   }
 };
 // -----------------------------------------------------

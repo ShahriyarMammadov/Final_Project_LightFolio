@@ -40,7 +40,13 @@ const AboutMePage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   const [confirmError, setConfirmError] = useState("");
+  const [signature, setSignature] = useState("");
   const toast = useToast();
+
+  const current = new Date();
+  const date = `${current.getDate()}/${
+    current.getMonth() + 1
+  }/${current.getFullYear()}/${current.getHours()}:${current.getMinutes()}`;
 
   const userData = useSelector((state) => state.getAllUserDataReducer);
   console.log(userData);
@@ -48,6 +54,7 @@ const AboutMePage = () => {
   // Change userData
   const changeData = async (values) => {
     values.activity = "Name Updated";
+    values.activityDate = date;
 
     const { data } = await axios.put(
       `http://localhost:3000/user/${userData._id}`,
@@ -83,7 +90,7 @@ const AboutMePage = () => {
     try {
       let { data } = await axios.patch(
         `http://localhost:3000/email/${userData._id}`,
-        { newEmail, password, activity: "Email Changed" }
+        { newEmail, password, activity: "Email Changed", activityDate: date }
       );
       console.log(data);
       toast({
@@ -110,10 +117,55 @@ const AboutMePage = () => {
       setConfirmError("Passwords are not suitable");
     } else {
       setConfirmError("");
+      try {
+        const { data } = await axios.patch(
+          `http://localhost:3000/password/${userData._id}`,
+          {
+            newPassword,
+            currentPassword,
+            activity: "Password Changed",
+            activityDate: date,
+          }
+        );
+        toast({
+          title: `${data.message}`,
+          position: "bottom-right",
+          status: "success",
+          isClosable: true,
+        });
+      } catch (error) {
+        console.log(error);
+        toast({
+          title: `${error.response.data.message}`,
+          position: "bottom-right",
+          status: "success",
+          isClosable: true,
+        });
+      }
+    }
+  };
+
+  const changeSignature = async () => {
+    try {
       const { data } = await axios.patch(
-        `http://localhost:3000/password/${userData._id}`,
-        { newPassword, currentPassword }
+        `http://localhost:3000/signature/${userData._id}`,
+        { signature, activity: "Signature Changed", activityDate: date }
       );
+      toast({
+        title: `${data.message}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: `${data.message}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
     }
   };
 
@@ -364,6 +416,25 @@ const AboutMePage = () => {
             <div className="addedBtn">
               <button>Add Email Account</button>
             </div>
+          </div>
+
+          <div className="emailSignature">
+            <div className="emailHeader">
+              <h5>Email Signature</h5>
+            </div>
+
+            <div className="textarea">
+              <p>Signature</p>
+              <textarea
+                onChange={(value) => {
+                  setSignature(value.target.value.trim());
+                }}
+                name="signature"
+                id="signature"
+                defaultValue={userData?.signature}
+              ></textarea>
+            </div>
+            <button onClick={changeSignature}>SAVE</button>
           </div>
         </div>
       </div>

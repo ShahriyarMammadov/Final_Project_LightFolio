@@ -21,12 +21,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "FullName is required"],
     },
-    activity: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    activity: [{ activityName: String, activityDate: String }],
     signature: {
       type: String,
     },
