@@ -8,7 +8,7 @@ import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
 
 const AdminHeader = () => {
-  const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const navigate = useNavigate();
 
   const userData = useSelector((state) => state.getAllUserDataReducer);

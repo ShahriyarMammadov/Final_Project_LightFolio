@@ -21,28 +21,38 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "FullName is required"],
     },
+    activity: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    signature: {
+      type: String,
+    },
     galleries: [{ type: Schema.Types.ObjectId, ref: "Gallery" }],
   },
   { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// userSchema.pre("save", async function (next) {
+//   // const salt = await bcrypt.genSalt();
+//   // this.password = await bcrypt.hash(this.password, salt);
+//   this.password = await bcrypt.hash(this.password, 10);
+//   next();
+// });
 
-userSchema.statics.login = async function (email, password) {
-  const user = await this.findOne({ email });
+// userSchema.statics.login = async function (email, password) {
+//   const user = await this.findOne({ email });
 
-  if (user) {
-    const auth = await bcrypt.compare(password, user.password);
-    if (auth) {
-      return user;
-    }
-    throw Error("Incorrect password");
-  }
-  throw Error("Incorrect Email");
-};
+//   if (user) {
+//     const auth = await bcrypt.compare(password, user.password);
+//     if (auth) {
+//       return user;
+//     }
+//     throw Error("Incorrect password");
+//   }
+//   throw Error("Incorrect Email");
+// };
 
 module.exports = mongoose.model("LightFolioUsers", userSchema);

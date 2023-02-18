@@ -100,7 +100,7 @@ const LoginPage = () => {
               {errors.password && touched.password ? (
                 <div>{errors.password}</div>
               ) : null}
-              {<div>{error.password}</div>}
+              {<div>{error?.password}</div>}
 
               <button type="submit">LOG IN</button>
             </Form>

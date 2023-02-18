@@ -3,7 +3,6 @@
 
 .about {
   background-color: $adminBackgroundColor;
-  height: 100vh;
   #aboutMePage {
     padding: 80px;
     max-width: 1200px;
@@ -22,9 +21,8 @@
 
     .contactInformation {
       margin-top: 30px;
-      background-color: #ffffff;
       padding: 20px;
-      width: 60%;
+      width: 80%;
 
       .contactHeader {
         padding-bottom: 40px;
@@ -37,18 +35,20 @@
       }
 
       .contactFill {
-        display: flex;
-        gap: 30px;
+        background-color: #ffffff;
+        padding: 30px;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+        .changePassword {
+          display: flex;
+          gap: 30px;
+        }
 
         .image {
-          width: 26%;
+          width: 20%;
           height: 140px;
           position: relative;
           border-radius: 50%;
-
-          &:hover {
-            border: 2px solid grey;
-          }
 
           p {
             position: absolute;
@@ -59,7 +59,6 @@
           }
 
           img {
-            transition: all 0.7s;
             border-radius: 50%;
             width: 100%;
             height: 100%;
@@ -67,10 +66,16 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+
+            &:hover {
+              border: 2px solid grey;
+            }
           }
         }
 
         .userInformation {
+          width: 75%;
+
           form {
             .inputs {
               display: flex;
@@ -79,8 +84,8 @@
 
             .changeEmail {
               p {
-                font-weight: 400 !important;
-                font-size: 12px !important;
+                font-weight: 400;
+                font-size: 12px;
                 line-height: 20px;
               }
 
@@ -102,10 +107,145 @@
             }
             button {
               @extend %primary-button;
+              border-radius: 0%;
+            }
+          }
+          .changePassword {
+            padding-top: 25px;
+            display: block;
+
+            p {
+              font-size: 13px;
+              color: rgb(117, 117, 117);
+              line-height: 20px;
+            }
+
+            h6 {
+              padding-top: 5px;
+              width: fit-content;
+              cursor: pointer;
+              font-size: 16px;
+              color: rgb(13, 110, 253);
+              line-height: 20px;
+            }
+          }
+        }
+      }
+
+      .sendingEmail {
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        margin-top: 40px;
+        padding: 30px;
+        background-color: #ffffff;
+
+        .emailHeader {
+          h5 {
+            font-size: 16px;
+            color: rgb(68, 68, 68);
+            line-height: 19.2px;
+            font-weight: 600;
+          }
+        }
+        .sendingEmailText {
+          padding-top: 30px;
+          p {
+            font-size: 16px;
+            color: rgb(119, 119, 119);
+            line-height: 20px;
+            &.addEmail {
+              padding-top: 15px;
+              span {
+                color: rgb(13, 110, 253);
+                cursor: pointer;
+              }
+            }
+          }
+        }
+
+        .addedEmail {
+          padding: 20px 0;
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+
+          &:hover {
+            background-color: #f5f6fa;
+          }
+
+          .icon {
+            text-align: center;
+            color: #00b16a;
+
+            i {
+              font-size: 20px;
+            }
+            p {
+              color: #00b16a;
+              font-size: 13px;
+            }
+          }
+
+          .aboutUserEmail {
+            display: flex;
+            gap: 35px;
+
+            .aboutEmail {
+              h6 {
+                font-weight: 700;
+                font-size: 13px;
+                color: rgb(51, 51, 51);
+              }
+
+              p {
+                font-size: 13px;
+                line-height: 20px;
+                padding-top: 2px;
+
+                &.email {
+                  color: rgb(13, 110, 253);
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+          span {
+            color: rgb(119, 119, 119);
+            cursor: pointer;
+            font-size: 12px;
+          }
+        }
+
+        .addedBtn {
+          padding: 3% 0;
+          margin-top: 1%;
+
+          &:hover {
+            background-color: #f5f6fa;
+          }
+          button {
+            background-color: #eeeeee;
+            padding: 8px 5px;
+            width: 20%;
+            margin-left: 25%;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            color: rgb(119, 119, 119);
+            transition: all 0.3s;
+
+            &:hover {
+              background-color: rgb(230, 224, 224);
             }
           }
         }
       }
     }
+  }
+}
+.chakra-modal__body {
+  p {
+    font-size: 12px;
+    padding-top: 20px;
   }
 }

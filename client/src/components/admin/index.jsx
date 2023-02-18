@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserAllDataAction } from "../../redux/action/user.Action";
 
 const AdminRoot = () => {
-  const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const AdminRoot = () => {
     };
 
     verifyUser();
-  }, [cookies, navigate]);
+  }, [cookies, removeCookie, navigate]);
 
   return (
     <>

@@ -1,11 +1,18 @@
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 // Update User BYID
 module.exports.updateUserData = async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedUser = await userModel.findByIdAndUpdate(id, req.body);
+    const updatedUser = await userModel.findByIdAndUpdate(id, {
+      fullName: req.body.fullName,
+      email: req.body.email,
+    });
+    const updateActivity = await userModel.findByIdAndUpdate(id, {
+      $push: { activity: req.body.activity },
+    });
     res.json({ message: "Settings Saved" });
   } catch (error) {
     res.status(500).json({
@@ -29,6 +36,61 @@ module.exports.getUserById = async (req, res) => {
 };
 // -----------------------------------------------------
 
+// Email Changed
+module.exports.emailChanged = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { newEmail, password } = req.body;
+    const user = await userModel.findById(id);
+    console.log(id);
+
+    if (!user) {
+      throw Error("User not found");
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw Error("Incorrect password");
+    }
+    console.log(user);
+    const updatedUser = await userModel.findByIdAndUpdate(id, {
+      email: newEmail,
+    });
+    const updateActivity = await userModel.findByIdAndUpdate(id, {
+      $push: { activity: req.body.activity },
+    });
+    res.status(200).json({ message: "Email address changed successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: err.message });
+  }
+};
+// -----------------------------------------------------
+
+// Password Changed
+
+module.exports.passwordChanged = async (req, res) => {
+  const { id } = req.params;
+  let { currentPassword, newPassword } = req.body;
+  const user = await userModel.findById(id);
+  if (!user) {
+    throw Error("User not found!!!");
+  }
+
+  const isPasswordMatch = await bcrypt.compare(currentPassword, user.password);
+
+  if (!isPasswordMatch) {
+    throw Error("Password is incorrect");
+  }
+
+  const newHashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = newHashedPassword;
+  const passwordUpdate = await user.save();
+
+  console.log(passwordUpdate);
+  res.status(200).json({ message: "Password updated successfully" });
+};
+
 // Create Token
 const maxAge = 3 * 24 * 60 * 60;
 
@@ -41,7 +103,7 @@ const createToken = (id) => {
 const handleErrors = (err) => {
   let errors = { email: "", password: "" };
 
-  if (err.message === "Incorrect Email")
+  if (err.message === "User not found")
     errors.email = "Email is not registered";
 
   if (err.message === "Incorrect password")
@@ -62,35 +124,86 @@ const handleErrors = (err) => {
 // -----------------------------------------------------
 
 // Register
-module.exports.register = async (req, res, next) => {
-  try {
-    const { email, password, companyName, fullName } = req.body;
-    const user = await userModel.create({
-      email,
-      password,
-      companyName,
-      fullName,
-    });
-    const token = createToken(user._id);
+// module.exports.register = async (req, res, next) => {
+//   try {
+//     const { email, password, companyName, fullName } = req.body;
+//     const user = await userModel.create({
+//       email,
+//       password,
+//       companyName,
+//       fullName,
+//     });
+//     const token = createToken(user._id);
 
-    res.cookie("jwt", token, {
-      withCredentials: true,
-      maxAge: maxAge * 1000,
+//     res.cookie("jwt", token, {
+//       withCredentials: true,
+//       maxAge: maxAge * 1000,
+//     });
+//     res.status(201).json({ user: user._id, created: true });
+//   } catch (err) {
+//     console.log(err);
+//     const errors = handleErrors(err);
+//     res.json({ errors, created: false });
+//   }
+// };
+
+module.exports.register = async (req, res) => {
+  const { email, password, companyName, fullName } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  try {
+    const newUser = new userModel({
+      companyName: companyName,
+      fullName: fullName,
+      email: email,
+      password: hashedPassword,
     });
-    res.status(201).json({ user: user._id, created: true });
-  } catch (err) {
-    console.log(err);
-    const errors = handleErrors(err);
-    res.json({ errors, created: false });
+    const result = await newUser.save();
+    const { password, ...data } = result.toJSON();
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 };
 // -----------------------------------------------------
 
 // Login
-module.exports.login = async (req, res, next) => {
+// module.exports.login = async (req, res, next) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user = await userModel.login(email, password);
+//     const token = createToken(user._id);
+
+//     res.cookie("jwt", token, {
+//       withCredentials: true,
+//       maxAge: maxAge * 1000,
+//     });
+//     res.status(200).json({ user: user, created: true });
+//   } catch (err) {
+//     console.log(err);
+//     const errors = handleErrors(err);
+//     res.json({ errors, created: false });
+//   }
+// };
+
+module.exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await userModel.login(email, password);
+    const user = await userModel.findOne({ email: email });
+
+    if (!user) {
+      throw Error("User not found");
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    console.log(passwordMatch);
+    console.log(password);
+    console.log(user.password);
+    if (!passwordMatch) {
+      throw Error("Incorrect password");
+    }
+
+    // if (!(await bcrypt.compare(password, user.password))) {
+    //   throw Error("nocoreect");
+    // }
     const token = createToken(user._id);
 
     res.cookie("jwt", token, {
@@ -104,4 +217,30 @@ module.exports.login = async (req, res, next) => {
     res.json({ errors, created: false });
   }
 };
+
+// module.exports.login = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   console.log(email, password);
+//   try {
+//     const user = await userModel.findOne({ email: email });
+//     if (!user) {
+//       return res.status(404).send({ message: "User not found" });
+//     }
+
+//     console.log(user.password);
+//     if (!(await bcrypt.compare(password, user.password))) {
+//       return res.status(400).send({ message: "Invalid credentials" });
+//     }
+//     const token = sign({ _id: user._id }, "secret");
+//     res.cookie("jwt", token, {
+//       withCredentials: true,
+//       maxAge: 24 * 60 * 60 * 1000, // 1 day
+//     });
+//     res.status(200).send({ message: "SUCCESS" });
+//   } catch (error) {
+//     const errors = handleErrors(error);
+//     res.status(500).send({ errors });
+//   }
+// };
 // -----------------------------------------------------
