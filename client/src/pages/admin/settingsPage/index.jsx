@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import logo from "../../../assets/images/digital downloads photo.jpg";
 import "./index.scss";
@@ -10,8 +10,12 @@ import {
   Input,
   Button,
 } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const SettingsPage = () => {
+  const userData = useSelector((state) => state.getAllUserDataReducer);
+
   const {
     handleSubmit,
     register,
@@ -26,6 +30,46 @@ const SettingsPage = () => {
       }, 3000);
     });
   }
+  // -----------------------------------k
+  const [postImage, setPostImage] = useState({
+    myFile: "",
+  });
+
+  const url = `http://localhost:3000/uploads/${userData._id}`;
+  const createImage = (newImage) => axios.patch(url, newImage);
+
+  const createPost = async (post) => {
+    try {
+      await createImage(post);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleSubmitImage = (e) => {
+    e.preventDefault();
+    createPost(postImage);
+  };
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+    setPostImage({ ...postImage, myFile: base64 });
+  };
+
+  // ---------------------------------------
 
   return (
     <div id="settings">
@@ -69,6 +113,7 @@ const SettingsPage = () => {
                     <FormLabel htmlFor="name">First name</FormLabel>
                     <Input
                       id="name"
+                      name="image"
                       placeholder="name"
                       {...register("name", {
                         required: "This is required",
@@ -91,6 +136,21 @@ const SettingsPage = () => {
                     Submit
                   </Button>
                 </form>
+              </div>
+              <div className="imageDownload">
+                <div>
+                  <form onSubmit={handleSubmitImage}>
+                    <input
+                      type="file"
+                      label="Image"
+                      name="myFile"
+                      accept=".jpeg, .png, .jpg"
+                      onChange={(e) => handleFileUpload(e)}
+                    />
+
+                    <button>Submit</button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>

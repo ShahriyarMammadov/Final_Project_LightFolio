@@ -171,6 +171,31 @@ const handleErrors = (err) => {
 };
 // -----------------------------------------------------
 
+// Image Download
+
+module.exports.imageDownload = async (req, res, next) => {
+  try {
+    const body = req.body.myFile;
+    const { id } = req.params;
+    const user = await userModel.findByIdAndUpdate(id, {
+      $push: {
+        galleries: {
+          body,
+        },
+      },
+    });
+    console.log("user", user);
+    console.log(body);
+    // const newImage = await userModel.create(body);
+    // newImage.save();
+    res.status(201).json({ message: "new image uploaded" });
+  } catch (error) {
+    res.status(409).json({
+      message: error.message,
+    });
+  }
+};
+
 // Register
 // module.exports.register = async (req, res, next) => {
 //   try {

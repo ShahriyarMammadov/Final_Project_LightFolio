@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
     signature: {
       type: String,
     },
-    galleries: [{ type: Schema.Types.ObjectId, ref: "Gallery" }],
+    galleries: [{ data: Buffer, contentType: String }],
   },
   { timestamps: true }
 );
