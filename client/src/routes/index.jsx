@@ -15,6 +15,7 @@ import DashboardPage from "../pages/admin/dashboard";
 import MainRoot from "../components/site/";
 import AdminRoot from "../components/admin/";
 import AboutMePage from "../pages/admin/aboutMePage";
+import SettingsPage from "../pages/admin/settingsPage";
 
 const ROUTES = [
   {
@@ -74,6 +75,10 @@ const ROUTES = [
       {
         path: "user/",
         element: <AboutMePage />,
+      },
+      {
+        path: "business/",
+        element: <SettingsPage />,
       },
       {
         path: "*",

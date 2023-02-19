@@ -20,11 +20,11 @@ const AdminHeader = () => {
     removeCookie("jwt");
     navigate("/");
   };
-  console.log(toggle);
+
   useEffect(() => {
     if (
       location.pathname === "/admin/user/" ||
-      location.pathname === "/admin/businnes/" ||
+      location.pathname === "/admin/business/" ||
       location.pathname === "/admin/employees/" ||
       location.pathname === "/admin/subscription/"
     ) {
@@ -47,10 +47,10 @@ const AdminHeader = () => {
           {toggle && (
             <div className="settingsNav">
               <nav>
-                <NavLink to={"/admin/business"}>Settings</NavLink>
-                <NavLink to={"/admin/user"}>About Me + Email</NavLink>
-                <NavLink to={"/admin/subscription"}>Subscription</NavLink>
-                <NavLink to={"/admin/employees"}>Team</NavLink>
+                <NavLink to={"/admin/business/"}>Settings</NavLink>
+                <NavLink to={"/admin/user/"}>About Me + Email</NavLink>
+                <NavLink to={"/admin/subscription/"}>Subscription</NavLink>
+                <NavLink to={"/admin/employees/"}>Team</NavLink>
               </nav>
             </div>
           )}
@@ -68,7 +68,11 @@ const AdminHeader = () => {
                 </div>
               </MenuButton>
               <MenuList>
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/admin/business/");
+                  }}
+                >
                   <i className="fa-solid fa-gear"></i> <span>Settings</span>
                 </MenuItem>
                 <MenuItem
@@ -79,7 +83,11 @@ const AdminHeader = () => {
                   <i className="fa-solid fa-user"></i>{" "}
                   <span>About Me + Email</span>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/admin/subscription/");
+                  }}
+                >
                   <i className="fa-solid fa-dollar-sign"></i>{" "}
                   <span>Subscription</span>
                 </MenuItem>

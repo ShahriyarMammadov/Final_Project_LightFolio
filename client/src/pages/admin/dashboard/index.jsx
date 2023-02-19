@@ -391,8 +391,11 @@ const DashboardPage = () => {
             </div>
             <hr />
             <div className="alert">
-              {userData.activity.length === 0 ? (
-                <h2>No Activity</h2>
+              {userData?.activity?.length === 0 ? (
+                <div className="noNotification">
+                  <i className="fa-solid fa-bell"></i>
+                  <h4>No recent notifications</h4>
+                </div>
               ) : (
                 userData?.activity?.map((element) => {
                   return (

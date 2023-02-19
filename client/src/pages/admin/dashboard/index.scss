@@ -239,8 +239,13 @@
           font-size: 9px;
           line-height: 13.5px;
           text-transform: uppercase;
-          background-color: #eeeede;
+          background-color: #eeeeee;
           padding: 4px 6px;
+
+          &:hover {
+            background-color: #aaaaaa;
+            color: white;
+          }
         }
 
         button[tabindex="0"] {
@@ -302,6 +307,22 @@
       }
 
       .alert {
+        .noNotification {
+          text-align: center;
+          margin: 35% 0;
+
+          i {
+            font-size: 40px;
+            color: #efefef;
+          }
+
+          h4 {
+            font-weight: 700;
+            padding-top: 10px;
+            font-size: 14px;
+            color: rgb(119, 119, 119);
+          }
+        }
         .card {
           display: flex;
           cursor: pointer;

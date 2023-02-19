@@ -22,6 +22,30 @@ const userSchema = new mongoose.Schema(
       required: [true, "FullName is required"],
     },
     activity: [{ activityName: String, activityDate: String }],
+    business: {
+      businessName: String,
+      businessWebsite: String,
+      businessEmail: String,
+      businessPhone: String,
+      businessAddress: {
+        addressLine1: String,
+        addressLine2: String,
+        city: String,
+        postalCode: String,
+        country: String,
+      },
+    },
+    socialMedia: {
+      facebook: String,
+      twitter: String,
+      pinterest: String,
+      linkedin: String,
+      youtube: String,
+      tiktok: String,
+      snapchat: String,
+      instagram: String,
+    },
+
     signature: {
       type: String,
     },
