@@ -9,12 +9,16 @@ import {
   FormControl,
   Input,
   Button,
+  Select,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const SettingsPage = () => {
+  const [toggle, setToggle] = useState(false);
   const userData = useSelector((state) => state.getAllUserDataReducer);
+  const [loading, setLoading] = useState(false);
 
   const {
     handleSubmit,
@@ -24,19 +28,29 @@ const SettingsPage = () => {
 
   function onSubmit(values) {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
+      alert(JSON.stringify(values, null, 2));
+      resolve();
     });
   }
-  // -----------------------------------k
+
+  function socialMediaLinks(values) {
+    return new Promise((resolve) => {
+      alert(JSON.stringify(values, null, 2));
+      resolve();
+    });
+  }
+  // -----------------------------------
+
+  // Image convert Base64 and mongo DB upload
   const [postImage, setPostImage] = useState({
     myFile: "",
   });
 
   const url = `http://localhost:3000/uploads/${userData._id}`;
-  const createImage = (newImage) => axios.patch(url, newImage);
+  const createImage = async (newImage) => {
+    await axios.patch(url, newImage);
+    setLoading(false);
+  };
 
   const createPost = async (post) => {
     try {
@@ -45,10 +59,12 @@ const SettingsPage = () => {
       console.log(error.message);
     }
   };
+  console.log(loading);
 
   const handleSubmitImage = (e) => {
     e.preventDefault();
     createPost(postImage);
+    setLoading(true);
   };
 
   const convertToBase64 = (file) => {
@@ -63,6 +79,7 @@ const SettingsPage = () => {
       };
     });
   };
+
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
@@ -70,6 +87,10 @@ const SettingsPage = () => {
   };
 
   // ---------------------------------------
+
+  //------------------- User Location ------------------
+  let userLocation = JSON.parse(localStorage.getItem("userLocation"));
+  //----------------------------------------------------
 
   return (
     <div id="settings">
@@ -109,35 +130,135 @@ const SettingsPage = () => {
 
               <div className="businessAbout">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <FormControl isInvalid={errors.name}>
-                    <FormLabel htmlFor="name">First name</FormLabel>
+                  <FormControl isRequired isInvalid={errors.businessName}>
+                    <FormLabel htmlFor="businessName">Business Name</FormLabel>
                     <Input
-                      id="name"
-                      name="image"
-                      placeholder="name"
-                      {...register("name", {
-                        required: "This is required",
+                      id="businessName"
+                      name="businessName"
+                      placeholder="Business Name"
+                      defaultValue={userData?.companyName}
+                      {...register("businessName", {
+                        required: "Business Name is required",
                         minLength: {
-                          value: 4,
-                          message: "Minimum length should be 4",
+                          value: 3,
+                          message: "Minimum length should be 3",
                         },
                       })}
                     />
                     <FormErrorMessage>
-                      {errors.name && errors.name.message}
+                      {errors.businessName && errors.businessName.message}
                     </FormErrorMessage>
                   </FormControl>
-                  <Button
-                    mt={4}
-                    colorScheme="teal"
-                    isLoading={isSubmitting}
-                    type="submit"
-                  >
-                    Submit
+
+                  <FormLabel htmlFor="businessWebSite">
+                    Business Web Site
+                  </FormLabel>
+                  <Input
+                    id="businessWebSite"
+                    name="businessWebSite"
+                    placeholder="http://www.mycompany.com"
+                    {...register("businessWebSite")}
+                  />
+
+                  <FormLabel htmlFor="businessEmail">Business Email</FormLabel>
+                  <Input
+                    id="businessEmail"
+                    name="businessEmail"
+                    defaultValue={userData.email}
+                    {...register("businessEmail")}
+                  />
+                  <div className="toggleBtn">
+                    <h6
+                      onClick={() => {
+                        setToggle(!toggle);
+                      }}
+                    >
+                      Show more details{" "}
+                      <i className="fa-solid fa-chevron-down"></i>
+                    </h6>
+                  </div>
+
+                  {toggle && (
+                    <>
+                      <div className="faxAndPhone">
+                        <div>
+                          <FormLabel htmlFor="businessPhone">
+                            Business Phone
+                          </FormLabel>
+                          <Input
+                            id="businessPhone"
+                            name="businessPhone"
+                            {...register("businessPhone")}
+                          />
+                        </div>
+
+                        <div>
+                          <FormLabel htmlFor="faxNumber">Fax Number</FormLabel>
+                          <Input
+                            id="faxNumber"
+                            name="faxNumber"
+                            {...register("faxNumber")}
+                          />
+                        </div>
+                      </div>
+                      <FormLabel htmlFor="businessWebSite">
+                        Business Address
+                      </FormLabel>
+                      <Input
+                        defaultValue={
+                          userLocation ? userLocation.display_name : ""
+                        }
+                        id="addressLine1"
+                        name="addressLine1"
+                        placeholder="Address Line 1"
+                        {...register("addressLine1")}
+                      />
+
+                      <Input
+                        className="input"
+                        id="addressLine2"
+                        name="addressLine2"
+                        placeholder="Address Line 2"
+                        {...register("addressLine2")}
+                      />
+                      <div className="cityAndPostal">
+                        <Input
+                          className="input"
+                          defaultValue={
+                            userLocation ? userLocation.address.city : ""
+                          }
+                          id="city"
+                          name="city"
+                          placeholder="City"
+                          {...register("city")}
+                        />
+
+                        <Input
+                          className="input"
+                          defaultValue={
+                            userLocation ? userLocation.address.postcode : ""
+                          }
+                          id="postalCode"
+                          name="postalCode"
+                          placeholder="Postal Code"
+                          {...register("postalCode")}
+                        />
+                      </div>
+                      <Select placeholder="Select option" className="input">
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                      </Select>
+                    </>
+                  )}
+
+                  <Button mt={4} isLoading={loading} type="submit">
+                    SAVE
                   </Button>
                 </form>
               </div>
-              <div className="imageDownload">
+
+              {/* <div className="imageDownload">
                 <div>
                   <form onSubmit={handleSubmitImage}>
                     <input
@@ -151,15 +272,36 @@ const SettingsPage = () => {
                     <button>Submit</button>
                   </form>
                 </div>
-              </div>
-              {userData?.galleries?.map((e) => {
-                console.log(e?.data);
-                return (
-                  <img src={`${e?.data}`} alt={"asd"} />
-                );
-              })}
+              </div> */}
+              {/* {userData?.galleries?.map((e, i) => {
+                return <img key={i} src={`${e?.data}`} alt={"asd"} />;
+              })} */}
             </div>
           </div>
+        </div>
+
+        <div className="socialMediaLinks">
+          <div className="socialHeaderText">
+            <p>
+              Make it easy for clients to connect with your social media
+              presence by adding links to your{" "}
+              <Link to={"/galleries/directory"}>gallery directory</Link>.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit(socialMediaLinks)}>
+            <Input
+              className="input"
+              id="post"
+              name="post"
+              placeholder="Postal Code"
+              {...register("post")}
+            />
+
+            <Button mt={4} isLoading={loading} type="submit">
+              SAVE
+            </Button>
+          </form>
         </div>
       </div>
     </div>

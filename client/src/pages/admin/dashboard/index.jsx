@@ -28,14 +28,30 @@ import {
 import whatsNewImage from "../../../assets/images/dashboardWhatsNew.jpg";
 import { useForm } from "react-hook-form";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import axios from "axios";
 
 const DashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [latitude, setLatitude] = useState(30);
-  const [longitude, setLongitude] = useState(30);
   const navigate = useNavigate();
 
   const userData = useSelector((state) => state.getAllUserDataReducer);
+
+  //Get User Country and City Name
+  const getLocation = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(function (position) {
+        let locationObj = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        };
+        localStorage.setItem("location", JSON.stringify(locationObj));
+      });
+      GetCountryCity();
+    }
+  };
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   // Google Maps
   const containerStyle = {
@@ -43,24 +59,22 @@ const DashboardPage = () => {
     height: "400px",
   };
 
+  let lat = JSON.parse(localStorage.getItem("location"));
   const center = {
-    lat: latitude,
-    lng: longitude,
+    lat: lat?.lat,
+    lng: lat?.lon,
   };
 
   const options = {
     mapTypeId: "satellite",
   };
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(function (position) {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-      });
-    }
-  }, []);
-
+  const GetCountryCity = async () => {
+    const response = await axios.get(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat.lat}&lon=${lat.lon}&format=json`
+    );
+    localStorage.setItem("userLocation", JSON.stringify(response.data));
+  };
   // Modal New Gallery Form
   const [toggle, setToggle] = useState(false);
 
@@ -397,9 +411,9 @@ const DashboardPage = () => {
                   <h4>No recent notifications</h4>
                 </div>
               ) : (
-                userData?.activity?.map((element) => {
+                userData?.activity?.map((element, index) => {
                   return (
-                    <Link to={"/crm/dashboard"}>
+                    <Link to={"/crm/dashboard"} key={index}>
                       <div className="card">
                         <div className="icon">
                           {element.activityName === "Password Changed" ? (

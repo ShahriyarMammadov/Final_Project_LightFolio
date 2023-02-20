@@ -79,7 +79,7 @@ const SignupPage = () => {
             </Form>
           )}
         </Formik>
-        <p>
+        <p className="footerText">
           By clicking this button you agree to the Lightfolio{" "}
           <Link to={"/termsofuse"}>terms of use</Link> and{" "}
           <Link to={"/privacypolicy"}>privacy policy</Link>.

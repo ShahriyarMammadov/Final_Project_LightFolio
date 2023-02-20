@@ -175,18 +175,22 @@ const handleErrors = (err) => {
 
 module.exports.imageDownload = async (req, res, next) => {
   try {
-    const body = req.body.myFile;
-    const { id } = req.params;
-    const user = await userModel.findByIdAndUpdate(id, {
-      $push: {
-        galleries: {
-          data: body,
+    if (req.headers["content-length"] > 50 * 1024 * 1024) {
+      res.status(400).json({ error: "Dosya boyutu çok büyük" });
+    } else {
+      const body = req.body.myFile;
+      const { id } = req.params;
+      const user = await userModel.findByIdAndUpdate(id, {
+        $push: {
+          galleries: {
+            data: body,
+          },
         },
-      },
-    });
-    // const newImage = await userModel.create(body);
-    // newImage.save();
-    res.status(201).json({ message: "new image uploaded" });
+      });
+      // const newImage = await userModel.create(body);
+      // newImage.save();
+      res.status(201).json({ message: "Image Upload Successfully" });
+    }
   } catch (error) {
     res.status(409).json({
       message: error.message,

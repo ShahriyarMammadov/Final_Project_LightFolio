@@ -41,6 +41,7 @@ const AboutMePage = () => {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   const [confirmError, setConfirmError] = useState("");
   const [signature, setSignature] = useState("");
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   const current = new Date();
@@ -55,11 +56,13 @@ const AboutMePage = () => {
   const changeData = async (values) => {
     values.activity = "Name Updated";
     values.activityDate = date;
+    setLoading(true);
 
     const { data } = await axios.put(
       `http://localhost:3000/user/${userData._id}`,
       values
     );
+    setLoading(false);
     location.reload();
   };
 
@@ -88,11 +91,11 @@ const AboutMePage = () => {
   // Email Change
   const changeEmail = async () => {
     try {
+      setLoading(true);
       let { data } = await axios.patch(
         `http://localhost:3000/email/${userData._id}`,
         { newEmail, password, activity: "Email Changed", activityDate: date }
       );
-      console.log(data);
       toast({
         title: `${data.message}`,
         position: "bottom-right",
@@ -100,6 +103,7 @@ const AboutMePage = () => {
         isClosable: true,
       });
       console.log(data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
       toast({
@@ -108,6 +112,7 @@ const AboutMePage = () => {
         status: "error",
         isClosable: true,
       });
+      setLoading(false);
     }
   };
 
@@ -118,6 +123,7 @@ const AboutMePage = () => {
     } else {
       setConfirmError("");
       try {
+        setLoading(true);
         const { data } = await axios.patch(
           `http://localhost:3000/password/${userData._id}`,
           {
@@ -133,20 +139,24 @@ const AboutMePage = () => {
           status: "success",
           isClosable: true,
         });
+        setLoading(false);
       } catch (error) {
         console.log(error);
         toast({
           title: `${error.response.data.message}`,
           position: "bottom-right",
-          status: "success",
+          status: "error",
           isClosable: true,
         });
+        setLoading(false);
       }
     }
   };
 
+  // Signature Added
   const changeSignature = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.patch(
         `http://localhost:3000/signature/${userData._id}`,
         { signature, activity: "Signature Changed", activityDate: date }
@@ -158,14 +168,16 @@ const AboutMePage = () => {
         isClosable: true,
       });
       console.log(data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
       toast({
         title: `${data.message}`,
         position: "bottom-right",
-        status: "success",
+        status: "error",
         isClosable: true,
       });
+      setLoading(false);
     }
   };
 
@@ -320,6 +332,7 @@ const AboutMePage = () => {
                         colorScheme="blue"
                         mr={3}
                         onClick={changePassword}
+                        isLoading={loading}
                       >
                         Save
                       </Button>
@@ -366,7 +379,12 @@ const AboutMePage = () => {
                     </ModalBody>
 
                     <ModalFooter>
-                      <Button colorScheme="blue" mr={3} onClick={changeEmail}>
+                      <Button
+                        colorScheme="teal"
+                        mr={3}
+                        onClick={changeEmail}
+                        isLoading={loading}
+                      >
                         Save
                       </Button>
                       <Button onClick={onEmailClose}>Cancel</Button>

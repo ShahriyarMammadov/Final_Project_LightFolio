@@ -4,68 +4,37 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 
-// Morgan, console -de response statuslari ve s. gormek ucun
+//------------------------- Morgan ------------------------
 app.use(morgan("dev"));
-// -------------------------------------------------------
+// --------------------------------------------------------
 
-// Cookie
+//------------------------- Cookie ------------------------
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
-// -------------------------------------------------------
+// --------------------------------------------------------
 
-app.use(express.json());
-
+//-------------------- Express js server Config -----------
+app.use(express.json({ limit: "20mb" }));
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+// --------------------------------------------------------
 
-// Authentification Routes
+//--------------------- Authentification Routes -----------
 const authRoutes = require("./Routes/AuthRoutes");
-const userModel = require("./models/userModel");
-const multer = require("multer");
 authRoutes(app);
-// -------------------------------------------------------
+// ---------------------------------------------------------
 
-app.post("/uploads", async (req, res) => {
-  const body = req.body;
-  try {
-    const newimg = await userModel.images.create(body);
-    newimg.save();
-    res.status(201).json({ message: "yes new message" });
-  } catch (error) {
-    console.log(error);
-  }
-});
+//-------------------------User Routes ---------------------
+// ---------------------------------------------------------
 
-// Express js Server
+//--------------------- Express js Server ------------------
 const port = 3000;
 app.listen(port, () => {
   console.log("server islediiiiii .. . . .");
 });
-// -------------------------------------------------------
+// ---------------------------------------------------------
 
-// TEST
-// const router = require("./Routes/PhotoRoutes");
 
-// app.use("/galleries", router);
-// app.use("/images", router);
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-app.post("/api/upload", upload.single("photo"), (req, res) => {
-  res.json({ message: "Photo uploaded successfully" });
-});
-
-// -------------------------------------------------------
-
-// DataBase mongoDB
+//-------------------- DataBase mongoDB --------------------
 mongoose.set("strictQuery", true);
 
 mongoose
