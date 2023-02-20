@@ -180,12 +180,10 @@ module.exports.imageDownload = async (req, res, next) => {
     const user = await userModel.findByIdAndUpdate(id, {
       $push: {
         galleries: {
-          body,
+          data: body,
         },
       },
     });
-    console.log("user", user);
-    console.log(body);
     // const newImage = await userModel.create(body);
     // newImage.save();
     res.status(201).json({ message: "new image uploaded" });

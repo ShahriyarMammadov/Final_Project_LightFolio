@@ -152,6 +152,12 @@ const SettingsPage = () => {
                   </form>
                 </div>
               </div>
+              {userData?.galleries?.map((e) => {
+                console.log(e?.data);
+                return (
+                  <img src={`${e?.data}`} alt={"asd"} />
+                );
+              })}
             </div>
           </div>
         </div>
