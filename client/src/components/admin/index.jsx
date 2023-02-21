@@ -5,7 +5,7 @@ import AdminLeftNav from "../../layouts/admin/leftNav";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserAllDataAction } from "../../redux/action/user.Action";
+import { getAllcountryAction, getUserAllDataAction } from "../../redux/action/user.Action";
 
 const AdminRoot = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -35,6 +35,7 @@ const AdminRoot = () => {
           //   `http://localhost:3000/user/${data.user}`
           // );
           await dispatch(getUserAllDataAction(data.data));
+          dispatch(getAllcountryAction());
         }
       }
     };

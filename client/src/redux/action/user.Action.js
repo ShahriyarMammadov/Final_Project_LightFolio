@@ -17,22 +17,22 @@ export const getUserAllDataAction = (userData) => {
 //----------------------------------------------
 
 //--------------- Get All Counrty --------------
-export const getAllcountryAction = async () => {
+export const getAllcountryAction = () => {
   return async (dispatch) => {
     dispatch({
-      type: "Pending",
+      type: "PENDING",
     });
     axios
       .get(`https://restcountries.com/v3.1/all`)
       .then((result) => {
         dispatch({
-          type: "SEARCH_UNIVERSITY_SUCCESS",
+          type: "FULFILLED",
           payload: result.data,
         });
       })
       .catch((error) => {
         dispatch({
-          type: "SEARCH_UNIVERSITY_FAIL",
+          type: "REJECTED",
           payload: error,
         });
       });

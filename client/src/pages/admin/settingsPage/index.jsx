@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import logo from "../../../assets/images/digital downloads photo.jpg";
 import "./index.scss";
@@ -12,14 +12,16 @@ import {
   Select,
   Switch,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import LoadingComp from "../../../components/loading";
+import { getAllcountryAction } from "../../../redux/action/user.Action";
 
 const SettingsPage = () => {
   const [toggle, setToggle] = useState(false);
   const userData = useSelector((state) => state.getAllUserDataReducer);
+  const countryData = useSelector((state) => state.getAllCountryReducer);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -29,10 +31,10 @@ const SettingsPage = () => {
   } = useForm();
 
   function onSubmit(values) {
-    return new Promise((resolve) => {
-      alert(JSON.stringify(values, null, 2));
-      resolve();
-    });
+    // return new Promise((resolve) => {
+    //   alert(JSON.stringify(values, null, 2));
+    //   resolve();
+    // });
   }
   // -----------------------------------
 
@@ -143,9 +145,7 @@ const SettingsPage = () => {
                 <div className="businessAbout">
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <FormControl isRequired isInvalid={errors.businessName}>
-                      <FormLabel htmlFor="companyName">
-                        Business Name
-                      </FormLabel>
+                      <FormLabel htmlFor="companyName">Business Name</FormLabel>
                       <Input
                         id="companyName"
                         name="companyName"
@@ -319,6 +319,7 @@ const SettingsPage = () => {
                 <form onSubmit={handleSubmit(socialMediaLinks)}>
                   <FormLabel htmlFor="facebookUrl">Facebook URL</FormLabel>
                   <Input
+                    defaultValue={userData?.data?.socialMedia?.facebookUrl}
                     id="facebookUrl"
                     name="facebookUrl"
                     placeholder="https://www.facebook.com/username"
@@ -327,6 +328,7 @@ const SettingsPage = () => {
 
                   <FormLabel htmlFor="twitterUrl">Twitter URL</FormLabel>
                   <Input
+                    defaultValue={userData?.data?.socialMedia?.twitterUrl}
                     id="twitterUrl"
                     name="twitterUrl"
                     placeholder="https://www.twitter.com/username"
@@ -335,6 +337,7 @@ const SettingsPage = () => {
 
                   <FormLabel htmlFor="instagramUrl">Instagram URL</FormLabel>
                   <Input
+                    defaultValue={userData?.data?.socialMedia?.instagramUrl}
                     id="instagramUrl"
                     name="instagramUrl"
                     placeholder="https://www.instagram.com/username"
@@ -343,6 +346,7 @@ const SettingsPage = () => {
 
                   <FormLabel htmlFor="pinterestUrl">Pinterest URL</FormLabel>
                   <Input
+                    defaultValue={userData?.data?.socialMedia?.pinterestUrl}
                     id="pinterestUrl"
                     name="pinterestUrl"
                     placeholder="https://www.pinterest.com/username"
@@ -351,6 +355,7 @@ const SettingsPage = () => {
 
                   <FormLabel htmlFor="youtubeUrl">Youtube URL</FormLabel>
                   <Input
+                    defaultValue={userData?.data?.socialMedia?.youtubeUrl}
                     id="youtubeUrl"
                     name="youtubeUrl"
                     placeholder="https://www.youtube.com/username"
@@ -359,6 +364,7 @@ const SettingsPage = () => {
 
                   <FormLabel htmlFor="tiktokUrl">Tiktok URL</FormLabel>
                   <Input
+                    defaultValue={userData?.data?.socialMedia?.tiktokUrl}
                     id="tiktokUrl"
                     name="tiktokUrl"
                     placeholder="https://www.tiktok.com/username"
@@ -367,6 +373,7 @@ const SettingsPage = () => {
 
                   <FormLabel htmlFor="snapchatrUrl">Snapchat URL</FormLabel>
                   <Input
+                    defaultValue={userData?.data?.socialMedia?.snapchatUrl}
                     id="snapchatrUrl"
                     name="snapchatrUrl"
                     placeholder="https://www.snapchat.com/username"
@@ -439,7 +446,7 @@ const SettingsPage = () => {
 
                 <div className="checkbox">
                   <input name="daylight" id="daylight" type="checkbox" />{" "}
-                  <label for="daylight">Observe Daylight Savings Time</label>
+                  <label htmlFor="daylight">Observe Daylight Savings Time</label>
                 </div>
 
                 <div className="checkboxsForBranding">
