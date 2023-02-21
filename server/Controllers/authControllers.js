@@ -138,6 +138,32 @@ module.exports.signatureChanged = async (req, res) => {
     });
   }
 };
+// -----------------------------------------------------
+
+// Business Data Updated
+module.exports.businessDataUpdated = async (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+
+  try {
+    const updateBusinessData = await userModel.findByIdAndUpdate(id, {
+      business: req.body,
+    });
+    const updateCompanyName = await userModel.findByIdAndUpdate(id, {
+      companyName: body.companyName,
+    });
+    const updateSocialMedia = await userModel.findByIdAndUpdate(id, {
+      socialMedia: body,
+    });
+
+    res.json({ message: "Success" });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+// -----------------------------------------------------
 
 // Create Token
 const maxAge = 3 * 24 * 60 * 60;
@@ -172,7 +198,6 @@ const handleErrors = (err) => {
 // -----------------------------------------------------
 
 // Image Download
-
 module.exports.imageDownload = async (req, res, next) => {
   try {
     const galleryByGalleryName = await userModel.findOne({
@@ -203,29 +228,6 @@ module.exports.imageDownload = async (req, res, next) => {
 };
 
 // Register
-// module.exports.register = async (req, res, next) => {
-//   try {
-//     const { email, password, companyName, fullName } = req.body;
-//     const user = await userModel.create({
-//       email,
-//       password,
-//       companyName,
-//       fullName,
-//     });
-//     const token = createToken(user._id);
-
-//     res.cookie("jwt", token, {
-//       withCredentials: true,
-//       maxAge: maxAge * 1000,
-//     });
-//     res.status(201).json({ user: user._id, created: true });
-//   } catch (err) {
-//     console.log(err);
-//     const errors = handleErrors(err);
-//     res.json({ errors, created: false });
-//   }
-// };
-
 module.exports.register = async (req, res) => {
   const { email, password, companyName, fullName } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -257,24 +259,6 @@ module.exports.register = async (req, res) => {
 // -----------------------------------------------------
 
 // Login
-// module.exports.login = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
-//     const user = await userModel.login(email, password);
-//     const token = createToken(user._id);
-
-//     res.cookie("jwt", token, {
-//       withCredentials: true,
-//       maxAge: maxAge * 1000,
-//     });
-//     res.status(200).json({ user: user, created: true });
-//   } catch (err) {
-//     console.log(err);
-//     const errors = handleErrors(err);
-//     res.json({ errors, created: false });
-//   }
-// };
-
 module.exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -284,53 +268,19 @@ module.exports.login = async (req, res) => {
       throw Error("User not found");
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
-    console.log(passwordMatch);
-    console.log(password);
-    console.log(user.password);
     if (!passwordMatch) {
       throw Error("Incorrect password");
     }
-
-    // if (!(await bcrypt.compare(password, user.password))) {
-    //   throw Error("nocoreect");
-    // }
     const token = createToken(user._id);
 
     res.cookie("jwt", token, {
       withCredentials: true,
       maxAge: maxAge * 1000,
     });
-    res.status(200).json({ user: user, created: true });
+    res.status(200).json({ data: user, created: true });
   } catch (err) {
     console.log(err);
     const errors = handleErrors(err);
     res.json({ errors, created: false });
   }
 };
-
-// module.exports.login = async (req, res) => {
-//   const { email, password } = req.body;
-
-//   console.log(email, password);
-//   try {
-//     const user = await userModel.findOne({ email: email });
-//     if (!user) {
-//       return res.status(404).send({ message: "User not found" });
-//     }
-
-//     console.log(user.password);
-//     if (!(await bcrypt.compare(password, user.password))) {
-//       return res.status(400).send({ message: "Invalid credentials" });
-//     }
-//     const token = sign({ _id: user._id }, "secret");
-//     res.cookie("jwt", token, {
-//       withCredentials: true,
-//       maxAge: 24 * 60 * 60 * 1000, // 1 day
-//     });
-//     res.status(200).send({ message: "SUCCESS" });
-//   } catch (error) {
-//     const errors = handleErrors(error);
-//     res.status(500).send({ errors });
-//   }
-// };
-// -----------------------------------------------------

@@ -24,28 +24,25 @@ const userSchema = new mongoose.Schema(
     activity: [{ activityName: String, activityDate: String }],
 
     business: {
-      businessName: String,
-      businessWebsite: String,
+      businessWebSite: String,
       businessEmail: String,
       businessPhone: String,
-      businessAddress: {
-        addressLine1: String,
-        addressLine2: String,
-        city: String,
-        postalCode: String,
-        country: String,
-      },
+      addressLine1: String,
+      addressLine2: String,
+      city: String,
+      postalCode: String,
+      country: String,
     },
 
     socialMedia: {
-      facebook: String,
-      twitter: String,
-      pinterest: String,
-      linkedin: String,
-      youtube: String,
-      tiktok: String,
-      snapchat: String,
-      instagram: String,
+      facebookUrl: String,
+      twitterUrl: String,
+      pinterestUrl: String,
+      linkedinUrl: String,
+      youtubeUrl: String,
+      tiktokUrl: String,
+      snapchatUrl: String,
+      instagramUrl: String,
     },
 
     signature: {

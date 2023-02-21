@@ -7,6 +7,7 @@ const {
   passwordChanged,
   signatureChanged,
   imageDownload,
+  businessDataUpdated,
 } = require("../controllers/authControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -19,6 +20,7 @@ function userRouter(app) {
   app.patch("/password/:id", passwordChanged);
   app.patch("/uploads/:id", imageDownload);
   app.patch("/signature/:id", signatureChanged);
+  app.patch("/business/:id", businessDataUpdated);
   app.put("/user/:id", updateUserData);
 }
 

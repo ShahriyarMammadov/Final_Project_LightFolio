@@ -62,8 +62,8 @@ const AdminHeader = () => {
                 <div className="user">
                   <img src={userPhoto} alt="" />
                   <div className="name">
-                    <h6>{userData.companyName}</h6>
-                    <p>{userData.fullName}</p>
+                    <h6>{userData?.data?.companyName}</h6>
+                    <p>{userData?.data?.fullName}</p>
                   </div>
                 </div>
               </MenuButton>

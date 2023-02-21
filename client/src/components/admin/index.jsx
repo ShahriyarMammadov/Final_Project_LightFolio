@@ -31,10 +31,10 @@ const AdminRoot = () => {
           removeCookie("jwt");
           navigate("/login");
         } else {
-          const response = await axios.get(
-            `http://localhost:3000/user/${data.user}`
-          );
-          await dispatch(getUserAllDataAction(response.data));
+          // const response = await axios.get(
+          //   `http://localhost:3000/user/${data.user}`
+          // );
+          await dispatch(getUserAllDataAction(data.data));
         }
       }
     };

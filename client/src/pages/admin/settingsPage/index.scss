@@ -22,13 +22,30 @@
         padding: 0 25px;
       }
     }
+    .input {
+      margin-top: 15px;
+    }
 
     .settingsFlex {
+      display: flex;
+      gap: 3%;
+
       .businessProfile {
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
         margin-top: 40px;
         padding: 30px;
         background-color: #ffffff;
+        button {
+          background-color: rgb(51, 51, 51);
+          color: white;
+          width: 140px;
+          transition: all 0.5s;
+          border-radius: 0%;
+
+          &:hover {
+            background-color: rgb(68, 68, 68);
+          }
+        }
 
         .contactHeader {
           padding-bottom: 40px;
@@ -48,6 +65,7 @@
             font-size: 12px;
             border-radius: 8px;
             transition: all 0.5s;
+            color: rgb(136, 136, 136);
 
             &:hover {
               background-color: rgb(68, 68, 68);
@@ -115,22 +133,6 @@
               }
             }
           }
-
-          .input {
-            margin-top: 15px;
-          }
-
-          button {
-            background-color: rgb(51, 51, 51);
-            color: white;
-            width: 140px;
-            transition: all 0.5s;
-            border-radius: 0%;
-
-            &:hover {
-              background-color: rgb(68, 68, 68);
-            }
-          }
         }
       }
       .socialMediaLinks {
@@ -144,6 +146,7 @@
           p {
             font-size: 16px;
             line-height: 20px;
+            padding-top: 10px;
 
             a {
               color: rgb(13, 110, 253);
@@ -151,8 +154,69 @@
           }
         }
       }
+      .appSettings {
+        height: fit-content;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        margin-top: 40px;
+        padding: 30px;
+        background-color: #ffffff;
+
+        .app {
+          .headerBranding,
+          .activityHeader {
+            padding-top: 50px;
+            h4 {
+              font-weight: 600 !important;
+              color: rgb(68, 68, 68) !important;
+              line-height: 19.2px;
+            }
+          }
+
+          .currencyAndDateFormat {
+            display: flex;
+            gap: 10px;
+            div {
+              display: inline-block;
+              margin-top: 10px;
+            }
+          }
+
+          .control {
+            button {
+              margin-top: 16px;
+              width: 80px;
+              padding: 5px 0;
+              background-color: rgb(68, 68, 68);
+              color: white;
+
+              &.leftBtn {
+                margin-left: 30px;
+              }
+            }
+          }
+
+          .checkbox {
+            padding: 10px 0;
+          }
+
+          .checkboxsForBranding {
+            .switch {
+              display: flex;
+              align-items: center;
+              gap: 15px;
+
+              span {
+                font-weight: 700;
+                font-size: 14px;
+                color: rgb(136, 136, 136);
+              }
+            }
+          }
+        }
+      }
     }
-    label {
+    label,
+    p {
       font-weight: 400;
       font-size: 13px;
       color: rgb(117, 117, 117);
