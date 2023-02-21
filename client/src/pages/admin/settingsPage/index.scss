@@ -96,14 +96,6 @@
             }
           }
 
-          label {
-            font-weight: 400;
-            font-size: 13px;
-            color: rgb(117, 117, 117);
-            line-height: 20px;
-            padding-top: 20px;
-          }
-
           .faxAndPhone,
           .cityAndPostal {
             display: flex;
@@ -141,6 +133,31 @@
           }
         }
       }
+      .socialMediaLinks {
+        margin-top: 40px;
+        .socialHeaderText {
+          h4 {
+            font-weight: 600 !important;
+            color: rgb(68, 68, 68) !important;
+            line-height: 19.2px;
+          }
+          p {
+            font-size: 16px;
+            line-height: 20px;
+
+            a {
+              color: rgb(13, 110, 253);
+            }
+          }
+        }
+      }
+    }
+    label {
+      font-weight: 400;
+      font-size: 13px;
+      color: rgb(117, 117, 117);
+      line-height: 20px;
+      padding-top: 20px;
     }
   }
 }

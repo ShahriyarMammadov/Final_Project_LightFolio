@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "FullName is required"],
     },
     activity: [{ activityName: String, activityDate: String }],
+
     business: {
       businessName: String,
       businessWebsite: String,
@@ -35,6 +36,7 @@ const userSchema = new mongoose.Schema(
         country: String,
       },
     },
+
     socialMedia: {
       facebook: String,
       twitter: String,
@@ -49,7 +51,8 @@ const userSchema = new mongoose.Schema(
     signature: {
       type: String,
     },
-    galleries: [{ data: String }],
+
+    galleries: [{ galleryName: String, galleryImage: [String] }],
   },
   { timestamps: true }
 );

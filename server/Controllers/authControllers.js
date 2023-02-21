@@ -175,8 +175,12 @@ const handleErrors = (err) => {
 
 module.exports.imageDownload = async (req, res, next) => {
   try {
+    const galleryByGalleryName = await userModel.findOne({
+      galleryName: galleryName,
+    });
+    console.log(galleryByGalleryName);
     if (req.headers["content-length"] > 50 * 1024 * 1024) {
-      res.status(400).json({ error: "Dosya boyutu çok büyük" });
+      res.status(400).json({ error: "Image Length Very Long!!!!" });
     } else {
       const body = req.body.myFile;
       const { id } = req.params;

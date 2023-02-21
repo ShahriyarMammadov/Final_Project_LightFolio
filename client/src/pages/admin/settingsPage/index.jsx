@@ -34,6 +34,7 @@ const SettingsPage = () => {
   }
 
   function socialMediaLinks(values) {
+    axios.patch(`http://localhost:3000/business/${userData._id}`);
     return new Promise((resolve) => {
       alert(JSON.stringify(values, null, 2));
       resolve();
@@ -244,7 +245,14 @@ const SettingsPage = () => {
                           {...register("postalCode")}
                         />
                       </div>
-                      <Select placeholder="Select option" className="input">
+                      <Select
+                        placeholder={
+                          userLocation
+                            ? userLocation.address.country
+                            : "Please Select Country"
+                        }
+                        className="input"
+                      >
                         <option value="option1">Option 1</option>
                         <option value="option2">Option 2</option>
                         <option value="option3">Option 3</option>
@@ -252,9 +260,9 @@ const SettingsPage = () => {
                     </>
                   )}
 
-                  <Button mt={4} isLoading={loading} type="submit">
+                  {/* <Button mt={4} isLoading={loading} type="submit">
                     SAVE
-                  </Button>
+                  </Button> */}
                 </form>
               </div>
 
@@ -277,31 +285,79 @@ const SettingsPage = () => {
                 return <img key={i} src={`${e?.data}`} alt={"asd"} />;
               })} */}
             </div>
+            
+            <div className="socialMediaLinks">
+              <div className="socialHeaderText">
+                <h4>Social Media Links</h4>
+                <p>
+                  Make it easy for clients to connect with your social media
+                  presence by adding links to your{" "}
+                  <Link to={"/galleries/directory"}>gallery directory</Link>.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit(socialMediaLinks)}>
+                <FormLabel htmlFor="facebookUrl">Facebook URL</FormLabel>
+                <Input
+                  id="facebookUrl"
+                  name="facebookUrl"
+                  placeholder="https://www.facebook.com/username"
+                  {...register("facebookUrl")}
+                />
+
+                <FormLabel htmlFor="twitterUrl">Twitter URL</FormLabel>
+                <Input
+                  id="twitterUrl"
+                  name="twitterUrl"
+                  placeholder="https://www.twitter.com/username"
+                  {...register("twitterUrl")}
+                />
+
+                <FormLabel htmlFor="instagramUrl">Instagram URL</FormLabel>
+                <Input
+                  id="instagramUrl"
+                  name="instagramUrl"
+                  placeholder="https://www.instagram.com/username"
+                  {...register("instagramUrl")}
+                />
+
+                <FormLabel htmlFor="pinterestUrl">Pinterest URL</FormLabel>
+                <Input
+                  id="pinterestUrl"
+                  name="pinterestUrl"
+                  placeholder="https://www.pinterest.com/username"
+                  {...register("pinterestUrl")}
+                />
+
+                <FormLabel htmlFor="youtubeUrl">Youtube URL</FormLabel>
+                <Input
+                  id="youtubeUrl"
+                  name="youtubeUrl"
+                  placeholder="https://www.youtube.com/username"
+                  {...register("youtubeUrl")}
+                />
+
+                <FormLabel htmlFor="tiktokUrl">Tiktok URL</FormLabel>
+                <Input
+                  id="tiktokUrl"
+                  name="tiktokUrl"
+                  placeholder="https://www.tiktok.com/username"
+                  {...register("tiktokUrl")}
+                />
+
+                <FormLabel htmlFor="snapchatrUrl">Snapchat URL</FormLabel>
+                <Input
+                  id="snapchatrUrl"
+                  name="snapchatrUrl"
+                  placeholder="https://www.snapchat.com/username"
+                  {...register("snapchatrUrl")}
+                />
+                <Button mt={4} isLoading={loading} type="submit">
+                  SAVE
+                </Button>
+              </form>
+            </div>
           </div>
-        </div>
-
-        <div className="socialMediaLinks">
-          <div className="socialHeaderText">
-            <p>
-              Make it easy for clients to connect with your social media
-              presence by adding links to your{" "}
-              <Link to={"/galleries/directory"}>gallery directory</Link>.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit(socialMediaLinks)}>
-            <Input
-              className="input"
-              id="post"
-              name="post"
-              placeholder="Postal Code"
-              {...register("post")}
-            />
-
-            <Button mt={4} isLoading={loading} type="submit">
-              SAVE
-            </Button>
-          </form>
         </div>
       </div>
     </div>
