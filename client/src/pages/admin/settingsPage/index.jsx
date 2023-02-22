@@ -11,6 +11,8 @@ import {
   Button,
   Select,
   Switch,
+  Toast,
+  useToast,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -24,6 +26,8 @@ const SettingsPage = () => {
   const userData = useSelector((state) => state.getAllUserDataReducer);
   const countryData = useSelector((state) => state.getAllCountryReducer);
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
+
   console.log(userData.data?.business);
   const {
     handleSubmit,
@@ -60,7 +64,7 @@ const SettingsPage = () => {
 
   const handleSubmitImage = async (e) => {
     e.preventDefault();
-    await createPost(postImage);
+    await createPost(postImage, userData.data._id);
     setLoading(true);
   };
 
@@ -90,16 +94,32 @@ const SettingsPage = () => {
   //------------------------------------------------------
 
   //------------------ Update Business Data --------------
-  function socialMediaLinks(values) {
-    axios.patch(
-      `http://localhost:3000/business/${userData?.data?._id}`,
-      values
-    );
+  const socialMediaLinks = async (values) => {
+    try {
+      const { data } = await axios.patch(
+        `http://localhost:3000/business/${userData?.data?._id}`,
+        values
+      );
+      console.log(data);
+      toast({
+        title: `${data.message}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: `${data.message}`,
+        position: "bottom-right",
+        status: "error",
+        isClosable: true,
+      });
+    }
     // return new Promise((resolve) => {
     //   alert(JSON.stringify(values, null, 2));
     //   resolve();
     // });
-  }
+  };
   //------------------------------------------------------
 
   return (
@@ -168,7 +188,7 @@ const SettingsPage = () => {
                       Business Web Site
                     </FormLabel>
                     <Input
-                      defaultValue={userData?.data?.business.businessWebSite}
+                      defaultValue={userData?.data?.business?.businessWebSite}
                       id="businessWebSite"
                       name="businessWebSite"
                       placeholder="http://www.mycompany.com"
@@ -217,9 +237,7 @@ const SettingsPage = () => {
                               Fax Number
                             </FormLabel>
                             <Input
-                              defaultValue={
-                                userData?.data?.business?.faxNumber
-                              }
+                              defaultValue={userData?.data?.business?.faxNumber}
                               id="faxNumber"
                               name="faxNumber"
                               {...register("faxNumber")}
@@ -280,9 +298,9 @@ const SettingsPage = () => {
                           name="country"
                           id="country"
                           placeholder={
-                            userData.data.business.country
-                              ? userData.data.business.country
-                              : userLocation.address.country
+                            userData?.data?.business?.country
+                              ? userData?.data?.business?.country
+                              : userLocation?.address?.country
                           }
                           className="input"
                           {...register("postalCode")}

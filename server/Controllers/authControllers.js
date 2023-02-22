@@ -1,6 +1,7 @@
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
 
 // Update User BYID
 module.exports.updateUserData = async (req, res) => {
@@ -199,33 +200,62 @@ const handleErrors = (err) => {
 
 // Image Download`
 module.exports.imageDownload = async (req, res, next) => {
-  console.log(req.body);
-  // try {
-  //   const galleryByGalleryName = await userModel.findOne({
-  //     galleryName: galleryName,
-  //   });
-  //   console.log(galleryByGalleryName);
-  //   if (req.headers["content-length"] > 50 * 1024 * 1024) {
-  //     res.status(400).json({ error: "Image Length Very Long!!!!" });
-  //   } else {
-  //     const body = req.body.myFile;
-  //     const { id } = req.params;
-  //     const user = await userModel.findByIdAndUpdate(id, {
-  //       $push: {
-  //         galleries: {
-  //           galleryImage: body,
-  //         },
-  //       },
-  //     });
-  //     // const newImage = await userModel.create(body);
-  //     // newImage.save();
-  //     res.status(201).json({ message: "Image Upload Successfully" });
-  //   }
-  // } catch (error) {
-  //   res.status(409).json({
-  //     message: error.message,
-  //   });
-  // }
+  try {
+    if (req.headers["content-length"] > 20 * 1024 * 1024) {
+      res.status(400).json({ error: "Image Length Very Long!!!!" });
+    } else {
+      const { id } = req.params;
+      const newImage = req.body.myFile;
+      // UserModel üzerinden kullanıcıyı buluyoruz
+      const user = await userModel.findById(id);
+      const galleryId = "63f64d52ff5e994413dd4172";
+
+      // Hangi galeri nesnesine resim eklemek istediğimizi belirleyebilmek için, önce galeri nesnesini buluyoruz
+      const gallery = user.galleries.find(
+        (gallery) => gallery._id.toString() === galleryId
+      );
+
+      // Galeri nesnesini bulduktan sonra, galleryImage array'ine yeni bir image nesnesi ekleyebiliriz
+      gallery.galleryImage.push({
+        _id: new mongoose.Types.ObjectId(),
+        image: newImage,
+      });
+
+      // Kullanıcının güncellenmiş verisini kaydediyoruz
+      await user.save();
+      // const body = req.body.myFile;
+      // const { id } = req.params;
+
+      // const user = await userModel.findByIdAndUpdate(id, {
+      //   galleries: {
+      //     $push: { galleryImage: body },
+      //   },
+      // });
+
+      // console.log(user);
+      // let galery = user.galleries.findOne({
+      //   _id: galeryId,
+      // });
+
+      // user.galleries.map((e) => {
+      //   if (e._id == galeryId) {
+      //     return e;
+      //   } else {
+      //     console.log("usernot");
+      //   }
+      // });
+      // const gallery = await galery.findById(galeryId);
+      // console.log(user.galleries);
+      // const newImage = await userModel.create(body);
+      // newImage.save();
+      res.status(201).json({ message: "Image Upload Successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(409).json({
+      message: error.message,
+    });
+  }
 };
 // -----------------------------------------------------
 

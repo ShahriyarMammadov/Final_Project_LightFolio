@@ -30,6 +30,7 @@ import { useForm } from "react-hook-form";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import axios from "axios";
 import LoadingComp from "../../../components/loading/index";
+import { convertToBase64 } from "../../../services";
 
 const DashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -108,6 +109,18 @@ const DashboardPage = () => {
 
   console.log(date);
 
+  //Cover Image Convert to base64
+  const [postImage, setPostImage] = useState({
+    myFile: "",
+  });
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+    setPostImage({ ...postImage, myFile: base64 });
+  };
+  //-------------------------------------------
+
   return (
     <div id="dashboard">
       <Helmet>
@@ -175,6 +188,22 @@ const DashboardPage = () => {
                       {...register("eventDate")}
                       type={"datetime-local"}
                       id="eventDate"
+                    />
+                  </FormControl>
+
+                  <FormControl>
+                    <div className="coverImage">
+                      <FormLabel htmlFor="coverImage">Cover Image</FormLabel>
+                      <FormHelperText>
+                        The date the photos were taken.
+                      </FormHelperText>
+                    </div>
+                    <Input
+                      onChange={handleFileUpload}
+                      value={postImage}
+                      {...register("coverImage")}
+                      id="coverImage"
+                      type={"file"}
                     />
                   </FormControl>
 
@@ -303,52 +332,36 @@ const DashboardPage = () => {
 
           <div className="galleryCardAndStudioVisit">
             <div className="galleryCards">
-              <Link to={`/galleryImageDetail`}>
-                <div className="card">
-                  <div className="expired">
-                    <p>EXPIRED</p>
-                  </div>
-                  <div className="galleryImage">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8mEIWZjRFdiO4YIkq790lTaNzTtCH6DcwrQ&usqp=CAU"
-                      alt="GalleryImage"
-                    />
-                  </div>
+              {userData.data.galleries.map((e, i) => {
+                if (i < 3) {
+                  return (
+                    <Link to={`/galleryImageDetail/${e._id}`} key={i}>
+                      <div className="card">
+                        <div className="expired">
+                          <p>EXPIRED</p>
+                        </div>
+                        <div className="galleryImage">
+                          <img src={`${e?.data}`} alt={e?.galleryName} />
+                        </div>
 
-                  <div className="galleryName">
-                    <p>Shahriyar's Gallery</p>
-                    <div className="visitorAndImageLength">
-                      <span>0</span>
-                      <i className="fa-solid fa-images"></i>
-                      <span>1</span>
-                      <i className="fa-solid fa-eye"></i>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+                        <div className="galleryName">
+                          <p>{e?.galleryName}</p>
+                          <div className="visitorAndImageLength">
+                            <span>0</span>
+                            <i className="fa-solid fa-images"></i>
+                            <span>1</span>
+                            <i className="fa-solid fa-eye"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                } else {
+                  null;
+                }
+              })}
 
-              <Link to={`/galleryImageDetail`}>
-                <div className="card">
-                  <div className="galleryImage">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8mEIWZjRFdiO4YIkq790lTaNzTtCH6DcwrQ&usqp=CAU"
-                      alt="GalleryImage"
-                    />
-                  </div>
-
-                  <div className="galleryName">
-                    <p>Shahriyar's Gallery</p>
-                    <div className="visitorAndImageLength">
-                      <span>0</span>
-                      <i className="fa-solid fa-images"></i>
-                      <span>1</span>
-                      <i className="fa-solid fa-eye"></i>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-
-              <Link to={`/galleryImageDetail`}>
+              {/* <Link to={`/galleryImageDetail`}>
                 <div className="card">
                   <div className="galleryImage">
                     <img
@@ -368,6 +381,27 @@ const DashboardPage = () => {
                   </div>
                 </div>
               </Link>
+
+              <Link to={`/galleryImageDetail`}>
+                <div className="card">
+                  <div className="galleryImage">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8mEIWZjRFdiO4YIkq790lTaNzTtCH6DcwrQ&usqp=CAU"
+                      alt="GalleryImage"
+                    />
+                  </div>
+
+                  <div className="galleryName">
+                    <p>Shahriyar's Gallery</p>
+                    <div className="visitorAndImageLength">
+                      <span>0</span>
+                      <i className="fa-solid fa-images"></i>
+                      <span>1</span>
+                      <i className="fa-solid fa-eye"></i>
+                    </div>
+                  </div>
+                </div>
+              </Link> */}
             </div>
 
             <div className="studioManagerVisit">

@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 export const convertToBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -19,6 +20,8 @@ export const createImage = async (newImage, id) => {
 };
 
 export const createPost = async (newImage, id) => {
+  console.log(newImage);
+  console.log(id);
   try {
     await createImage(newImage, id);
   } catch (error) {
