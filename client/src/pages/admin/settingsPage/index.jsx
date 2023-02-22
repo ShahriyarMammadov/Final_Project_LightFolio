@@ -17,13 +17,14 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import LoadingComp from "../../../components/loading";
 import { getAllcountryAction } from "../../../redux/action/user.Action";
+import { convertToBase64, createPost } from "../../../services";
 
 const SettingsPage = () => {
   const [toggle, setToggle] = useState(false);
   const userData = useSelector((state) => state.getAllUserDataReducer);
   const countryData = useSelector((state) => state.getAllCountryReducer);
   const [loading, setLoading] = useState(false);
-
+  console.log(userData.data?.business);
   const {
     handleSubmit,
     register,
@@ -43,39 +44,38 @@ const SettingsPage = () => {
     myFile: "",
   });
 
-  const url = `http://localhost:3000/uploads/${userData?.data?._id}`;
-  const createImage = async (newImage) => {
-    await axios.patch(url, newImage);
-    setLoading(false);
-  };
+  // const url = `http://localhost:3000/uploads/${userData?.data?._id}`;
+  // const createImage = async (newImage) => {
+  //   await axios.patch(url, newImage);
+  //   setLoading(false);
+  // };
 
-  const createPost = async (post) => {
-    try {
-      await createImage(post);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  console.log(loading);
+  // const createPost = async (post) => {
+  //   try {
+  //     await createImage(post);
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
 
-  const handleSubmitImage = (e) => {
+  const handleSubmitImage = async (e) => {
     e.preventDefault();
-    createPost(postImage);
+    await createPost(postImage);
     setLoading(true);
   };
 
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
+  // const convertToBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.readAsDataURL(file);
+  //     fileReader.onload = () => {
+  //       resolve(fileReader.result);
+  //     };
+  //     fileReader.onerror = (error) => {
+  //       reject(error);
+  //     };
+  //   });
+  // };
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -95,10 +95,10 @@ const SettingsPage = () => {
       `http://localhost:3000/business/${userData?.data?._id}`,
       values
     );
-    return new Promise((resolve) => {
-      alert(JSON.stringify(values, null, 2));
-      resolve();
-    });
+    // return new Promise((resolve) => {
+    //   alert(JSON.stringify(values, null, 2));
+    //   resolve();
+    // });
   }
   //------------------------------------------------------
 
@@ -168,6 +168,7 @@ const SettingsPage = () => {
                       Business Web Site
                     </FormLabel>
                     <Input
+                      defaultValue={userData?.data?.business.businessWebSite}
                       id="businessWebSite"
                       name="businessWebSite"
                       placeholder="http://www.mycompany.com"
@@ -202,6 +203,9 @@ const SettingsPage = () => {
                               Business Phone
                             </FormLabel>
                             <Input
+                              defaultValue={
+                                userData?.data?.business?.businessPhone
+                              }
                               id="businessPhone"
                               name="businessPhone"
                               {...register("businessPhone")}
@@ -213,6 +217,9 @@ const SettingsPage = () => {
                               Fax Number
                             </FormLabel>
                             <Input
+                              defaultValue={
+                                userData?.data?.business?.faxNumber
+                              }
                               id="faxNumber"
                               name="faxNumber"
                               {...register("faxNumber")}
@@ -224,7 +231,9 @@ const SettingsPage = () => {
                         </FormLabel>
                         <Input
                           defaultValue={
-                            userLocation ? userLocation.display_name : ""
+                            userData?.data?.business?.addressLine1
+                              ? userData?.data?.business?.addressLine1
+                              : userLocation.display_name
                           }
                           id="addressLine1"
                           name="addressLine1"
@@ -233,6 +242,7 @@ const SettingsPage = () => {
                         />
 
                         <Input
+                          defaultValue={userData?.data?.business?.addressLine2}
                           className="input"
                           id="addressLine2"
                           name="addressLine2"
@@ -243,7 +253,9 @@ const SettingsPage = () => {
                           <Input
                             className="input"
                             defaultValue={
-                              userLocation ? userLocation.address.city : ""
+                              userData?.data?.business?.city
+                                ? userData?.data?.business?.city
+                                : userLocation.address.city
                             }
                             id="city"
                             name="city"
@@ -254,7 +266,9 @@ const SettingsPage = () => {
                           <Input
                             className="input"
                             defaultValue={
-                              userLocation ? userLocation.address.postcode : ""
+                              userData?.data?.business?.postalCode
+                                ? userData?.data?.business?.businessPhone
+                                : userLocation.address.postcode
                             }
                             id="postalCode"
                             name="postalCode"
@@ -266,9 +280,9 @@ const SettingsPage = () => {
                           name="country"
                           id="country"
                           placeholder={
-                            userLocation
-                              ? userLocation.address.country
-                              : "Please Select Country"
+                            userData.data.business.country
+                              ? userData.data.business.country
+                              : userLocation.address.country
                           }
                           className="input"
                           {...register("postalCode")}
@@ -286,24 +300,24 @@ const SettingsPage = () => {
                   </form>
                 </div>
 
-                {/* <div className="imageDownload">
-                <div>
-                  <form onSubmit={handleSubmitImage}>
-                    <input
-                      type="file"
-                      label="Image"
-                      name="myFile"
-                      accept=".jpeg, .png, .jpg"
-                      onChange={(e) => handleFileUpload(e)}
-                    />
+                <div className="imageDownload">
+                  <div>
+                    <form onSubmit={handleSubmitImage}>
+                      <input
+                        type="file"
+                        label="Image"
+                        name="myFile"
+                        accept=".jpeg, .png, .jpg"
+                        onChange={(e) => handleFileUpload(e)}
+                      />
 
-                    <button>Submit</button>
-                  </form>
+                      <button>Submit</button>
+                    </form>
+                  </div>
                 </div>
-              </div> */}
-                {/* {userData?.galleries?.map((e, i) => {
-                return <img key={i} src={`${e?.data}`} alt={"asd"} />;
-              })} */}
+                {userData?.galleries?.map((e, i) => {
+                  return <img key={i} src={`${e?.data}`} alt={"asd"} />;
+                })}
               </div>
 
               <div className="socialMediaLinks">
@@ -446,7 +460,9 @@ const SettingsPage = () => {
 
                 <div className="checkbox">
                   <input name="daylight" id="daylight" type="checkbox" />{" "}
-                  <label htmlFor="daylight">Observe Daylight Savings Time</label>
+                  <label htmlFor="daylight">
+                    Observe Daylight Savings Time
+                  </label>
                 </div>
 
                 <div className="checkboxsForBranding">

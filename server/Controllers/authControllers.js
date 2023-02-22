@@ -197,34 +197,47 @@ const handleErrors = (err) => {
 };
 // -----------------------------------------------------
 
-// Image Download
+// Image Download`
 module.exports.imageDownload = async (req, res, next) => {
-  try {
-    const galleryByGalleryName = await userModel.findOne({
-      galleryName: galleryName,
-    });
-    console.log(galleryByGalleryName);
-    if (req.headers["content-length"] > 50 * 1024 * 1024) {
-      res.status(400).json({ error: "Image Length Very Long!!!!" });
-    } else {
-      const body = req.body.myFile;
-      const { id } = req.params;
-      const user = await userModel.findByIdAndUpdate(id, {
-        $push: {
-          galleries: {
-            data: body,
-          },
-        },
-      });
-      // const newImage = await userModel.create(body);
-      // newImage.save();
-      res.status(201).json({ message: "Image Upload Successfully" });
-    }
-  } catch (error) {
-    res.status(409).json({
-      message: error.message,
-    });
-  }
+  console.log(req.body);
+  // try {
+  //   const galleryByGalleryName = await userModel.findOne({
+  //     galleryName: galleryName,
+  //   });
+  //   console.log(galleryByGalleryName);
+  //   if (req.headers["content-length"] > 50 * 1024 * 1024) {
+  //     res.status(400).json({ error: "Image Length Very Long!!!!" });
+  //   } else {
+  //     const body = req.body.myFile;
+  //     const { id } = req.params;
+  //     const user = await userModel.findByIdAndUpdate(id, {
+  //       $push: {
+  //         galleries: {
+  //           galleryImage: body,
+  //         },
+  //       },
+  //     });
+  //     // const newImage = await userModel.create(body);
+  //     // newImage.save();
+  //     res.status(201).json({ message: "Image Upload Successfully" });
+  //   }
+  // } catch (error) {
+  //   res.status(409).json({
+  //     message: error.message,
+  //   });
+  // }
+};
+// -----------------------------------------------------
+
+//---------------- New Gallery --------------------------
+module.exports.newGallery = async (req, res) => {
+  const { id } = req.params;
+
+  const gallery = await userModel.findByIdAndUpdate(id, {
+    $push: {
+      galleries: req.body,
+    },
+  });
 };
 
 // Register

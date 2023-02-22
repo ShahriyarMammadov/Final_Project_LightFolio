@@ -8,6 +8,7 @@ const {
   signatureChanged,
   imageDownload,
   businessDataUpdated,
+  newGallery,
 } = require("../controllers/authControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -16,6 +17,7 @@ function userRouter(app) {
   app.post("/", checkUser);
   app.post("/register", register);
   app.post("/login", login);
+  app.post("/galleryCreate/:id", newGallery);
   app.patch("/email/:id", emailChanged);
   app.patch("/password/:id", passwordChanged);
   app.patch("/uploads/:id", imageDownload);

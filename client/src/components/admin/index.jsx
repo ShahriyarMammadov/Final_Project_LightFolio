@@ -35,7 +35,7 @@ const AdminRoot = () => {
           //   `http://localhost:3000/user/${data.user}`
           // );
           await dispatch(getUserAllDataAction(data.data));
-          dispatch(getAllcountryAction());
+          // dispatch(getAllcountryAction());
         }
       }
     };

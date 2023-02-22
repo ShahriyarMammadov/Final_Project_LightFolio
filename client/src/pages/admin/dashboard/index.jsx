@@ -86,12 +86,17 @@ const DashboardPage = () => {
   } = useForm();
 
   function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 1000);
-    });
+    console.log(values);
+    axios.post(
+      `http://localhost:3000/galleryCreate/${userData.data._id}`,
+      values
+    );
+    // return new Promise((resolve) => {
+    //   setTimeout(() => {
+    //     alert(JSON.stringify(values, null, 2));
+    //     resolve();
+    //   }, 1000);
+    // });
   }
   // -------------------------------
 

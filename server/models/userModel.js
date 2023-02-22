@@ -49,7 +49,17 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
-    galleries: [{ galleryName: String, galleryImage: [String] }],
+    galleries: [
+      {
+        galleryName: String,
+        galleryImage: [String],
+        eventDate: String,
+        expirationDate: String,
+        galleryDirection: Boolean,
+        seoTitle: String,
+        seoDescription: String,
+      },
+    ],
   },
   { timestamps: true }
 );
