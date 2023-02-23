@@ -219,31 +219,6 @@ module.exports.imageDownload = async (req, res, next) => {
       });
 
       await user.save();
-      // const body = req.body.myFile;
-      // const { id } = req.params;
-
-      // const user = await userModel.findByIdAndUpdate(id, {
-      //   galleries: {
-      //     $push: { galleryImage: body },
-      //   },
-      // });
-
-      // console.log(user);
-      // let galery = user.galleries.findOne({
-      //   _id: galeryId,
-      // });
-
-      // user.galleries.map((e) => {
-      //   if (e._id == galeryId) {
-      //     return e;
-      //   } else {
-      //     console.log("usernot");
-      //   }
-      // });
-      // const gallery = await galery.findById(galeryId);
-      // console.log(user.galleries);
-      // const newImage = await userModel.create(body);
-      // newImage.save();
       res.status(201).json({ message: "Image Upload Successfully" });
     }
   } catch (error) {
@@ -254,6 +229,24 @@ module.exports.imageDownload = async (req, res, next) => {
   }
 };
 // -----------------------------------------------------
+
+module.exports.coverImageUpload = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { albomId } = req.body;
+
+    const user = await userModel.findById(id);
+
+    const gallery = user.galleries.find(
+      (gallery) => gallery._id.toString() === albomId
+    );
+
+    gallery.coverImage = { coverImg: req.body.newImage.myFile };
+    await user.save();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 //---------------- New Gallery --------------------------
 module.exports.newGallery = async (req, res) => {

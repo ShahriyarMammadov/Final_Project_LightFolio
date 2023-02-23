@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema(
     galleries: [
       {
         galleryName: String,
-        coverImage: String,
+        coverImage: { coverImg: String },
         galleryImage: [{ image: String }],
         eventDate: String,
         expirationDate: String,

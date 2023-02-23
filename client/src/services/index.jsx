@@ -14,16 +14,17 @@ export const convertToBase64 = (file) => {
   });
 };
 
-export const createImage = async (newImage, id) => {
-  await axios.patch(`http://localhost:3000/uploads/${id}`, newImage);
+export const createImage = async (newImage, endpoint, albomId, userId) => {
+  await axios.post(`http://localhost:3000/${endpoint}/${userId}`, {
+    newImage: newImage,
+    albomId: albomId,
+  });
   setLoading(false);
 };
 
-export const createPost = async (newImage, id) => {
-  console.log(newImage);
-  console.log(id);
+export const createPost = async (newImage, endpoint, albomId, userId) => {
   try {
-    await createImage(newImage, id);
+    await createImage(newImage, endpoint, albomId, userId);
   } catch (error) {
     console.log(error.message);
   }

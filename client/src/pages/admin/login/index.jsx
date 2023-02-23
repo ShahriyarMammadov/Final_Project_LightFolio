@@ -91,6 +91,7 @@ const LoginPage = () => {
               <Field
                 name="password"
                 placeholder="Password"
+                type={"password"}
                 style={
                   errors.password && touched.password
                     ? { borderColor: "red" }

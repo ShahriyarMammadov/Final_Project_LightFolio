@@ -31,7 +31,7 @@ import { useForm } from "react-hook-form";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import axios from "axios";
 import LoadingComp from "../../../components/loading/index";
-import { convertToBase64 } from "../../../services";
+import { convertToBase64, createPost } from "../../../services";
 
 const DashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,12 +45,14 @@ const DashboardPage = () => {
     myFile: "",
   });
   const [loading, setLoading] = useState(false);
+  const [albomId, setAlbomId] = useState("");
+  const [expirationToggle, setExpirationToggle] = useState(false);
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
     maxFiles: 1,
     onDrop: (acceptedFiles) => {
-      props.handleFileUpload(acceptedFiles[0]);
+      handleFileUpload(acceptedFiles[0]);
     },
   });
 
@@ -106,15 +108,13 @@ const DashboardPage = () => {
   } = useForm();
 
   const onSubmit = async (values) => {
-    setLoading(true);
-    const request = await axios.post(
+    const { data } = await axios.post(
       `http://localhost:3000/galleryCreate/${userData.data._id}`,
       values
     );
-    setLoading(false);
     onCoverİmageOpen();
 
-    console.log(postImage);
+    setAlbomId(data.galleryId);
     // return new Promise((resolve) => {
     //   setTimeout(() => {
     //     alert(JSON.stringify(values, null, 2));
@@ -130,15 +130,35 @@ const DashboardPage = () => {
     current.getMonth() + 1
   }/${current.getFullYear()}/${current.getHours()}/${current.getMinutes()}`;
 
-  console.log(date);
-
   //Cover Image Convert to base64
   const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
+    const file = e;
     const base64 = await convertToBase64(file);
     setPostImage({ ...postImage, myFile: base64 });
   };
+
+  const handleFileInput = async (e) => {
+    const file = e.target.file[0];
+    const base64 = await convertToBase64(file);
+    setPostImage({ ...postImage, myFile: base64 });
+  };
+
+  const handleImageUpload = async () => {
+    setLoading(true);
+    await createPost(postImage, "coverImage", albomId, userData.data._id);
+    setLoading(false);
+  };
   //-------------------------------------------
+
+  const expiration = new Date();
+  const expirationDate =
+    expiration.getMonth() + 1 < 10
+      ? `${expiration.getFullYear()}-0${
+          expiration.getMonth() + 1
+        }-${expiration.getDate()}T${expiration.getHours()}:${expiration.getMinutes()}`
+      : `${expiration.getFullYear()}-${
+          expiration.getMonth() + 1
+        }-${expiration.getDate()}T${expiration.getHours()}:${expiration.getMinutes()}`;
 
   return (
     <div id="dashboard">
@@ -335,34 +355,51 @@ const DashboardPage = () => {
 
           <div className="galleryCardAndStudioVisit">
             <div className="galleryCards">
-              {userData.data.galleries.map((e, i) => {
-                if (i < 3) {
-                  return (
-                    <Link to={`/galleryImageDetail/${e._id}`} key={i}>
-                      <div className="card">
-                        <div className="expired">
-                          <p>EXPIRED</p>
-                        </div>
-                        <div className="galleryImage">
-                          <img src={`${e?.data}`} alt={e?.galleryName} />
-                        </div>
+              {userData.data.galleries.length === 0 ? (
+                <div className="gallerislength" onClick={onOpen}>
+                  <i className="fa-solid fa-camera"></i>
+                  <p>No Galleries</p>
+                </div>
+              ) : (
+                userData.data.galleries.map((e, i) => {
+                  console.log(e.expirationDate.slice(0, 7));
+                  if (i < 3) {
+                    return (
+                      <Link to={`/galleriesDetail/${e._id}`} key={i}>
+                        <div className="card">
+                          <div className="expired">
+                            {e?.expirationDate.slice(0, 10) >=
+                            expirationDate.slice(0, 10) ? (
+                              ""
+                            ) : (
+                              <p>EXPIRED</p>
+                            )}
+                          </div>
+                          <div className="galleryImage">
+                            <img
+                              src={`${e?.coverImage?.coverImg}`}
+                              alt={e?.galleryName}
+                            />
+                            <h6>{e?.galleryName}</h6>
+                          </div>
 
-                        <div className="galleryName">
-                          <p>{e?.galleryName}</p>
-                          <div className="visitorAndImageLength">
-                            <span>0</span>
-                            <i className="fa-solid fa-images"></i>
-                            <span>1</span>
-                            <i className="fa-solid fa-eye"></i>
+                          <div className="galleryName">
+                            <p>{e?.galleryName}</p>
+                            <div className="visitorAndImageLength">
+                              <span>0</span>
+                              <i className="fa-solid fa-images"></i>
+                              <span>1</span>
+                              <i className="fa-solid fa-eye"></i>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  );
-                } else {
-                  null;
-                }
-              })}
+                      </Link>
+                    );
+                  } else {
+                    null;
+                  }
+                })
+              )}
 
               {/* <Link to={`/galleryImageDetail`}>
                 <div className="card">
@@ -589,7 +626,13 @@ const DashboardPage = () => {
               <div {...getRootProps()} className="coverImage">
                 <FormLabel htmlFor="coverImage">Cover Image</FormLabel>
                 <FormHelperText>The date the photos were taken.</FormHelperText>
-                <input {...getInputProps()} id="coverImage" />
+                <input
+                  {...getInputProps()}
+                  id="coverImage"
+                  onChange={(e) => {
+                    handleFileInput(e);
+                  }}
+                />
                 {acceptedFiles.length > 0 && (
                   <p>Selected file: {acceptedFiles[0].name}</p>
                 )}
@@ -598,7 +641,12 @@ const DashboardPage = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              isLoading={loading}
+              onClick={handleImageUpload}
+            >
               Save
             </Button>
             <Button onClick={onCoverClose}>Cancel</Button>
