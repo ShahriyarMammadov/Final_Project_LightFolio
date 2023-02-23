@@ -1,6 +1,9 @@
 @import "../../../assets/sass/components/button";
 @import "../../../assets/sass/utils/mixins";
 
+.chakra-modal__footer {
+  margin-top: 0 !important;
+}
 #dashboard {
   background-color: #f5f6fa;
 

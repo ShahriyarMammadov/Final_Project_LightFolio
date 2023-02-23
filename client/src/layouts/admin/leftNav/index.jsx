@@ -12,7 +12,7 @@ const AdminLeftNav = () => {
             <h5>Home</h5>
           </div>
         </NavLink>
-        <NavLink to={"/s"}>
+        <NavLink to={"/admin/galleries/"}>
           <i className="fa-solid fa-image"></i>
           <div className="textNav">
             <h5>Galleries</h5>

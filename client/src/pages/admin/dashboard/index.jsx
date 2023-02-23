@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import "./index.scss";
@@ -34,7 +35,24 @@ import { convertToBase64 } from "../../../services";
 
 const DashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: coverİmageOpen,
+    onOpen: onCoverİmageOpen,
+    onClose: onCoverClose,
+  } = useDisclosure();
   const navigate = useNavigate();
+  const [postImage, setPostImage] = useState({
+    myFile: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    maxFiles: 1,
+    onDrop: (acceptedFiles) => {
+      props.handleFileUpload(acceptedFiles[0]);
+    },
+  });
 
   const userData = useSelector((state) => state.getAllUserDataReducer);
 
@@ -48,10 +66,10 @@ const DashboardPage = () => {
         };
         localStorage.setItem("location", JSON.stringify(locationObj));
       });
-      GetCountryCity();
     }
   };
   useEffect(() => {
+    GetCountryCity();
     getLocation();
   }, []);
 
@@ -77,6 +95,7 @@ const DashboardPage = () => {
     );
     localStorage.setItem("userLocation", JSON.stringify(response.data));
   };
+
   // Modal New Gallery Form
   const [toggle, setToggle] = useState(false);
 
@@ -86,19 +105,23 @@ const DashboardPage = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  function onSubmit(values) {
-    console.log(values);
-    axios.post(
+  const onSubmit = async (values) => {
+    setLoading(true);
+    const request = await axios.post(
       `http://localhost:3000/galleryCreate/${userData.data._id}`,
       values
     );
+    setLoading(false);
+    onCoverİmageOpen();
+
+    console.log(postImage);
     // return new Promise((resolve) => {
     //   setTimeout(() => {
     //     alert(JSON.stringify(values, null, 2));
     //     resolve();
     //   }, 1000);
     // });
-  }
+  };
   // -------------------------------
 
   // Expiring Date Handle
@@ -110,10 +133,6 @@ const DashboardPage = () => {
   console.log(date);
 
   //Cover Image Convert to base64
-  const [postImage, setPostImage] = useState({
-    myFile: "",
-  });
-
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
@@ -188,22 +207,6 @@ const DashboardPage = () => {
                       {...register("eventDate")}
                       type={"datetime-local"}
                       id="eventDate"
-                    />
-                  </FormControl>
-
-                  <FormControl>
-                    <div className="coverImage">
-                      <FormLabel htmlFor="coverImage">Cover Image</FormLabel>
-                      <FormHelperText>
-                        The date the photos were taken.
-                      </FormHelperText>
-                    </div>
-                    <Input
-                      onChange={handleFileUpload}
-                      value={postImage}
-                      {...register("coverImage")}
-                      id="coverImage"
-                      type={"file"}
                     />
                   </FormControl>
 
@@ -570,6 +573,38 @@ const DashboardPage = () => {
           </section>
         </div>
       )}
+      {/* CoverImage Modal */}
+      <Button onClick={onCoverİmageOpen}>Open Modal</Button>
+      <Modal
+        closeOnOverlayClick={false}
+        isOpen={coverİmageOpen}
+        onClose={onCoverClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create your account</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <div {...getRootProps()} className="coverImage">
+                <FormLabel htmlFor="coverImage">Cover Image</FormLabel>
+                <FormHelperText>The date the photos were taken.</FormHelperText>
+                <input {...getInputProps()} id="coverImage" />
+                {acceptedFiles.length > 0 && (
+                  <p>Selected file: {acceptedFiles[0].name}</p>
+                )}
+              </div>
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3}>
+              Save
+            </Button>
+            <Button onClick={onCoverClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

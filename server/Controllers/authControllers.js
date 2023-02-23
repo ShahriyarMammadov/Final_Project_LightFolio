@@ -206,22 +206,18 @@ module.exports.imageDownload = async (req, res, next) => {
     } else {
       const { id } = req.params;
       const newImage = req.body.myFile;
-      // UserModel üzerinden kullanıcıyı buluyoruz
       const user = await userModel.findById(id);
       const galleryId = "63f64d52ff5e994413dd4172";
 
-      // Hangi galeri nesnesine resim eklemek istediğimizi belirleyebilmek için, önce galeri nesnesini buluyoruz
       const gallery = user.galleries.find(
         (gallery) => gallery._id.toString() === galleryId
       );
 
-      // Galeri nesnesini bulduktan sonra, galleryImage array'ine yeni bir image nesnesi ekleyebiliriz
       gallery.galleryImage.push({
         _id: new mongoose.Types.ObjectId(),
         image: newImage,
       });
 
-      // Kullanıcının güncellenmiş verisini kaydediyoruz
       await user.save();
       // const body = req.body.myFile;
       // const { id } = req.params;
@@ -262,12 +258,16 @@ module.exports.imageDownload = async (req, res, next) => {
 //---------------- New Gallery --------------------------
 module.exports.newGallery = async (req, res) => {
   const { id } = req.params;
-
-  const gallery = await userModel.findByIdAndUpdate(id, {
-    $push: {
-      galleries: req.body,
+  const gallery = await userModel.findByIdAndUpdate(
+    id,
+    {
+      $push: {
+        galleries: req.body,
+      },
     },
-  });
+    { new: true }
+  );
+  res.json({ galleryId: gallery.galleries[gallery.galleries.length - 1]._id });
 };
 
 // Register

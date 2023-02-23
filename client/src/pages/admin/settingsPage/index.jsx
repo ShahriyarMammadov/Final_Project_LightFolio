@@ -251,7 +251,7 @@ const SettingsPage = () => {
                           defaultValue={
                             userData?.data?.business?.addressLine1
                               ? userData?.data?.business?.addressLine1
-                              : userLocation.display_name
+                              : userLocation?.display_name
                           }
                           id="addressLine1"
                           name="addressLine1"
@@ -273,7 +273,7 @@ const SettingsPage = () => {
                             defaultValue={
                               userData?.data?.business?.city
                                 ? userData?.data?.business?.city
-                                : userLocation.address.city
+                                : userLocation?.address?.city
                             }
                             id="city"
                             name="city"
@@ -286,7 +286,7 @@ const SettingsPage = () => {
                             defaultValue={
                               userData?.data?.business?.postalCode
                                 ? userData?.data?.business?.businessPhone
-                                : userLocation.address.postcode
+                                : userLocation?.address?.postcode
                             }
                             id="postalCode"
                             name="postalCode"
