@@ -10,17 +10,41 @@ import {
   FacebookIcon,
   TwitterShareButton,
   TwitterIcon,
-  // InstagramShareButton,
-  // InstagramIcon,
   WhatsappShareButton,
   WhatsappIcon,
 } from "react-share";
+import { useDropzone } from "react-dropzone";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Button,
+  FormLabel,
+  FormControl,
+  FormHelperText,
+} from "@chakra-ui/react";
+import { convertToBase64, createPost } from "../../../services";
 
 const GalleryDetailPage = () => {
   const userData = useSelector((state) => state.getAllUserDataReducer);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
   const { id } = useParams();
+  const [postImage, setPostImage] = useState({
+    myFile: "",
+  });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: newImageisOpen,
+    onOpen: newImageonOpen,
+    onClose: newImageClose,
+  } = useDisclosure();
 
   const handleDrag = (e, data) => {
     console.log(data.lastX);
@@ -41,6 +65,45 @@ const GalleryDetailPage = () => {
     getGalleryImage();
   }, []);
 
+  const directionEdit = async () => {
+    const { response } = await axios.patch(
+      `http://localhost:3000/galleryDirection/${userData.data._id}/${data._id}`,
+      { direction: !data.galleryDirection }
+    );
+  };
+
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    maxFiles: 1,
+    onDrop: (acceptedFiles) => {
+      handleFileUpload(acceptedFiles[0]);
+    },
+  });
+
+  const handleFileUpload = async (e) => {
+    const file = e;
+    const base64 = await convertToBase64(file);
+    setPostImage({ ...postImage, myFile: base64 });
+  };
+
+  const handleFileInput = async (e) => {
+    const file = e.target.file[0];
+    const base64 = await convertToBase64(file);
+    setPostImage({ ...postImage, myFile: base64 });
+  };
+
+  const handleCoverImageUpload = async () => {
+    setLoading(true);
+    await createPost(postImage, "coverImage", data._id, userData.data._id);
+    setLoading(false);
+  };
+
+  const handleImageUpload = async () => {
+    setLoading(true);
+    await createPost(postImage, "uploads", data._id, userData.data._id);
+    setLoading(false);
+  };
+
   const url = window.location.href;
   return (
     <div id="galleryDetail">
@@ -50,34 +113,53 @@ const GalleryDetailPage = () => {
         <div className="galleryImage">
           <div className="galleryName">
             <div className="image">
-              <img src={data?.coverImage?.coverImg} alt="" />
-              <h2>{data?.galleryName}</h2>
-
+              <div className="userData">
+                <img src={data?.coverImage?.coverImg} alt="" onClick={onOpen} />
+                <h2>{data?.galleryName}</h2>
+              </div>
               <div className="publishAndShare">
-                <button>PUBLISHED</button>
-                <FacebookShareButton url={url}>
-                  <FacebookIcon size={32} round />
-                </FacebookShareButton>
-                <TwitterShareButton url={url}>
-                  <TwitterIcon size={32} round />
-                </TwitterShareButton>
-                {/* <InstagramShareButton url={url}>
-                  <InstagramIcon size={32} round />
-                </InstagramShareButton> */}
-                <WhatsappShareButton url={url}>
-                  <WhatsappIcon size={32} round />
-                </WhatsappShareButton>
+                <button
+                  style={
+                    data?.galleryDirection ? null : { backgroundColor: "red" }
+                  }
+                  onClick={() => {
+                    directionEdit();
+                  }}
+                >
+                  {data?.galleryDirection ? (
+                    <>
+                      <i className="fa-solid fa-circle-check"></i> PUBLISHED
+                    </>
+                  ) : (
+                    <>
+                      <i className="fa-solid fa-xmark"></i> PERSONAL
+                    </>
+                  )}
+                </button>
+                <div className="share">
+                  <FacebookShareButton url={url}>
+                    <FacebookIcon size={32} round />
+                  </FacebookShareButton>
+                  <TwitterShareButton url={url}>
+                    <TwitterIcon size={32} round />
+                  </TwitterShareButton>
+                  <WhatsappShareButton url={url}>
+                    <WhatsappIcon size={32} round />
+                  </WhatsappShareButton>
+                </div>
               </div>
             </div>
 
             <div className="operationNav">
-              <div className="upload">
+              <div className="upload" onClick={newImageonOpen}>
                 <i className="fa-solid fa-cloud-arrow-up"></i>
                 <span>UPLOAD IMAGES</span>
               </div>
               <div className="trash">
                 <i className="fa-solid fa-trash"></i>
               </div>
+
+              <div className="editBar">. . .</div>
             </div>
           </div>
           <div className="draggableGallery">
@@ -97,6 +179,89 @@ const GalleryDetailPage = () => {
           </div>
         </div>
       )}
+
+      {/* Cover Image Modal */}
+      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Upload to your Gallery Cover Image</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <div {...getRootProps()} className="coverImage">
+                <FormLabel htmlFor="coverImage">Cover Image</FormLabel>
+                <FormHelperText>The date the photos were taken.</FormHelperText>
+                <input
+                  {...getInputProps()}
+                  id="coverImage"
+                  onChange={(e) => {
+                    handleFileInput(e);
+                  }}
+                />
+                {acceptedFiles.length > 0 && (
+                  <p>Selected file: {acceptedFiles[0].name}</p>
+                )}
+              </div>
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              isLoading={loading}
+              onClick={handleCoverImageUpload}
+            >
+              Save
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* New Image Modal */}
+
+      <Modal
+        closeOnOverlayClick={false}
+        isOpen={newImageisOpen}
+        onClose={newImageClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Upload to your Gallery Image</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <div {...getRootProps()} className="coverImage">
+                <FormLabel htmlFor="coverImage">Cover Image</FormLabel>
+                <FormHelperText>The date the photos were taken.</FormHelperText>
+                <input
+                  {...getInputProps()}
+                  id="coverImage"
+                  onChange={(e) => {
+                    handleFileInput(e);
+                  }}
+                />
+                {acceptedFiles.length > 0 && (
+                  <p>Selected file: {acceptedFiles[0].name}</p>
+                )}
+              </div>
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              isLoading={loading}
+              onClick={handleImageUpload}
+            >
+              Save
+            </Button>
+            <Button onClick={newImageClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

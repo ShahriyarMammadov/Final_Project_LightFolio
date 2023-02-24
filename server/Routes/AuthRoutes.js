@@ -11,6 +11,7 @@ const {
   newGallery,
   coverImageUpload,
   getImagesById,
+  galleryDirectionChanged,
 } = require("../controllers/authControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -24,6 +25,7 @@ function userRouter(app) {
   app.post("/coverImage/:id", coverImageUpload);
   app.patch("/email/:id", emailChanged);
   app.patch("/password/:id", passwordChanged);
+  app.patch("/galleryDirection/:userId/:galleryId", galleryDirectionChanged);
   app.post("/uploads/:id", imageDownload);
   app.patch("/signature/:id", signatureChanged);
   app.patch("/business/:id", businessDataUpdated);

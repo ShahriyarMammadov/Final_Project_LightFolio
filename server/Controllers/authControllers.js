@@ -265,14 +265,39 @@ module.exports.newGallery = async (req, res) => {
 };
 //-------------------------------------------------------
 
-//--------- Get Images By Gallery ID -------------
-module.exports.getImagesById = async (req, res) => {
+//------------- Gallery Direction Changed ---------------
+module.exports.galleryDirectionChanged = async (req, res) => {
   const userId = req.params.userId;
   const galleryId = req.params.galleryId;
 
   try {
     const user = await userModel.findById(userId);
     const gallery = user.galleries.find((g) => g._id.toString() === galleryId);
+
+    if (!gallery) {
+      return res.status(404).send("Gallery Not Found!!");
+    }
+    gallery.galleryDirection = req.body.direction;
+
+    user.save();
+    return res.status(200).json(gallery);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error });
+  }
+};
+//-------------------------------------------------------
+
+//--------- Get Images By Gallery ID -------------
+module.exports.getImagesById = async (req, res) => {
+  const userId = req.params.userId;
+  const galleryId = req.params.galleryId;
+  console.log(galleryId);
+  try {
+    const user = await userModel.findById(userId);
+    const gallery = await user.galleries.find(
+      (g) => g._id.toString() === galleryId
+    );
 
     if (!gallery) {
       return res.status(404).send("Gallery Not Found!!");

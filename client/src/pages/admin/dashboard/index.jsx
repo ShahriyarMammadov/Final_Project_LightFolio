@@ -619,7 +619,7 @@ const DashboardPage = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
+          <ModalHeader>Upload to your Gallery Cover Image</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
