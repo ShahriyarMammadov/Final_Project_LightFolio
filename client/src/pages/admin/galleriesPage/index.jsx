@@ -27,7 +27,7 @@ const GalleriesPage = () => {
           {userData.data.galleries &&
             userData?.data?.galleries?.map((gallery, index) => {
               return (
-                <Link to={`/galleriesDetail/${gallery._id}`} key={index}>
+                <Link to={`galleriesDetail/${gallery._id}`} key={index}>
                   <div className="card">
                     <div className="expired">
                       {gallery?.expirationDate.slice(0, 10) >=
@@ -48,7 +48,7 @@ const GalleriesPage = () => {
                     <div className="galleryName">
                       <p>{gallery?.galleryName}</p>
                       <div className="visitorAndImageLength">
-                        <span>0</span>
+                        <span>{gallery.galleryImage.length}</span>
                         <i className="fa-solid fa-images"></i>
                         <span>1</span>
                         <i className="fa-solid fa-eye"></i>

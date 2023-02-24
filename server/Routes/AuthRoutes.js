@@ -10,11 +10,13 @@ const {
   businessDataUpdated,
   newGallery,
   coverImageUpload,
+  getImagesById,
 } = require("../controllers/authControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
 function userRouter(app) {
   app.get("/user/:id", getUserById);
+  app.get("/images/:userId/:galleryId", getImagesById);
   app.post("/", checkUser);
   app.post("/register", register);
   app.post("/login", login);

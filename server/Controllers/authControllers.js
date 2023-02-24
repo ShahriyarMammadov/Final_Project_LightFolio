@@ -205,12 +205,13 @@ module.exports.imageDownload = async (req, res, next) => {
       res.status(400).json({ error: "Image Length Very Long!!!!" });
     } else {
       const { id } = req.params;
-      const newImage = req.body.myFile;
-      const user = await userModel.findById(id);
-      const galleryId = "63f64d52ff5e994413dd4172";
+      const albomId = req.body.albomId;
+      const newImage = req.body.newImage.myFile;
 
-      const gallery = user.galleries.find(
-        (gallery) => gallery._id.toString() === galleryId
+      const user = await userModel.findById(id);
+
+      const gallery = await user.galleries.find(
+        (gallery) => gallery._id.toString() === albomId
       );
 
       gallery.galleryImage.push({
@@ -262,6 +263,28 @@ module.exports.newGallery = async (req, res) => {
   );
   res.json({ galleryId: gallery.galleries[gallery.galleries.length - 1]._id });
 };
+//-------------------------------------------------------
+
+//--------- Get Images By Gallery ID -------------
+module.exports.getImagesById = async (req, res) => {
+  const userId = req.params.userId;
+  const galleryId = req.params.galleryId;
+
+  try {
+    const user = await userModel.findById(userId);
+    const gallery = user.galleries.find((g) => g._id.toString() === galleryId);
+
+    if (!gallery) {
+      return res.status(404).send("Gallery Not Found!!");
+    }
+
+    return res.status(200).json(gallery);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error });
+  }
+};
+//--------------------------------------------
 
 // Register
 module.exports.register = async (req, res) => {

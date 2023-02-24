@@ -361,11 +361,11 @@ const DashboardPage = () => {
                   <p>No Galleries</p>
                 </div>
               ) : (
-                userData.data.galleries.map((e, i) => {
+                userData.data.galleries.reverse().map((e, i) => {
                   console.log(e.expirationDate.slice(0, 7));
                   if (i < 3) {
                     return (
-                      <Link to={`/galleriesDetail/${e._id}`} key={i}>
+                      <Link to={`galleries/galleriesDetail/${e._id}`} key={i}>
                         <div className="card">
                           <div className="expired">
                             {e?.expirationDate.slice(0, 10) >=

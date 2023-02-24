@@ -10,6 +10,11 @@
   padding-top: 40px;
   font-family: "Playfair Display", serif;
   overflow: auto;
+
+  .loader {
+    margin: 16px;
+    height: 10px;
+  }
   .footerText {
     font-size: 12px !important;
     line-height: 18px !important;

@@ -9,13 +9,13 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/title-logo.png";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLoginAuth = async (values) => {
     try {
+      setLoading(true);
       let { data } = await axios.post("http://localhost:3000/login", values, {
         withCredentials: true,
       });
@@ -25,18 +25,22 @@ const LoginPage = () => {
         if (data.errors) {
           const { email, password } = data.errors;
           if (email) {
-            // setEmail(email);
+            setLoading(false);
           } else if (password) {
-            // setPassword(password);
+            setLoading(false);
           }
         } else {
           navigate("/admin/");
+          setLoading(false);
         }
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
+
+  console.log(loading);
 
   return (
     <div id="login">
@@ -103,7 +107,16 @@ const LoginPage = () => {
               ) : null}
               {<div>{error?.password}</div>}
 
-              <button type="submit">LOG IN</button>
+              <button type="submit">
+                {" "}
+                {loading ? (
+                  <>
+                    <span className="loader"></span>
+                  </>
+                ) : (
+                  "LOG IN"
+                )}{" "}
+              </button>
             </Form>
           )}
         </Formik>

@@ -17,6 +17,7 @@ import AdminRoot from "../components/admin/";
 import AboutMePage from "../pages/admin/aboutMePage";
 import SettingsPage from "../pages/admin/settingsPage";
 import AdminGalleriesPage from "../pages/admin/galleriesPage";
+import GalleryDetailPage from "../pages/admin/galleryDetailPage";
 
 const ROUTES = [
   {
@@ -84,6 +85,10 @@ const ROUTES = [
       {
         path: "galleries/",
         element: <AdminGalleriesPage />,
+      },
+      {
+        path: "galleries/galleriesDetail/:id/",
+        element: <GalleryDetailPage />,
       },
       {
         path: "*",

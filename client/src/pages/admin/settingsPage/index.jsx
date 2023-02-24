@@ -28,7 +28,6 @@ const SettingsPage = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
-  console.log(userData.data?.business);
   const {
     handleSubmit,
     register,
@@ -64,7 +63,12 @@ const SettingsPage = () => {
 
   const handleSubmitImage = async (e) => {
     e.preventDefault();
-    await createPost(postImage, userData.data._id);
+    await createPost(
+      postImage,
+      "uploads",
+      "63f888f45e4e08b9eb262aa0",
+      userData.data._id
+    );
     setLoading(true);
   };
 

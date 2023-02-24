@@ -9,9 +9,11 @@ import { Helmet } from "react-helmet";
 const SignupPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignupAuth = async (values) => {
     try {
+      setLoading(true);
       let { data } = await axios.post(
         "http://localhost:3000/register",
         values,
@@ -21,9 +23,11 @@ const SignupPage = () => {
       );
 
       if (data?.created) {
+        setLoading(false);
         navigate("/login");
       }
       setError(data.errors);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -71,11 +75,13 @@ const SignupPage = () => {
                 <div>{errors.fullName}</div>
               ) : null}
 
-              <Field name="password" placeholder="Password" />
+              <Field name="password" placeholder="Password" type={"password"} />
               {errors.password && touched.password ? (
                 <div>{errors.password}</div>
               ) : null}
-              <button type="submit">Let's Do It</button>
+              <button type="submit">
+                {loading ? <span className="loader"></span> : "Let's Do It"}
+              </button>
             </Form>
           )}
         </Formik>
