@@ -306,8 +306,12 @@
       height: 480px;
       overflow-y: auto;
     }
+    .knowledge {
+      overflow-x: auto;
+    }
     .notification,
     .orders {
+      overflow-x: auto;
       box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
       background-color: #ffffff;
       padding: 10px;
@@ -353,6 +357,10 @@
           gap: 5%;
           padding: 10px;
           transition: all 0.3s;
+
+          i {
+            transition: all 0.5s;
+          }
 
           &:hover {
             background-color: lightgrey;

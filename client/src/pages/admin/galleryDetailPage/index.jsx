@@ -12,6 +12,7 @@ import {
   TwitterIcon,
   WhatsappShareButton,
   WhatsappIcon,
+  FacebookShareCount,
 } from "react-share";
 import { useDropzone } from "react-dropzone";
 import {
@@ -33,12 +34,15 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Input,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { convertToBase64, createPost } from "../../../services";
 import { useToast } from "@chakra-ui/react";
+import ProgressBar from "../../../components/progressBar";
+import { useForm } from "react-hook-form";
 
-const GalleryDetailPage = ({ message }) => {
-  console.log(message);
+const GalleryDetailPage = () => {
   const userData = useSelector((state) => state.getAllUserDataReducer);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
@@ -58,13 +62,23 @@ const GalleryDetailPage = ({ message }) => {
     onOpen: galleyDeleteOnOpen,
     onClose: galleryDeleteOnClose,
   } = useDisclosure();
-  localStorage.setItem("id", userData?.data?._id);
+  const {
+    isOpen: editGalleryisOpen,
+    onOpen: editGalleryonOpen,
+    onClose: editGalleryonClose,
+  } = useDisclosure();
+  const [toggle, setToggle] = useState(false);
+  const [loadedPercent, setLoadedPercent] = useState(0);
 
   const navigate = useNavigate();
   const handleDrag = (e, data) => {
     console.log(data.lastX);
     console.log(data.lastX);
   };
+
+  const [blob, setBlob] = useState("");
+
+  // console.log(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   const getGalleryImage = async () => {
     setLoading(true);
@@ -140,16 +154,15 @@ const GalleryDetailPage = ({ message }) => {
         postImage,
         "uploads",
         data._id,
-        userData.data._id
+        userData.data._id,
+        setLoadedPercent
       );
-
       // toast({
       //   title: `${response.data.message}`,
       //   position: "bottom-right",
       //   status: "success",
       //   isClosable: true,
       // });
-
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -166,6 +179,7 @@ const GalleryDetailPage = ({ message }) => {
 
   const galleryDeleteById = async () => {
     try {
+      setLoading(true);
       const response = await axios.delete(
         `http://localhost:3000/galleryDelete/${userData.data._id}/${data._id}`
       );
@@ -178,12 +192,63 @@ const GalleryDetailPage = ({ message }) => {
       if (response.data.delete) {
         navigate("/admin/galleries/");
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
 
   const url = window.location.href;
+
+  const handleClick = async () => {
+    try {
+      await navigator.share({
+        title: "LightFolio",
+        text: `${userData.data.fullName}'s Gallery`,
+        url: url,
+      });
+      toast({
+        title: `SHARE SUCCESS`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: `${error}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+    }
+  };
+
+  const imageDelete = async () => {};
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (values) => {
+    const response = await axios.patch(
+      `http://localhost:3000/editGalleryName`,
+      values
+    );
+
+    console.log(response.data);
+  };
+  // const imageDownloadToClick = async (base64Image) => {
+  //   var base64 = base64Image;
+  //   var binary = atob(base64);
+  //   console.log(binary);
+  //   var blob = new Blob([binary], { type: "image/png" });
+  //   var url = URL.createObjectURL(blob);
+  //   setBlob(url);
+  // };
+
   return (
     <div id="galleryDetail">
       {loading ? (
@@ -216,15 +281,9 @@ const GalleryDetailPage = ({ message }) => {
                   )}
                 </button>
                 <div className="share">
-                  <FacebookShareButton url={url}>
-                    <FacebookIcon size={32} round />
-                  </FacebookShareButton>
-                  <TwitterShareButton url={url}>
-                    <TwitterIcon size={32} round />
-                  </TwitterShareButton>
-                  <WhatsappShareButton url={url}>
-                    <WhatsappIcon size={32} round />
-                  </WhatsappShareButton>
+                  <button onClick={handleClick}>
+                    <i className="fa-solid fa-square-share-nodes"></i> SHARE
+                  </button>
                 </div>
               </div>
             </div>
@@ -238,7 +297,9 @@ const GalleryDetailPage = ({ message }) => {
                 <i className="fa-solid fa-trash"></i>
               </div>
 
-              <div className="editBar">. . .</div>
+              <div className="editBar" onClick={editGalleryonOpen}>
+                . . .
+              </div>
             </div>
           </div>
           <div className="draggableGallery">
@@ -281,6 +342,8 @@ const GalleryDetailPage = ({ message }) => {
                   <p>Selected file: {acceptedFiles[0].name}</p>
                 )}
               </div>
+              <div className="progress-text">{loadedPercent}%</div>
+              <ProgressBar loadedPercent={loadedPercent} />
             </FormControl>
           </ModalBody>
 
@@ -291,7 +354,7 @@ const GalleryDetailPage = ({ message }) => {
               isLoading={loading}
               onClick={handleCoverImageUpload}
             >
-              Save
+              Upload
             </Button>
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
@@ -325,6 +388,8 @@ const GalleryDetailPage = ({ message }) => {
                   <p>Selected file: {acceptedFiles[0].name}</p>
                 )}
               </div>
+              <div className="progress-text">{loadedPercent}%</div>
+              <ProgressBar loadedPercent={loadedPercent} />
             </FormControl>
           </ModalBody>
 
@@ -335,9 +400,70 @@ const GalleryDetailPage = ({ message }) => {
               isLoading={loading}
               onClick={handleImageUpload}
             >
-              Save
+              {loadedPercent === 100 ? "Loaded" : "Upload"}
             </Button>
-            <Button onClick={newImageClose}>Cancel</Button>
+            <Button
+              onClick={() => {
+                newImageClose();
+              }}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* edit Gallery Name */}
+      <Modal
+        closeOnOverlayClick={false}
+        isOpen={editGalleryisOpen}
+        onClose={editGalleryonClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>EDIT GALLERY NAME</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <FormControl isInvalid={errors.name}>
+                <FormLabel htmlFor="name">First name</FormLabel>
+                <Input
+                  id="name"
+                  placeholder="name"
+                  {...register("name", {
+                    required: "This is required",
+                    minLength: {
+                      value: 4,
+                      message: "Minimum length should be 4",
+                    },
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.name && errors.name.message}
+                </FormErrorMessage>
+              </FormControl>
+              <Button
+                mt={4}
+                colorScheme="teal"
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Submit
+              </Button>
+            </form>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} isLoading={loading}>
+              SAVE
+            </Button>
+            <Button
+              onClick={() => {
+                editGalleryonClose();
+              }}
+            >
+              CANCEL
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -353,7 +479,7 @@ const GalleryDetailPage = ({ message }) => {
         <AlertDialogOverlay>
           <AlertDialogContent className="alert">
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Customer
+              {loading ? <span className="loader"></span> : "Delete Gallery"}
             </AlertDialogHeader>
 
             <AlertDialogBody>

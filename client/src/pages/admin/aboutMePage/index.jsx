@@ -24,6 +24,7 @@ import {
 import LoadingComp from "../../../components/loading";
 import { useDropzone } from "react-dropzone";
 import { convertToBase64, createPost } from "../../../services";
+import ProgressBar from "../../../components/progressBar";
 
 const AboutMePage = () => {
   const {
@@ -211,9 +212,17 @@ const AboutMePage = () => {
     setPostImage({ ...postImage, myFile: base64 });
   };
 
+  const [loadedPercent, setLoadedPercent] = useState(0);
+
   const handleImageUpload = async () => {
-    // setLoading(true);
-    await createPost(postImage, "profilePhotoUpdate", "", userData.data._id);
+    setLoading(true);
+    await createPost(
+      postImage,
+      "profilePhotoUpdate",
+      "",
+      userData.data._id,
+      setLoadedPercent
+    );
     setLoading(false);
   };
 
@@ -255,6 +264,8 @@ const AboutMePage = () => {
                       <p>Selected file: {acceptedFiles[0].name}</p>
                     )}
                   </div>
+                  <div className="progress-text">{loadedPercent}%</div>
+                  <ProgressBar loadedPercent={loadedPercent} />
                 </FormControl>
               </ModalBody>
 

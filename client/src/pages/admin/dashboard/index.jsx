@@ -32,8 +32,10 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import axios from "axios";
 import LoadingComp from "../../../components/loading/index";
 import { convertToBase64, createPost } from "../../../services";
+import ProgressBar from "../../../components/progressBar";
 
 const DashboardPage = () => {
+  const [loadedPercent, setLoadedPercent] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: coverİmageOpen,
@@ -139,10 +141,25 @@ const DashboardPage = () => {
 
   const handleImageUpload = async () => {
     setLoading(true);
-    await createPost(postImage, "coverImage", albomId, userData.data._id);
+    await createPost(
+      postImage,
+      "coverImage",
+      albomId,
+      userData.data._id,
+      setLoadedPercent
+    );
     setLoading(false);
   };
   //-------------------------------------------
+
+  useEffect(() => {
+    if (loadedPercent === 100) {
+      setTimeout(() => {
+        onCoverClose();
+        onClose();
+      }, 1000);
+    }
+  }, [loadedPercent]);
 
   const expiration = new Date();
   const expirationDate =
@@ -153,6 +170,8 @@ const DashboardPage = () => {
       : `${expiration.getFullYear()}-${
           expiration.getMonth() + 1
         }-${expiration.getDate()}T${expiration.getHours()}:${expiration.getMinutes()}`;
+
+  localStorage.setItem("id", userData?.data?._id);
 
   return (
     <div id="dashboard">
@@ -531,7 +550,7 @@ const DashboardPage = () => {
               </Link>
               <p>TUESDAY, AUG 31, 2021 · NEWS</p>
             </div>
-            <div className="orders">
+            <div className="orders knowledge">
               <div className="headText">
                 <h5>Knowledge Base Highlights</h5>
               </div>
@@ -563,7 +582,6 @@ const DashboardPage = () => {
         </div>
       )}
       {/* CoverImage Modal */}
-      <Button onClick={onCoverİmageOpen}>Open Modal</Button>
       <Modal
         closeOnOverlayClick={false}
         isOpen={coverİmageOpen}
@@ -589,6 +607,8 @@ const DashboardPage = () => {
                   <p>Selected file: {acceptedFiles[0].name}</p>
                 )}
               </div>
+              <div className="progress-text">{loadedPercent}%</div>
+              <ProgressBar loadedPercent={loadedPercent} />
             </FormControl>
           </ModalBody>
 

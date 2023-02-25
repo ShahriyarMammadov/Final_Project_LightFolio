@@ -15,44 +15,43 @@ export const convertToBase64 = (file) => {
   });
 };
 
-export const createImage = async (newImage, endpoint, albomId, userId) => {
+export const createImage = async (
+  newImage,
+  endpoint,
+  albomId,
+  userId,
+  setLoadedPercent
+) => {
+  const totalSize = newImage.size;
+  let loadedSize = 0;
+
   const response = await axios.post(
     `http://localhost:3000/${endpoint}/${userId}`,
     {
       newImage: newImage,
       albomId: albomId,
+    },
+    {
+      onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        setLoadedPercent(percentCompleted);
+      },
     }
   );
-  setLoading(false);
-  <GalleryDetailPage message={"salam"} />;
-  console.log(data);
 };
 
-export const createPost = async (newImage, endpoint, albomId, userId) => {
+export const createPost = async (
+  newImage,
+  endpoint,
+  albomId,
+  userId,
+  setLoadedPercent
+) => {
   try {
-    await createImage(newImage, endpoint, albomId, userId);
+    await createImage(newImage, endpoint, albomId, userId, setLoadedPercent);
   } catch (error) {
     console.log(error.message);
   }
 };
-
-// export const profilePhotoCreate = async (newImage, endpoint, albomId, userId) => {
-//   const response = await axios.post(
-//     `http://localhost:3000/${endpoint}/${userId}`,
-//     {
-//       newImage: newImage,
-//       albomId: albomId,
-//     }
-//   );
-//   setLoading(false);
-//   <GalleryDetailPage message={"salam"} />;
-//   console.log(data);
-// };
-
-// export const uploadProfileImage = async (newImage, endpoint, userId) => {
-//   try {
-//     await createImage(newImage, endpoint, userId);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };

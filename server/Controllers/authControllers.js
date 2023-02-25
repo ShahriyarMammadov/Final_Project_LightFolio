@@ -187,6 +187,22 @@ module.exports.profilePhotoUpdated = async (req, res) => {
     console.log(error);
   }
 };
+//--------------Edit Gallery Name ------------------
+module.exports.editGalleryName = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { albomId, values } = req.body;
+
+    const gallery = user.galleries.find(
+      (gallery) => gallery._id.toString() === albomId
+    );
+
+    gallery.galleryName = values;
+    await user.save();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 //--------------Gallery Delete By ID----------------
 module.exports.galleryDeleteByid = async (req, res) => {
@@ -195,7 +211,9 @@ module.exports.galleryDeleteByid = async (req, res) => {
     const userId = req.params.userId;
     let user = await userModel.findById(userId);
 
-    const galeri = await user.galleries.find(
+    console.log(galleryId);
+
+    const galeri = await user.galleries.filter(
       (gallery) => gallery._id.toString() !== galleryId
     );
 

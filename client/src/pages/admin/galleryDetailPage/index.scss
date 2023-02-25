@@ -3,12 +3,11 @@
 #chakra-modal--body-deleteModal {
   max-height: 66px !important;
 }
-.alert{
+.alert {
   max-height: 0;
 }
 #galleryDetail {
   background-color: $adminBackgroundColor;
-  
 
   .galleryImage {
     max-width: 1200px;
@@ -91,6 +90,7 @@
       .imageDiv {
         width: fit-content;
         height: fit-content;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         background-color: white;
         border-radius: 10px;
 
