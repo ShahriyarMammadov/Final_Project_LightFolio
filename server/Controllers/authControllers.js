@@ -174,6 +174,20 @@ const createToken = (id) => {
 };
 // -----------------------------------------------------
 
+//--------------Profile Photo Updated ------------------
+module.exports.profilePhotoUpdated = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userModel.findByIdAndUpdate(id, {
+      profilePhoto: req.body.newImage.myFile,
+    });
+
+    res.status(201).json({ message: "Updated Successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //--------------Gallery Delete By ID----------------
 module.exports.galleryDeleteByid = async (req, res) => {
   try {
@@ -184,14 +198,16 @@ module.exports.galleryDeleteByid = async (req, res) => {
     const galeri = await user.galleries.find(
       (gallery) => gallery._id.toString() !== galleryId
     );
+
     user.galleries = galeri;
 
     await user.save();
-    console.log(galleryId);
-    console.log(user);
-    res.status(200).json({ message: "success" });
+
+    res
+      .status(200)
+      .json({ message: "Gallery Successfully Deleted", delete: true });
   } catch (error) {
-    console.log(error);
+    res.json({ error: error, delete: false });
   }
 };
 
@@ -241,12 +257,15 @@ module.exports.imageDownload = async (req, res, next) => {
       });
 
       await user.save();
-      res.status(201).json({ message: "Image Upload Successfully" });
+      res
+        .status(201)
+        .json({ message: "Image Upload Successfully", upload: true });
     }
   } catch (error) {
     console.log(error);
     res.status(409).json({
       message: error.message,
+      upload: false,
     });
   }
 };
@@ -265,6 +284,8 @@ module.exports.coverImageUpload = async (req, res) => {
 
     gallery.coverImage = { coverImg: req.body.newImage.myFile };
     await user.save();
+
+    res.status(201).json({ message: "Updated Successfully" });
   } catch (error) {
     console.log(error);
   }
@@ -296,12 +317,12 @@ module.exports.galleryDirectionChanged = async (req, res) => {
     const gallery = user.galleries.find((g) => g._id.toString() === galleryId);
 
     if (!gallery) {
-      return res.status(404).send("Gallery Not Found!!");
+      return res.status(404).json({ message: "Gallery Not Found!!" });
     }
     gallery.galleryDirection = req.body.direction;
 
     user.save();
-    return res.status(200).json(gallery);
+    return res.status(200).json({ message: "Updated Succesfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: error });
@@ -313,7 +334,7 @@ module.exports.galleryDirectionChanged = async (req, res) => {
 module.exports.getImagesById = async (req, res) => {
   const userId = req.params.userId;
   const galleryId = req.params.galleryId;
-  console.log(galleryId);
+  console.log(userId);
   try {
     const user = await userModel.findById(userId);
     const gallery = await user.galleries.find(
@@ -321,7 +342,7 @@ module.exports.getImagesById = async (req, res) => {
     );
 
     if (!gallery) {
-      return res.status(404).send("Gallery Not Found!!");
+      return res.status(404).json({ message: "Gallery Not Found!!" });
     }
 
     return res.status(200).json(gallery);

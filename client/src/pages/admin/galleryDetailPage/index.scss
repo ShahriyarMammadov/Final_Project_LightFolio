@@ -1,7 +1,15 @@
 @import "../../../assets/sass/utils/variables";
 
+#chakra-modal--body-deleteModal {
+  max-height: 66px !important;
+}
+.alert{
+  max-height: 0;
+}
 #galleryDetail {
   background-color: $adminBackgroundColor;
+  
+
   .galleryImage {
     max-width: 1200px;
     margin: 0 auto;

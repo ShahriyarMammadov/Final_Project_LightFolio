@@ -60,7 +60,14 @@ const AdminHeader = () => {
             <Menu isLazy>
               <MenuButton>
                 <div className="user">
-                  <img src={userPhoto} alt="" />
+                  <img
+                    src={
+                      userData?.data?.profilePhoto
+                        ? userData?.data?.profilePhoto
+                        : userPhoto
+                    }
+                    alt="ProfilePhoto"
+                  />
                   <div className="name">
                     <h6>{userData?.data?.companyName}</h6>
                     <p>{userData?.data?.fullName}</p>

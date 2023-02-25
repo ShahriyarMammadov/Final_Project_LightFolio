@@ -115,12 +115,6 @@ const DashboardPage = () => {
     onCoverİmageOpen();
 
     setAlbomId(data.galleryId);
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     alert(JSON.stringify(values, null, 2));
-    //     resolve();
-    //   }, 1000);
-    // });
   };
   // -------------------------------
 
@@ -362,15 +356,14 @@ const DashboardPage = () => {
                 </div>
               ) : (
                 userData.data.galleries.reverse().map((e, i) => {
-                  console.log(e.expirationDate.slice(0, 7));
                   if (i < 3) {
                     return (
                       <Link to={`galleries/galleriesDetail/${e._id}`} key={i}>
                         <div className="card">
                           <div className="expired">
                             {e?.expirationDate !== "" &&
-                            e?.expirationDate.slice(0, 10) >=
-                              expirationDate.slice(0, 10) ? (
+                            e?.expirationDate?.slice(0, 10) >=
+                              expirationDate?.slice(0, 10) ? (
                               ""
                             ) : (
                               <p>EXPIRED</p>
@@ -401,48 +394,6 @@ const DashboardPage = () => {
                   }
                 })
               )}
-
-              {/* <Link to={`/galleryImageDetail`}>
-                <div className="card">
-                  <div className="galleryImage">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8mEIWZjRFdiO4YIkq790lTaNzTtCH6DcwrQ&usqp=CAU"
-                      alt="GalleryImage"
-                    />
-                  </div>
-
-                  <div className="galleryName">
-                    <p>Shahriyar's Gallery</p>
-                    <div className="visitorAndImageLength">
-                      <span>0</span>
-                      <i className="fa-solid fa-images"></i>
-                      <span>1</span>
-                      <i className="fa-solid fa-eye"></i>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-
-              <Link to={`/galleryImageDetail`}>
-                <div className="card">
-                  <div className="galleryImage">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8mEIWZjRFdiO4YIkq790lTaNzTtCH6DcwrQ&usqp=CAU"
-                      alt="GalleryImage"
-                    />
-                  </div>
-
-                  <div className="galleryName">
-                    <p>Shahriyar's Gallery</p>
-                    <div className="visitorAndImageLength">
-                      <span>0</span>
-                      <i className="fa-solid fa-images"></i>
-                      <span>1</span>
-                      <i className="fa-solid fa-eye"></i>
-                    </div>
-                  </div>
-                </div>
-              </Link> */}
             </div>
 
             <div className="studioManagerVisit">

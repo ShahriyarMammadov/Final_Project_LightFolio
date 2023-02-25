@@ -5,7 +5,7 @@ import "./index.scss";
 import logo from "../../../assets/images/gallery-directory1.jpg";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useToast } from "@chakra-ui/react";
+import { FormHelperText, useToast } from "@chakra-ui/react";
 import {
   Modal,
   ModalOverlay,
@@ -22,8 +22,15 @@ import {
   Button,
 } from "@chakra-ui/react";
 import LoadingComp from "../../../components/loading";
+import { useDropzone } from "react-dropzone";
+import { convertToBase64, createPost } from "../../../services";
 
 const AboutMePage = () => {
+  const {
+    isOpen: newImageisOpen,
+    onOpen: newImageonOpen,
+    onClose: newImageClose,
+  } = useDisclosure();
   const {
     isOpen: emailOpen,
     onOpen: onEmailOpen,
@@ -34,7 +41,13 @@ const AboutMePage = () => {
     onOpen: onPasswordOpen,
     onClose: onPasswordClose,
   } = useDisclosure();
-
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    maxFiles: 1,
+    onDrop: (acceptedFiles) => {
+      handleFileUpload(acceptedFiles[0]);
+    },
+  });
   const [password, setPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -44,6 +57,9 @@ const AboutMePage = () => {
   const [signature, setSignature] = useState("");
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const [postImage, setPostImage] = useState({
+    myFile: "",
+  });
 
   const current = new Date();
   const date = `${current.getDate()}/${
@@ -182,6 +198,25 @@ const AboutMePage = () => {
     }
   };
 
+  //Profile Photo Updated
+  const handleFileUpload = async (e) => {
+    const file = e;
+    const base64 = await convertToBase64(file);
+    setPostImage({ ...postImage, myFile: base64 });
+  };
+
+  const handleFileInput = async (e) => {
+    const file = e.target.file[0];
+    const base64 = await convertToBase64(file);
+    setPostImage({ ...postImage, myFile: base64 });
+  };
+
+  const handleImageUpload = async () => {
+    // setLoading(true);
+    await createPost(postImage, "profilePhotoUpdate", "", userData.data._id);
+    setLoading(false);
+  };
+
   return (
     <div className="about">
       {userData?.loading ? (
@@ -191,6 +226,51 @@ const AboutMePage = () => {
           <Helmet>
             <title>About Me</title>
           </Helmet>
+          <Modal
+            closeOnOverlayClick={false}
+            isOpen={newImageisOpen}
+            onClose={newImageClose}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Upload to your Profile Photo</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <FormControl>
+                  <div {...getRootProps()} className="coverImage">
+                    <FormLabel htmlFor="coverImage">
+                      New Profile Photo
+                    </FormLabel>
+                    <FormHelperText>
+                      The date the photos were taken.
+                    </FormHelperText>
+                    <input
+                      {...getInputProps()}
+                      id="coverImage"
+                      onChange={(e) => {
+                        handleFileInput(e);
+                      }}
+                    />
+                    {acceptedFiles.length > 0 && (
+                      <p>Selected file: {acceptedFiles[0].name}</p>
+                    )}
+                  </div>
+                </FormControl>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  isLoading={loading}
+                  onClick={handleImageUpload}
+                >
+                  Save
+                </Button>
+                <Button onClick={newImageClose}>Cancel</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
           <div className="aboutHeader">
             <h2>About Me</h2>
           </div>
@@ -200,9 +280,16 @@ const AboutMePage = () => {
                 <h4>Contact Information</h4>
               </div>
               <div className="changePassword">
-                <div className="image">
+                <div className="image" onClick={newImageonOpen}>
                   <p>UPLOAD IMAGE</p>
-                  <img src={logo} alt="userImage" />
+                  <img
+                    src={
+                      userData?.data?.profilePhoto
+                        ? userData?.data?.profilePhoto
+                        : logo
+                    }
+                    alt="userImage"
+                  />
                 </div>
 
                 <div className="userInformation">

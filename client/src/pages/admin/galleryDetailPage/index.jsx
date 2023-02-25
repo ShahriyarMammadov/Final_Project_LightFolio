@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LoadingComp from "../../../components/loading";
 import Draggable from "react-draggable";
 import "./index.scss";
@@ -35,8 +35,10 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { convertToBase64, createPost } from "../../../services";
+import { useToast } from "@chakra-ui/react";
 
-const GalleryDetailPage = () => {
+const GalleryDetailPage = ({ message }) => {
+  console.log(message);
   const userData = useSelector((state) => state.getAllUserDataReducer);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
@@ -44,7 +46,7 @@ const GalleryDetailPage = () => {
   const [postImage, setPostImage] = useState({
     myFile: "",
   });
-
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: newImageisOpen,
@@ -56,7 +58,9 @@ const GalleryDetailPage = () => {
     onOpen: galleyDeleteOnOpen,
     onClose: galleryDeleteOnClose,
   } = useDisclosure();
+  localStorage.setItem("id", userData?.data?._id);
 
+  const navigate = useNavigate();
   const handleDrag = (e, data) => {
     console.log(data.lastX);
     console.log(data.lastX);
@@ -65,7 +69,7 @@ const GalleryDetailPage = () => {
   const getGalleryImage = async () => {
     setLoading(true);
     let { data } = await axios.get(
-      `http://localhost:3000/images/${userData?.data?._id}/${id}`
+      `http://localhost:3000/images/${localStorage.getItem("id")}/${id}`
     );
     setLoading(false);
     setData(data);
@@ -77,10 +81,26 @@ const GalleryDetailPage = () => {
   }, []);
 
   const directionEdit = async () => {
-    const { response } = await axios.patch(
-      `http://localhost:3000/galleryDirection/${userData.data._id}/${data._id}`,
-      { direction: !data.galleryDirection }
-    );
+    try {
+      const response = await axios.patch(
+        `http://localhost:3000/galleryDirection/${userData.data._id}/${data._id}`,
+        { direction: !data.galleryDirection }
+      );
+
+      toast({
+        title: `${response.data.message}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: `${response.data.error}`,
+        position: "bottom-right",
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
@@ -104,24 +124,64 @@ const GalleryDetailPage = () => {
   };
 
   const handleCoverImageUpload = async () => {
-    setLoading(true);
-    await createPost(postImage, "coverImage", data._id, userData.data._id);
-    setLoading(false);
+    try {
+      setLoading(true);
+      await createPost(postImage, "coverImage", data._id, userData.data._id);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleImageUpload = async () => {
-    setLoading(true);
-    await createPost(postImage, "uploads", data._id, userData.data._id);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const response = await createPost(
+        postImage,
+        "uploads",
+        data._id,
+        userData.data._id
+      );
+
+      // toast({
+      //   title: `${response.data.message}`,
+      //   position: "bottom-right",
+      //   status: "success",
+      //   isClosable: true,
+      // });
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: `${error}`,
+        position: "bottom-right",
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
   const cancelRef = React.useRef();
+
   const galleryDeleteById = async () => {
-    const response = await axios.delete(
-      `http://localhost:3000/galleryDelete/${userData.data._id}/${data._id}`
-    );
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/galleryDelete/${userData.data._id}/${data._id}`
+      );
+      toast({
+        title: `${response.data.message}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+      if (response.data.delete) {
+        navigate("/admin/galleries/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-  console.log(cancelRef);
 
   const url = window.location.href;
   return (
@@ -288,9 +348,10 @@ const GalleryDetailPage = () => {
         isOpen={galleryDeleteIsOpen}
         leastDestructiveRef={cancelRef}
         onClose={galleryDeleteOnClose}
+        id="deleteModal"
       >
         <AlertDialogOverlay>
-          <AlertDialogContent>
+          <AlertDialogContent className="alert">
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
               Delete Customer
             </AlertDialogHeader>

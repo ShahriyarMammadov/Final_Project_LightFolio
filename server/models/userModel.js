@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema(
       required: [true, "Email is Required"],
       unique: true,
     },
+    profilePhoto: {
+      type: String,
+    },
     password: {
       type: String,
       required: [true, "Password is Required"],

@@ -1,8 +1,19 @@
 @import "../../../assets/sass/utils/mixins";
+@import "../../../assets/sass/components/button";
 
 #galleriesPage {
   background-color: #f5f6fa;
 
+  .noData {
+    margin: 0 auto;
+    padding: 16% 0;
+
+    button {
+      display: block;
+      margin: 40px auto;
+      @extend %primary-button;
+    }
+  }
   .galleries {
     max-width: 1200px;
     margin: 0 auto;

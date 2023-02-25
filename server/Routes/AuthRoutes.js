@@ -13,6 +13,7 @@ const {
   getImagesById,
   galleryDirectionChanged,
   galleryDeleteByid,
+  profilePhotoUpdated,
 } = require("../controllers/authControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -27,6 +28,7 @@ function userRouter(app) {
   app.patch("/email/:id", emailChanged);
   app.patch("/password/:id", passwordChanged);
   app.patch("/galleryDirection/:userId/:galleryId", galleryDirectionChanged);
+  app.post("/profilePhotoUpdate/:id", profilePhotoUpdated);
   app.post("/uploads/:id", imageDownload);
   app.patch("/signature/:id", signatureChanged);
   app.patch("/business/:id", businessDataUpdated);
