@@ -12,6 +12,7 @@ const {
   coverImageUpload,
   getImagesById,
   galleryDirectionChanged,
+  galleryDeleteByid,
 } = require("../controllers/authControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -30,6 +31,7 @@ function userRouter(app) {
   app.patch("/signature/:id", signatureChanged);
   app.patch("/business/:id", businessDataUpdated);
   app.put("/user/:id", updateUserData);
+  app.delete("/galleryDelete/:userId/:albomId", galleryDeleteByid);
 }
 
 module.exports = userRouter;

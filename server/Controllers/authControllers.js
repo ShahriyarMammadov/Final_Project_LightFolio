@@ -174,6 +174,27 @@ const createToken = (id) => {
 };
 // -----------------------------------------------------
 
+//--------------Gallery Delete By ID----------------
+module.exports.galleryDeleteByid = async (req, res) => {
+  try {
+    const galleryId = req.params.albomId;
+    const userId = req.params.userId;
+    let user = await userModel.findById(userId);
+
+    const galeri = await user.galleries.find(
+      (gallery) => gallery._id.toString() !== galleryId
+    );
+    user.galleries = galeri;
+
+    await user.save();
+    console.log(galleryId);
+    console.log(user);
+    res.status(200).json({ message: "success" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // Email and Password error
 const handleErrors = (err) => {
   let errors = { email: "", password: "" };

@@ -368,8 +368,9 @@ const DashboardPage = () => {
                       <Link to={`galleries/galleriesDetail/${e._id}`} key={i}>
                         <div className="card">
                           <div className="expired">
-                            {e?.expirationDate.slice(0, 10) >=
-                            expirationDate.slice(0, 10) ? (
+                            {e?.expirationDate !== "" &&
+                            e?.expirationDate.slice(0, 10) >=
+                              expirationDate.slice(0, 10) ? (
                               ""
                             ) : (
                               <p>EXPIRED</p>
@@ -386,7 +387,7 @@ const DashboardPage = () => {
                           <div className="galleryName">
                             <p>{e?.galleryName}</p>
                             <div className="visitorAndImageLength">
-                              <span>0</span>
+                              <span>{userData?.data?.galleries?.length}</span>
                               <i className="fa-solid fa-images"></i>
                               <span>1</span>
                               <i className="fa-solid fa-eye"></i>

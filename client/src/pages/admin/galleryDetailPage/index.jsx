@@ -27,6 +27,12 @@ import {
   FormLabel,
   FormControl,
   FormHelperText,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { convertToBase64, createPost } from "../../../services";
 
@@ -44,6 +50,11 @@ const GalleryDetailPage = () => {
     isOpen: newImageisOpen,
     onOpen: newImageonOpen,
     onClose: newImageClose,
+  } = useDisclosure();
+  const {
+    isOpen: galleryDeleteIsOpen,
+    onOpen: galleyDeleteOnOpen,
+    onClose: galleryDeleteOnClose,
   } = useDisclosure();
 
   const handleDrag = (e, data) => {
@@ -104,6 +115,14 @@ const GalleryDetailPage = () => {
     setLoading(false);
   };
 
+  const cancelRef = React.useRef();
+  const galleryDeleteById = async () => {
+    const response = await axios.delete(
+      `http://localhost:3000/galleryDelete/${userData.data._id}/${data._id}`
+    );
+  };
+  console.log(cancelRef);
+
   const url = window.location.href;
   return (
     <div id="galleryDetail">
@@ -155,7 +174,7 @@ const GalleryDetailPage = () => {
                 <i className="fa-solid fa-cloud-arrow-up"></i>
                 <span>UPLOAD IMAGES</span>
               </div>
-              <div className="trash">
+              <div className="trash" onClick={galleyDeleteOnOpen}>
                 <i className="fa-solid fa-trash"></i>
               </div>
 
@@ -262,6 +281,35 @@ const GalleryDetailPage = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {/* Delete Gallery */}
+
+      <AlertDialog
+        isOpen={galleryDeleteIsOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={galleryDeleteOnClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Customer
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={galleryDeleteOnClose}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" onClick={galleryDeleteById} ml={3}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </div>
   );
 };
