@@ -36,20 +36,23 @@ import ProgressBar from "../../../components/progressBar";
 
 const DashboardPage = () => {
   const [loadedPercent, setLoadedPercent] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  // Modal State's
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: coverİmageOpen,
     onOpen: onCoverİmageOpen,
     onClose: onCoverClose,
   } = useDisclosure();
-  const navigate = useNavigate();
+
+  // Image Download State
   const [postImage, setPostImage] = useState({
     myFile: "",
   });
-  const [loading, setLoading] = useState(false);
   const [albomId, setAlbomId] = useState("");
-  const [expirationToggle, setExpirationToggle] = useState(false);
 
+  // dropzone file download
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
     maxFiles: 1,
@@ -58,6 +61,7 @@ const DashboardPage = () => {
     },
   });
 
+  // Get User Data
   const userData = useSelector((state) => state.getAllUserDataReducer);
 
   //Get User Country and City Name
@@ -93,6 +97,7 @@ const DashboardPage = () => {
     mapTypeId: "satellite",
   };
 
+  // Country and City Name
   const GetCountryCity = async () => {
     const response = await axios.get(
       `https://nominatim.openstreetmap.org/reverse?lat=${lat.lat}&lon=${lat.lon}&format=json`
@@ -161,6 +166,7 @@ const DashboardPage = () => {
     }
   }, [loadedPercent]);
 
+  // expiration Date
   const expiration = new Date();
   const expirationDate =
     expiration.getMonth() + 1 < 10
@@ -399,7 +405,7 @@ const DashboardPage = () => {
                           <div className="galleryName">
                             <p>{e?.galleryName}</p>
                             <div className="visitorAndImageLength">
-                              <span>{userData?.data?.galleries?.length}</span>
+                              <span>{e?.galleryImage?.length}</span>
                               <i className="fa-solid fa-images"></i>
                               <span>1</span>
                               <i className="fa-solid fa-eye"></i>

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Helmet from "react-helmet";
 import "./index.scss";
-import logo from "../../../assets/images/gallery-directory1.jpg";
+import logo from "../../../assets/images/defaultUserImage.png";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FormHelperText, useToast } from "@chakra-ui/react";
@@ -27,6 +27,7 @@ import { convertToBase64, createPost } from "../../../services";
 import ProgressBar from "../../../components/progressBar";
 
 const AboutMePage = () => {
+  // Modal Open Functions
   const {
     isOpen: newImageisOpen,
     onOpen: newImageonOpen,
@@ -49,6 +50,8 @@ const AboutMePage = () => {
       handleFileUpload(acceptedFiles[0]);
     },
   });
+
+  // States
   const [password, setPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -57,11 +60,15 @@ const AboutMePage = () => {
   const [confirmError, setConfirmError] = useState("");
   const [signature, setSignature] = useState("");
   const [loading, setLoading] = useState(false);
+
   const toast = useToast();
+
+  // Images Post State
   const [postImage, setPostImage] = useState({
     myFile: "",
   });
 
+  // Date Function
   const current = new Date();
   const date = `${current.getDate()}/${
     current.getMonth() + 1
@@ -81,16 +88,16 @@ const AboutMePage = () => {
       values
     );
     setLoading(false);
-    location.reload();
   };
 
+  // react-hook-form
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  // Object split metodu ile fullName-nin first ve last name-e ayrilmasi
+  // Splitting fullName into first and last name with Object split method
   let firstAndLastName = userData?.data?.fullName?.split(" ");
 
   // Form onSubmit
@@ -199,7 +206,7 @@ const AboutMePage = () => {
     }
   };
 
-  //Profile Photo Updated
+  // Profile Photo Update
   const handleFileUpload = async (e) => {
     const file = e;
     const base64 = await convertToBase64(file);

@@ -11,14 +11,12 @@ import {
   Button,
   Select,
   Switch,
-  Toast,
   useToast,
 } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import LoadingComp from "../../../components/loading";
-import { getAllcountryAction } from "../../../redux/action/user.Action";
 import { convertToBase64, createPost } from "../../../services";
 
 const SettingsPage = () => {
@@ -47,20 +45,6 @@ const SettingsPage = () => {
     myFile: "",
   });
 
-  // const url = `http://localhost:3000/uploads/${userData?.data?._id}`;
-  // const createImage = async (newImage) => {
-  //   await axios.patch(url, newImage);
-  //   setLoading(false);
-  // };
-
-  // const createPost = async (post) => {
-  //   try {
-  //     await createImage(post);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-
   const handleSubmitImage = async (e) => {
     e.preventDefault();
     await createPost(
@@ -71,19 +55,6 @@ const SettingsPage = () => {
     );
     setLoading(true);
   };
-
-  // const convertToBase64 = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const fileReader = new FileReader();
-  //     fileReader.readAsDataURL(file);
-  //     fileReader.onload = () => {
-  //       resolve(fileReader.result);
-  //     };
-  //     fileReader.onerror = (error) => {
-  //       reject(error);
-  //     };
-  //   });
-  // };
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -119,10 +90,6 @@ const SettingsPage = () => {
         isClosable: true,
       });
     }
-    // return new Promise((resolve) => {
-    //   alert(JSON.stringify(values, null, 2));
-    //   resolve();
-    // });
   };
   //------------------------------------------------------
 
@@ -315,31 +282,8 @@ const SettingsPage = () => {
                         </Select>
                       </>
                     )}
-
-                    {/* <Button mt={4} isLoading={loading} type="submit">
-                    SAVE
-                  </Button> */}
                   </form>
                 </div>
-
-                <div className="imageDownload">
-                  <div>
-                    <form onSubmit={handleSubmitImage}>
-                      <input
-                        type="file"
-                        label="Image"
-                        name="myFile"
-                        accept=".jpeg, .png, .jpg"
-                        onChange={(e) => handleFileUpload(e)}
-                      />
-
-                      <button>Submit</button>
-                    </form>
-                  </div>
-                </div>
-                {userData?.galleries?.map((e, i) => {
-                  return <img key={i} src={`${e?.data}`} alt={"asd"} />;
-                })}
               </div>
 
               <div className="socialMediaLinks">

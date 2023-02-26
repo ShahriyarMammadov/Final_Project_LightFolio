@@ -36,7 +36,7 @@ const Header = () => {
               </Link>
               <div className="dropdown-content">
                 <Link to={"/photo-proofing"} title="Photo Proofing">
-                  <i className="fa-solid fa-database"></i>
+                  <i className="fa-solid fa-layer-group"></i>
                   <div className="text">
                     Proofing <p>Easy online photo Proofing</p>
                   </div>
@@ -45,34 +45,31 @@ const Header = () => {
                   to={"/deliver-photos-to-client"}
                   title="Digital Downloads"
                 >
-                  <i className="fa-solid fa-database"></i>
+                  <i className="fa-solid fa-download"></i>
                   <div className="text">
                     Digital Downloads <p>Allow client photo downloads</p>
                   </div>
                 </Link>
                 <Link to={"/visitor-analytics"} title="Visitor Analytics">
-                  <i className="fa-solid fa-database"></i>
+                  <i className="fa-solid fa-chart-simple"></i>
                   <div className="text">
                     Visitor Analytics <p>Gallery visitor stats</p>
                   </div>
                 </Link>
                 <Link to={"/online-store"} title="Online Store">
-                  <i className="fa-solid fa-database" title="Online Store"></i>
+                  <i className="fa-solid fa-store" title="Online Store"></i>
                   <div className="text">
                     Online Store <p>Set up shop</p>
                   </div>
                 </Link>
                 <Link to={"/gallery-directories"} title="Gallery Directories">
-                  <i
-                    className="fa-solid fa-database"
-                    title="Gallery Directories"
-                  ></i>
+                  <i className="fa-solid fa-images"></i>
                   <div className="text">
                     Gallery Directories <p>Gallery websites</p>
                   </div>
                 </Link>
                 <Link to={"/themes"} title="Themes">
-                  <i className="fa-solid fa-database"></i>
+                  <i className="fa-solid fa-palette"></i>
                   <div className="text">
                     Themes <p>Customize your galleries</p>
                   </div>
@@ -122,7 +119,7 @@ const Header = () => {
                     </div>
                   </Link>
                   <Link to={"/photography-forms"}>
-                    <i className="fa-solid fa-globe"></i>
+                    <i className="fa-solid fa-file-waveform"></i>
                     <div className="text">
                       Forms <p>Over a dozen form and questionnaire templates</p>
                     </div>
@@ -131,7 +128,7 @@ const Header = () => {
               </div>
             </div>
 
-            <Link to={"/websites"}>WEBSITES</Link>
+            <Link to={"/galleries"}>Galleries</Link>
           </nav>
         </div>
 

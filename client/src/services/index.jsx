@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import GalleryDetailPage from "../pages/admin/galleryDetailPage";
 
 export const convertToBase64 = (file) => {
   return new Promise((resolve, reject) => {

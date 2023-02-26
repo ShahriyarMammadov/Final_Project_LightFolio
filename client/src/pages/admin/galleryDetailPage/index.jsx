@@ -6,15 +6,7 @@ import LoadingComp from "../../../components/loading";
 import Draggable from "react-draggable";
 import "./index.scss";
 import mediumZoom from "medium-zoom";
-import {
-  FacebookShareButton,
-  FacebookIcon,
-  TwitterShareButton,
-  TwitterIcon,
-  WhatsappShareButton,
-  WhatsappIcon,
-  FacebookShareCount,
-} from "react-share";
+import Helmet from "react-helmet";
 import { useDropzone } from "react-dropzone";
 import {
   Modal,
@@ -53,6 +45,10 @@ const GalleryDetailPage = () => {
     myFile: "",
   });
   const toast = useToast();
+  const [toggle, setToggle] = useState(false);
+  const [loadedPercent, setLoadedPercent] = useState(0);
+
+  // Modal State
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: newImageisOpen,
@@ -69,8 +65,6 @@ const GalleryDetailPage = () => {
     onOpen: editGalleryonOpen,
     onClose: editGalleryonClose,
   } = useDisclosure();
-  const [toggle, setToggle] = useState(false);
-  const [loadedPercent, setLoadedPercent] = useState(0);
 
   const navigate = useNavigate();
   const handleDrag = (e, data) => {
@@ -78,10 +72,9 @@ const GalleryDetailPage = () => {
     console.log(data.lastX);
   };
 
-  const [blob, setBlob] = useState("");
-
   // console.log(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
+  // Get Users Gallery and Gallery Images
   const getGalleryImage = async () => {
     setLoading(true);
     let { data } = await axios.get(
@@ -97,6 +90,7 @@ const GalleryDetailPage = () => {
     getGalleryImage();
   }, []);
 
+  // Gallery Public or Personal
   const directionEdit = async () => {
     try {
       const response = await axios.patch(
@@ -120,10 +114,12 @@ const GalleryDetailPage = () => {
     }
   };
 
+  // Image Zoom Effect
   useEffect(() => {
     mediumZoom(".draggableGallery img");
   }, [data]);
 
+  // DropZone image download
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
     maxFiles: 1,
@@ -144,6 +140,7 @@ const GalleryDetailPage = () => {
     setPostImage({ ...postImage, myFile: base64 });
   };
 
+  // Gallery CoverImage download and change
   const handleCoverImageUpload = async () => {
     try {
       setLoading(true);
@@ -154,6 +151,7 @@ const GalleryDetailPage = () => {
     }
   };
 
+  // Gallery Image download
   const handleImageUpload = async () => {
     try {
       setLoading(true);
@@ -182,8 +180,7 @@ const GalleryDetailPage = () => {
     }
   };
 
-  const cancelRef = React.useRef();
-
+  // Gallery Delete
   const galleryDeleteById = async () => {
     try {
       setLoading(true);
@@ -206,6 +203,7 @@ const GalleryDetailPage = () => {
     }
   };
 
+  // Share
   const url = window.location.href;
 
   const handleClick = async () => {
@@ -231,11 +229,12 @@ const GalleryDetailPage = () => {
     }
   };
 
+  // Image Delete
   const imageDelete = async (imageId) => {
     try {
       const updatedImages = images.filter((img) => img._id !== imageId);
       setImages(updatedImages);
-      
+
       const response = await axios.delete(
         `http://localhost:3000/imageDelete/${userData.data._id}/${data._id}/${imageId}`
       );
@@ -256,13 +255,13 @@ const GalleryDetailPage = () => {
     }
   };
 
+  //Edit Gallery name
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  //edit gallery name
   const onSubmit = async (values) => {
     try {
       const response = await axios.patch(
@@ -287,6 +286,7 @@ const GalleryDetailPage = () => {
       });
     }
   };
+
   // const imageDownloadToClick = async (base64Image) => {
   //   var base64 = base64Image;
   //   var binary = atob(base64);
@@ -302,6 +302,9 @@ const GalleryDetailPage = () => {
         <LoadingComp />
       ) : (
         <div className="galleryImage">
+          <Helmet>
+            <title>{data?.seoTitle || data?.galleryName}</title>
+          </Helmet>
           <div className="galleryName">
             <div className="image">
               <div className="userData">
@@ -530,7 +533,6 @@ const GalleryDetailPage = () => {
 
       <AlertDialog
         isOpen={galleryDeleteIsOpen}
-        leastDestructiveRef={cancelRef}
         onClose={galleryDeleteOnClose}
         id="deleteModal"
       >
@@ -545,9 +547,7 @@ const GalleryDetailPage = () => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={galleryDeleteOnClose}>
-                Cancel
-              </Button>
+              <Button onClick={galleryDeleteOnClose}>Cancel</Button>
               <Button colorScheme="red" onClick={galleryDeleteById} ml={3}>
                 Delete
               </Button>

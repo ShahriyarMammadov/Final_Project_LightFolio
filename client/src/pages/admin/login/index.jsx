@@ -40,8 +40,6 @@ const LoginPage = () => {
     }
   };
 
-  console.log(loading);
-
   return (
     <div id="login">
       <Helmet>

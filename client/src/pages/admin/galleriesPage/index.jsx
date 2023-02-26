@@ -23,6 +23,7 @@ import { convertToBase64, createPost } from "../../../services";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 const GalleriesPage = () => {
   const [loading, setLoading] = useState(false);
@@ -96,6 +97,9 @@ const GalleriesPage = () => {
         <LoadingComponent />
       ) : (
         <div className="galleries">
+          <Helmet>
+            <title>Galleries | LightFolio</title>
+          </Helmet>
           {userData.data.galleries && userData.data.galleries.length === 0 ? (
             <div className="noData">
               <h3>Don't currently have any galleries, want to add one?</h3>

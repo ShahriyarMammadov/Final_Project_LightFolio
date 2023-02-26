@@ -1,7 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import "./index.scss";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import signupSchema from "./schema/index";
 import axios from "axios";
 import { Helmet } from "react-helmet";

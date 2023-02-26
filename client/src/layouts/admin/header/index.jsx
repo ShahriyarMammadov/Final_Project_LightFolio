@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import userPhoto from "../../../assets/images/title-logo.png";
+import userPhoto from "../../../assets/images/defaultUserImage.png";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import logo from "../../../assets/images/logo_lightfolio_mark_gold.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
