@@ -191,14 +191,16 @@ module.exports.profilePhotoUpdated = async (req, res) => {
 module.exports.editGalleryName = async (req, res) => {
   try {
     const { id } = req.params;
-    const { albomId, values } = req.body;
-
-    const gallery = user.galleries.find(
+    const { albomId, value } = req.body;
+    const user = await userModel.findById(id);
+    const gallery = await user.galleries.find(
       (gallery) => gallery._id.toString() === albomId
     );
-
-    gallery.galleryName = values;
+    gallery.galleryName = value.name;
     await user.save();
+    res
+      .status(201)
+      .json({ message: "Gallery Successfully Renamed", status: true });
   } catch (error) {
     console.log(error);
   }
@@ -252,6 +254,30 @@ const handleErrors = (err) => {
   return errors;
 };
 // -----------------------------------------------------
+
+//image Delete
+module.exports.imageDelete = async (req, res) => {
+  const userId = req.params.userId;
+  const albomId = req.params.albomId;
+  const imageId = req.params.imageId;
+
+  try {
+    const gallery = await userModel
+      .findById(userId)
+      .select("galleries")
+      .elemMatch("galleries", { _id: albomId });
+
+    const images = gallery.galleries[0].galleryImage;
+
+    const image = images.find((image) => image._id === imageId);
+    images.pull({ _id: imageId });
+    await gallery.save();
+    return res.status(200).json({ message: "Image Deleted" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error });
+  }
+};
 
 // Image Download`
 module.exports.imageDownload = async (req, res, next) => {

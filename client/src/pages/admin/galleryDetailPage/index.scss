@@ -1,4 +1,5 @@
 @import "../../../assets/sass/utils/variables";
+@import "../../../assets/sass/components/button";
 
 #chakra-modal--body-deleteModal {
   max-height: 66px !important;
@@ -6,15 +7,24 @@
 .alert {
   max-height: 0;
 }
+.chakra-modal__body {
+  form {
+    width: 100% !important;
+  }
+}
 #galleryDetail {
   background-color: $adminBackgroundColor;
-
   .galleryImage {
     max-width: 1200px;
     margin: 0 auto;
     padding: 80px;
 
     .galleryName {
+      .fa-pen-to-square {
+        color: rgb(156, 155, 155);
+        font-size: 20px;
+        cursor: pointer;
+      }
       .image {
         display: flex;
         justify-content: space-between;
@@ -27,8 +37,9 @@
           gap: 30px;
 
           img {
-            width: 24%;
-            height: 100px;
+            cursor: pointer;
+            width: 120px;
+            height: 115px;
             border-radius: 50%;
           }
 
@@ -52,6 +63,24 @@
             padding: 12px;
             color: white;
             border-radius: 8px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+              rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+            width: 150px;
+
+            &:hover {
+              background-color: #35ba77;
+            }
+          }
+
+          .share {
+            button {
+              background-color: grey;
+              width: 120px;
+
+              &:hover {
+                background-color: rgb(156, 155, 155);
+              }
+            }
           }
         }
       }
@@ -84,22 +113,72 @@
 
     .draggableGallery {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
 
-      .imageDiv {
-        width: fit-content;
-        height: fit-content;
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-        background-color: white;
-        border-radius: 10px;
+    .grid-container {
+      columns: 5 200px;
+      column-gap: 1.5rem;
+      width: 100%;
+      margin: 0 auto;
+
+      .draggableGallery {
+        width: 150px;
+        margin: 0 1.5rem 1.5rem 0;
+        display: inline-block;
+        width: 100%;
+        border: solid 2px black;
+        padding: 5px;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+        border-radius: 5px;
+        cursor: pointer;
+
+        .fa-trash {
+          display: none;
+          color: rgb(156, 155, 155);
+        }
+
+        &:hover {
+          border-color: coral;
+          .fa-trash {
+            display: inline;
+          }
+        }
 
         img {
-          padding: 10px;
-          max-width: 240px;
+          width: 100%;
+          border-radius: 5px;
+          transition: all 0.25s ease-in-out;
+        }
+        p {
+          margin: 5px 0;
+          padding: 0;
+          text-align: center;
+          font-style: italic;
         }
       }
     }
+
+    // .draggableGallery {
+    //   display: flex;
+    //   flex-wrap: wrap;
+    //   gap: 10px;
+
+    //   .imageDiv {
+    //     width: fit-content;
+    //     height: fit-content;
+    //     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    //     background-color: white;
+    //     border-radius: 10px;
+
+    //     img {
+    //       padding: 10px;
+    //       max-width: 240px;
+    //     }
+    //   }
+    // }
   }
 }
 

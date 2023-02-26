@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoadingComp from "../../../components/loading";
 import Draggable from "react-draggable";
 import "./index.scss";
+import mediumZoom from "medium-zoom";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -46,6 +47,7 @@ const GalleryDetailPage = () => {
   const userData = useSelector((state) => state.getAllUserDataReducer);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
+  const [images, setImages] = useState([]);
   const { id } = useParams();
   const [postImage, setPostImage] = useState({
     myFile: "",
@@ -87,6 +89,7 @@ const GalleryDetailPage = () => {
     );
     setLoading(false);
     setData(data);
+    setImages(data.galleryImage);
     console.log(data);
   };
 
@@ -116,6 +119,10 @@ const GalleryDetailPage = () => {
       });
     }
   };
+
+  useEffect(() => {
+    mediumZoom(".draggableGallery img");
+  }, [data]);
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
@@ -224,7 +231,30 @@ const GalleryDetailPage = () => {
     }
   };
 
-  const imageDelete = async () => {};
+  const imageDelete = async (imageId) => {
+    try {
+      const updatedImages = images.filter((img) => img._id !== imageId);
+      setImages(updatedImages);
+      
+      const response = await axios.delete(
+        `http://localhost:3000/imageDelete/${userData.data._id}/${data._id}/${imageId}`
+      );
+      toast({
+        title: `${response.data.message}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: `${error}`,
+        position: "bottom-right",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
 
   const {
     handleSubmit,
@@ -232,13 +262,30 @@ const GalleryDetailPage = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  //edit gallery name
   const onSubmit = async (values) => {
-    const response = await axios.patch(
-      `http://localhost:3000/editGalleryName`,
-      values
-    );
+    try {
+      const response = await axios.patch(
+        `http://localhost:3000/editGalleryName/${userData.data._id}`,
+        { value: values, albomId: data._id }
+      );
 
-    console.log(response.data);
+      response.data.status && editGalleryonClose();
+
+      toast({
+        title: `${response.data.message}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: `${error}`,
+        position: "bottom-right",
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
   // const imageDownloadToClick = async (base64Image) => {
   //   var base64 = base64Image;
@@ -259,12 +306,19 @@ const GalleryDetailPage = () => {
             <div className="image">
               <div className="userData">
                 <img src={data?.coverImage?.coverImg} alt="" onClick={onOpen} />
-                <h2>{data?.galleryName}</h2>
+                <h2>{data?.galleryName}</h2>{" "}
+                <i
+                  className="fa-solid fa-pen-to-square"
+                  title="Edit Gallery Name"
+                  onClick={editGalleryonOpen}
+                ></i>
               </div>
               <div className="publishAndShare">
                 <button
                   style={
-                    data?.galleryDirection ? null : { backgroundColor: "red" }
+                    data?.galleryDirection
+                      ? null
+                      : { backgroundColor: "darkred" }
                   }
                   onClick={() => {
                     directionEdit();
@@ -297,25 +351,31 @@ const GalleryDetailPage = () => {
                 <i className="fa-solid fa-trash"></i>
               </div>
 
-              <div className="editBar" onClick={editGalleryonOpen}>
-                . . .
-              </div>
+              <div className="editBar">. . .</div>
             </div>
           </div>
           <div className="draggableGallery">
-            {data?.galleryImage?.map((image, index) => {
-              return (
-                <Draggable
-                  key={index}
-                  onStop={handleDrag}
-                  // bounds={{ left: 0, top: 0, right: 700, bottom: 500 }}
-                >
-                  <div className="imageDiv">
-                    <img src={image.image} alt={`image`} />
-                  </div>
-                </Draggable>
-              );
-            })}
+            <div className="grid-container">
+              {images?.map((image, index) => {
+                return (
+                  <Draggable
+                    key={index}
+                    onStop={handleDrag}
+                    // bounds={{ left: 0, top: 0, right: 700, bottom: 500 }}
+                  >
+                    <div className="draggableGallery">
+                      <img src={image.image} alt={`image`} />
+                      <i
+                        className="fa-solid fa-trash"
+                        onClick={() => {
+                          imageDelete(image._id);
+                        }}
+                      ></i>
+                    </div>
+                  </Draggable>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
@@ -426,15 +486,16 @@ const GalleryDetailPage = () => {
           <ModalBody pb={6}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl isInvalid={errors.name}>
-                <FormLabel htmlFor="name">First name</FormLabel>
+                <FormLabel htmlFor="name">Gallery Name:</FormLabel>
                 <Input
                   id="name"
-                  placeholder="name"
+                  placeholder="Gallery Name"
+                  defaultValue={data.galleryName}
                   {...register("name", {
-                    required: "This is required",
+                    required: "Gallery Name is required",
                     minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
+                      value: 3,
+                      message: "Minimum length should be 3",
                     },
                   })}
                 />
@@ -448,15 +509,12 @@ const GalleryDetailPage = () => {
                 isLoading={isSubmitting}
                 type="submit"
               >
-                Submit
+                SAVE
               </Button>
             </form>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} isLoading={loading}>
-              SAVE
-            </Button>
             <Button
               onClick={() => {
                 editGalleryonClose();

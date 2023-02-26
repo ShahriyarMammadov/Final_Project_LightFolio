@@ -15,6 +15,7 @@ const {
   galleryDeleteByid,
   profilePhotoUpdated,
   editGalleryName,
+  imageDelete,
 } = require("../controllers/authControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -36,6 +37,7 @@ function userRouter(app) {
   app.patch("/business/:id", businessDataUpdated);
   app.put("/user/:id", updateUserData);
   app.delete("/galleryDelete/:userId/:albomId", galleryDeleteByid);
+  app.delete("/imageDelete/:userId/:albomId/:imageId", imageDelete);
 }
 
 module.exports = userRouter;
