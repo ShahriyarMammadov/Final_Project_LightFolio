@@ -18,6 +18,9 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 80px;
+    @media only screen and (max-width: 767px) {
+      padding: 80px 10px;
+    }
 
     .galleryName {
       .fa-pen-to-square {
@@ -30,6 +33,45 @@
         justify-content: space-between;
         align-items: center;
         gap: 30px;
+
+        @media only screen and (max-width: 960px) {
+          flex-direction: column;
+
+          .userData {
+            flex-direction: column;
+            width: 90%;
+
+            img {
+              border-radius: 0% !important;
+              width: 100% !important;
+              height: 500px !important;
+            }
+          }
+        }
+
+        @media only screen and (max-width: 767px) {
+          .userData {
+            width: 100%;
+
+            img {
+              border-radius: 0% !important;
+              width: 100% !important;
+              height: 400px !important;
+            }
+          }
+        }
+
+        @media only screen and (max-width: 425px) {
+          .userData {
+            width: 100% !important;
+
+            img {
+              border-radius: 0% !important;
+              width: 100% !important;
+              height: 310px !important;
+            }
+          }
+        }
 
         .userData {
           display: flex;

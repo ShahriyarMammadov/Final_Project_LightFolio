@@ -357,29 +357,62 @@ const GalleryDetailPage = () => {
               <div className="editBar">. . .</div>
             </div>
           </div>
-          <div className="draggableGallery">
-            <div className="grid-container">
-              {images?.map((image, index) => {
-                return (
-                  <Draggable
-                    key={index}
-                    onStop={handleDrag}
-                    // bounds={{ left: 0, top: 0, right: 700, bottom: 500 }}
-                  >
-                    <div className="draggableGallery">
-                      <img src={image.image} alt={`image`} />
-                      <i
-                        className="fa-solid fa-trash"
-                        onClick={() => {
-                          imageDelete(image._id);
-                        }}
-                      ></i>
-                    </div>
-                  </Draggable>
-                );
-              })}
+          {images.length === 0 ? (
+            <div>
+              <FormControl>
+                <div {...getRootProps()} className="coverImage">
+                  <FormLabel htmlFor="coverImage">Cover Image</FormLabel>
+                  <FormHelperText>
+                    The date the photos were taken.
+                  </FormHelperText>
+                  <input
+                    {...getInputProps()}
+                    id="coverImage"
+                    onChange={(e) => {
+                      handleFileInput(e);
+                    }}
+                  />
+                  {acceptedFiles.length > 0 && (
+                    <p>Selected file: {acceptedFiles[0].name}</p>
+                  )}
+                </div>
+                <div className="progress-text">{loadedPercent}%</div>
+                <ProgressBar loadedPercent={loadedPercent} />
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  isLoading={loading}
+                  onClick={handleImageUpload}
+                >
+                  {loadedPercent === 100 ? "Loaded" : "Upload"}
+                </Button>
+              </FormControl>
             </div>
-          </div>
+          ) : (
+            <div className="draggableGallery">
+              <div className="grid-container">
+                {images?.map((image, index) => {
+                  return (
+                    <Draggable
+                      key={index}
+                      onStop={handleDrag}
+                      // bounds={{ left: 0, top: 0, right: 700, bottom: 500 }}
+                    >
+                      <div className="draggableGallery">
+                        <img src={image.image} alt={`image`} />
+                        <i
+                          className="fa-solid fa-trash"
+                          onClick={() => {
+                            imageDelete(image._id);
+                          }}
+                        ></i>
+                      </div>
+                    </Draggable>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -438,7 +471,7 @@ const GalleryDetailPage = () => {
           <ModalBody pb={6}>
             <FormControl>
               <div {...getRootProps()} className="coverImage">
-                <FormLabel htmlFor="coverImage">Cover Image</FormLabel>
+                <FormLabel htmlFor="coverImage">New Image</FormLabel>
                 <FormHelperText>The date the photos were taken.</FormHelperText>
                 <input
                   {...getInputProps()}

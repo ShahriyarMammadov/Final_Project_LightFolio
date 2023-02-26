@@ -15,6 +15,7 @@ const {
   updateUserData,
   galleryDeleteByid,
   imageDelete,
+  allGalleriesSend,
 } = require("../Controllers/userControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -27,6 +28,7 @@ function userRouter(app) {
   // User Routes
   app.get("/user/:id", getUserById);
   app.get("/images/:userId/:galleryId", getImagesById);
+  app.get("/allGalleries", allGalleriesSend);
 
   app.post("/galleryCreate/:id", newGallery);
   app.post("/coverImage/:id", coverImageUpload);

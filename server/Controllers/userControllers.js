@@ -234,20 +234,29 @@ module.exports.imageDelete = async (req, res) => {
   const imageId = req.params.imageId;
 
   try {
-    const gallery = await userModel
-      .findById(userId)
-      .select("galleries")
-      .elemMatch("galleries", { _id: albomId });
+    const user = await userModel.findById(userId);
 
-    const images = gallery.galleries[0].galleryImage;
+    const gallery = user.galleries.find(
+      (g) => g._id.toString() === albomId.toString()
+    );
+    if (!gallery) {
+      return res.status(404).json({ error: "Gallery not found" });
+    }
 
-    const image = images.find((image) => image._id === imageId);
-    images.pull({ _id: imageId });
-    await gallery.save();
-    return res.status(200).json({ message: "Image Deleted" });
+    const image = gallery.galleryImage.find(
+      (img) => img._id.toString() === imageId.toString()
+    );
+    if (!image) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    gallery.galleryImage.pull({ _id: imageId });
+    await user.save();
+
+    return res.status(200).json({ message: "Image deleted successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: error });
+    return res.status(500).json({ error: error.message });
   }
 };
 //-------------------------------------------------------------------
@@ -368,6 +377,27 @@ module.exports.getImagesById = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: error });
+  }
+};
+//-------------------------------------------------------------------
+
+//---------------------- Get All Gallery ----------------------------
+module.exports.allGalleriesSend = async (req, res) => {
+  try {
+    userModel.find({}, { galleries: 1 })
+      .then((users) => {
+        const galleries = users.flatMap((user) =>
+          user.galleries.filter((gallery) => gallery.galleryDirection)
+        );
+        res.json(galleries);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+      });
+  } catch (error) {
+    console.log(error)
+    res.json({ error: error });
   }
 };
 //-------------------------------------------------------------------

@@ -18,6 +18,7 @@ import AboutMePage from "../pages/admin/aboutMePage";
 import SettingsPage from "../pages/admin/settingsPage";
 import AdminGalleriesPage from "../pages/admin/galleriesPage";
 import GalleryDetailPage from "../pages/admin/galleryDetailPage";
+import AllGalleries from "../pages/site/allGalleriesPage";
 
 const ROUTES = [
   {
@@ -59,6 +60,10 @@ const ROUTES = [
       {
         path: "themes",
         element: <ThemesPage />,
+      },
+      {
+        path: "galleries",
+        element: <AllGalleries />,
       },
       {
         path: "*",
