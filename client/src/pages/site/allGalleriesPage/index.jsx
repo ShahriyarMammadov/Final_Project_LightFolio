@@ -34,25 +34,28 @@ const AllGalleries = () => {
       ) : (
         <>
           <div className="gallery">
-            {data?.slice(0, sliceNumber).map((gallery, i) => {
-              return (
-                <Link to={`/galleriesDetail/${gallery._id}`} key={i}>
-                  <div className="imageCard">
-                    <div className="card card1">
-                      <img
-                        src={gallery?.coverImage?.coverImg}
-                        alt={gallery?.galleryName}
-                      />
-                      <div className="text">
-                        <p>
-                          <em>{gallery?.galleryName}</em>
-                        </p>
+            {data
+              ?.slice(0, sliceNumber)
+              .reverse()
+              .map((gallery, i) => {
+                return (
+                  <Link to={`/galleriesDetail/${gallery._id}`} key={i}>
+                    <div className="imageCard">
+                      <div className="card card1">
+                        <img
+                          src={gallery?.coverImage?.coverImg}
+                          alt={gallery?.galleryName}
+                        />
+                        <div className="text">
+                          <p>
+                            <em>{gallery?.galleryName}</em>
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              );
-            })}
+                  </Link>
+                );
+              })}
             {data?.length > 12 && (
               <button
                 onClick={() => {

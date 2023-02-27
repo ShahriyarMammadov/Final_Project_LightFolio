@@ -5,22 +5,42 @@
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    padding: 80px 0;
-    gap: 30px;
+    flex-wrap: wrap;
+    padding: 80px 2%;
+    gap: 20px;
     width: 100%;
 
-    .imageCard {
-      @media only screen and (max-width: 700px) {
-        flex-direction: column;
-      }
+    @media only screen and (max-width: 425px) {
+      width: 340px !important;
+    }
 
+    .imageCard {
       .card {
-        width: 100%;
+        padding: 5px;
+        background-color: aliceblue;
+        width: 260px;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+          rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        border-radius: 10px;
+
+        // @media only screen and (max-width: 425px) {
+        //   width: 340px !important;
+        // }
+
+        // @media only screen and (max-width: 425px) {
+        //   width: 340px !important;
+        // }
 
         img {
-          height: 150px;
+          height: 190px;
           width: 100%;
-          transition: all 0.6s;
+          border-top-right-radius: 10px;
+          border-top-left-radius: 10px;
+          transition: all 0.8s;
+
+          // @media only screen and (max-width: 425px) {
+          //   height: 220px !important;
+          // }
 
           &:hover {
             transform: translateY(-10px);
@@ -30,16 +50,21 @@
         }
         .text {
           text-align: center;
+          padding: 6px 0;
+
           p {
             font-family: "Poppins", sans-serif;
-            font-size: 12px;
-            margin-top: 0;
+            font-size: 14px;
+
+            em {
+              font-weight: 700;
+            }
           }
         }
 
-        @media only screen and (max-width: 900px) {
-          width: 100%;
-        }
+        // @media only screen and (max-width: 900px) {
+        //   width: 100%;
+        // }
       }
     }
   }

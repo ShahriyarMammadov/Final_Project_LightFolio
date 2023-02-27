@@ -409,10 +409,18 @@ module.exports.getGalleryById = async (req, res) => {
     const galleryId = req.params.id;
     userModel.findOne(
       { "galleries._id": galleryId },
-      { "galleries.$": 1, email: 1, companyName: 1, fullName: 1 },
+      {
+        "galleries.$": 1,
+        email: 1,
+        companyName: 1,
+        business: 1,
+        fullName: 1,
+        socialMedia: 1,
+        signature: 1,
+      },
       (err, user) => {
         if (err) {
-          res.json({ error: error });
+          res.json({ error: err });
         } else {
           res.status(200).json(user);
         }
