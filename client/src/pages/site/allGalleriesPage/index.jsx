@@ -3,11 +3,12 @@ import "./index.scss";
 import axios from "axios";
 import LoadingComp from "../../../components/loading";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import Helmet from "react-helmet";
 
 const AllGalleries = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sliceNumber, setSliceNumber] = useState(12);
 
   // Get All Direction: true galleries
   const getGalleries = async () => {
@@ -25,24 +26,42 @@ const AllGalleries = () => {
 
   return (
     <div id="allGalleries">
+      <Helmet>
+        <title>Galleries | LightFolio</title>
+      </Helmet>
       {loading ? (
         <LoadingComp />
       ) : (
         <>
           <div className="gallery">
-            {data?.map((gallery, i) => {
+            {data?.slice(0, sliceNumber).map((gallery, i) => {
               return (
-                <Link to={`/publicGallery/${gallery._id}`} key={i}>
-                  <div className="card">
-                    <img
-                      src={gallery?.coverImage?.coverImg}
-                      alt={gallery?.galleryName}
-                    />
-                    <h6>{gallery?.galleryName}</h6>
+                <Link to={`/galleriesDetail/${gallery._id}`} key={i}>
+                  <div className="imageCard">
+                    <div className="card card1">
+                      <img
+                        src={gallery?.coverImage?.coverImg}
+                        alt={gallery?.galleryName}
+                      />
+                      <div className="text">
+                        <p>
+                          <em>{gallery?.galleryName}</em>
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </Link>
               );
             })}
+            {data?.length > 12 && (
+              <button
+                onClick={() => {
+                  setSliceNumber(sliceNumber + 12);
+                }}
+              >
+                Show more Gallery
+              </button>
+            )}
           </div>
         </>
       )}

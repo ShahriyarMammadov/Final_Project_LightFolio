@@ -384,7 +384,8 @@ module.exports.getImagesById = async (req, res) => {
 //---------------------- Get All Gallery ----------------------------
 module.exports.allGalleriesSend = async (req, res) => {
   try {
-    userModel.find({}, { galleries: 1 })
+    userModel
+      .find({}, { galleries: 1 })
       .then((users) => {
         const galleries = users.flatMap((user) =>
           user.galleries.filter((gallery) => gallery.galleryDirection)
@@ -396,8 +397,29 @@ module.exports.allGalleriesSend = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
       });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.json({ error: error });
+  }
+};
+//-------------------------------------------------------------------
+
+//--------------------Get Gallery By ID -----------------------------
+module.exports.getGalleryById = async (req, res) => {
+  try {
+    const galleryId = req.params.id;
+    userModel.findOne(
+      { "galleries._id": galleryId },
+      { "galleries.$": 1, email: 1, companyName: 1, fullName: 1 },
+      (err, user) => {
+        if (err) {
+          res.json({ error: error });
+        } else {
+          res.status(200).json(user);
+        }
+      }
+    );
+  } catch (error) {
+    res.status(500).json({ error: error });
   }
 };
 //-------------------------------------------------------------------

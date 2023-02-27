@@ -4,7 +4,7 @@ import "./index.css";
 const LoadingComp = () => {
   return (
     <div id="loadingComponent">
-      <div className="lds-ellipsis">
+      <div className="lds-ring">
         <div></div>
         <div></div>
         <div></div>
