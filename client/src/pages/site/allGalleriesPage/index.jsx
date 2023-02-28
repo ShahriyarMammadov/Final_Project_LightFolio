@@ -56,16 +56,17 @@ const AllGalleries = () => {
                   </Link>
                 );
               })}
-            {data?.length > 12 && (
-              <button
-                onClick={() => {
-                  setSliceNumber(sliceNumber + 12);
-                }}
-              >
-                Show more Gallery
-              </button>
-            )}
           </div>
+          {data?.length > 12 && (
+            <button
+              className="sliceButton"
+              onClick={() => {
+                setSliceNumber(sliceNumber + 12);
+              }}
+            >
+              Show more Gallery
+            </button>
+          )}
         </>
       )}
     </div>

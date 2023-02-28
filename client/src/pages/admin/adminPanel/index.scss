@@ -1,0 +1,23 @@
+#adminPanel {
+  padding: 80px;
+
+  @media only screen and (max-width: 767px) {
+    padding: 80px 10px;
+  }
+
+  .table {
+    margin-top: 40px;
+  }
+
+  .ant-col {
+    margin-top: 40px;
+  }
+}
+
+// .ant-table-wrapper {
+//   td {
+//     z-index: 0;
+//   }
+//   // .ant-table-cell {
+//   // }
+// }

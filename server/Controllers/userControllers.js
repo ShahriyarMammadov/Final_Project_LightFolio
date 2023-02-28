@@ -406,26 +406,52 @@ module.exports.allGalleriesSend = async (req, res) => {
 //--------------------Get Gallery By ID -----------------------------
 module.exports.getGalleryById = async (req, res) => {
   try {
-    const galleryId = req.params.id;
-    userModel.findOne(
-      { "galleries._id": galleryId },
-      {
-        "galleries.$": 1,
-        email: 1,
-        companyName: 1,
-        business: 1,
-        fullName: 1,
-        socialMedia: 1,
-        signature: 1,
-      },
-      (err, user) => {
-        if (err) {
-          res.json({ error: err });
-        } else {
-          res.status(200).json(user);
+    const { id } = req.params;
+    userModel
+      .findOne(
+        { "galleries._id": id },
+        {
+          "galleries.$": 1,
+          email: 1,
+          companyName: 1,
+          business: 1,
+          fullName: 1,
+          socialMedia: 1,
+          signature: 1,
+        },
+        (err, user) => {
+          if (err) {
+            console.log(err);
+            res.json({ error: err });
+          } else {
+            res.status(200).json(user);
+          }
         }
-      }
-    );
+      )
+      .select("business socialMedia signature");
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+//-------------------------------------------------------------------
+
+//--------------------Get All Users Data ----------------------------
+module.exports.getAllUsersData = async (req, res) => {
+  try {
+    const users = await userModel.find();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+//-------------------------------------------------------------------
+
+//--------------------Get All Users Data ----------------------------
+module.exports.deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const newModel = await userModel.findByIdAndDelete(id);
+    res.status(200).json({ message: "User Successfully Deleted" });
   } catch (error) {
     res.status(500).json({ error: error });
   }

@@ -70,7 +70,7 @@ const AllGalleriesDetail = () => {
       ) : (
         <div className="allgalleriesPage">
           <div className="galleryDetail">
-            {data?.galleries.map((e, i) => {
+            {data?.galleries?.map((e, i) => {
               return (
                 <>
                   <div className="galleryImageAndName">
@@ -103,6 +103,81 @@ const AllGalleriesDetail = () => {
                         </div>
                       );
                     })}
+                  </div>
+
+                  <div className="businessAbout">
+                    <div className="about">
+                      <h5>
+                        <span>Company Name: </span> {data?.companyName}
+                      </h5>
+                      <h4>
+                        <span>City: </span>
+                        {data?.business?.city}
+                      </h4>
+                    </div>
+
+                    <div className="contact">
+                      <div className="usContact">
+                        <a href="tel:450 3134473">
+                          <span>Phone: </span>
+                          {data?.business?.businessPhone}
+                        </a>
+                        <a href="mailto: shahriyar@gmail.com">
+                          <span>Email: </span>
+                          {data?.business?.businessEmail}
+                        </a>
+                        <p>{data?.business?.addressLine1}</p>
+                      </div>
+
+                      <div className="webContact">
+                        <a
+                          href={data?.socialMedia?.faceBookUrl}
+                          target="_blank"
+                          className="sosial"
+                        >
+                          <i className="fa-brands fa-facebook"></i>
+                        </a>
+                        <a
+                          href={data?.socialMedia?.instagramUrl}
+                          target="_blank"
+                          className="sosial"
+                        >
+                          <i className="fa-brands fa-instagram"></i>
+                        </a>
+                        <a
+                          href={data?.socialMedia?.pinterestUrl}
+                          target="_blank"
+                          className="sosial"
+                        >
+                          <i className="fa-brands fa-pinterest"></i>
+                        </a>
+                        <a
+                          href={data?.socialMedia?.twitterUrl}
+                          target="_blank"
+                          className="sosial"
+                        >
+                          <i className="fa-brands fa-twitter"></i>
+                        </a>
+                        <a
+                          href={data?.socialMedia?.youtubeUrl}
+                          target="_blank"
+                          className="sosial"
+                        >
+                          <i className="fa-brands fa-youtube"></i>
+                        </a>
+                        <a
+                          href={data?.socialMedia?.tiktokUrl}
+                          target="_blank"
+                          className="sosial"
+                        >
+                          <i className="fa-brands fa-tiktok"></i>
+                        </a>
+                      </div>
+
+                      <div className="signature">
+                        <h4>{data?.signature}</h4>
+                      </div>
+                    </div>
                   </div>
                 </>
               );

@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema(
       required: [true, "Email is Required"],
       unique: true,
     },
+    position: {
+      type: String,
+      default: "user",
+    },
     profilePhoto: {
       type: String,
     },
@@ -27,29 +31,37 @@ const userSchema = new mongoose.Schema(
     activity: [{ activityName: String, activityDate: String }],
 
     business: {
-      businessWebSite: String,
-      businessEmail: String,
-      businessPhone: String,
-      addressLine1: String,
-      addressLine2: String,
-      city: String,
-      postalCode: String,
-      country: String,
+      type: {
+        businessWebSite: String,
+        businessEmail: String,
+        businessPhone: String,
+        addressLine1: String,
+        addressLine2: String,
+        city: String,
+        postalCode: String,
+        country: String,
+      },
+      default: {},
     },
+    default: {},
 
     socialMedia: {
-      facebookUrl: String,
-      twitterUrl: String,
-      pinterestUrl: String,
-      linkedinUrl: String,
-      youtubeUrl: String,
-      tiktokUrl: String,
-      snapchatUrl: String,
-      instagramUrl: String,
+      type: {
+        facebookUrl: String,
+        twitterUrl: String,
+        pinterestUrl: String,
+        linkedinUrl: String,
+        youtubeUrl: String,
+        tiktokUrl: String,
+        snapchatUrl: String,
+        instagramUrl: String,
+      },
+      default: {},
     },
 
     signature: {
       type: String,
+      default: "",
     },
 
     galleries: [

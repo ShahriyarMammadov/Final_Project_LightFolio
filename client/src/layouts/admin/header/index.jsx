@@ -90,14 +90,25 @@ const AdminHeader = () => {
                   <i className="fa-solid fa-user"></i>{" "}
                   <span>About Me + Email</span>
                 </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    navigate("/admin/subscription/");
-                  }}
-                >
-                  <i className="fa-solid fa-dollar-sign"></i>{" "}
-                  <span>Subscription</span>
-                </MenuItem>
+                {userData?.data?.position === "admin" ? (
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/admin/adminPanel/");
+                    }}
+                  >
+                    <i className="fa-solid fa-screwdriver-wrench"></i>{" "}
+                    <span>Admin Panel</span>
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/admin/subscription/");
+                    }}
+                  >
+                    <i className="fa-solid fa-dollar-sign"></i>{" "}
+                    <span>Subscription</span>
+                  </MenuItem>
+                )}
                 <hr />
                 <MenuItem onClick={logout}>
                   <i className="fa-solid fa-right-from-bracket"></i>

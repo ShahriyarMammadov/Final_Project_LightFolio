@@ -17,6 +17,8 @@ const {
   imageDelete,
   allGalleriesSend,
   getGalleryById,
+  getAllUsersData,
+  deleteUser,
 } = require("../Controllers/userControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -31,6 +33,7 @@ function userRouter(app) {
   app.get("/images/:userId/:galleryId", getImagesById);
   app.get("/allGalleries", allGalleriesSend);
   app.get("/publicGallery/:id", getGalleryById);
+  app.get("/getAllData", getAllUsersData);
 
   app.post("/galleryCreate/:id", newGallery);
   app.post("/coverImage/:id", coverImageUpload);
@@ -49,6 +52,7 @@ function userRouter(app) {
 
   app.delete("/galleryDelete/:userId/:albomId", galleryDeleteByid);
   app.delete("/imageDelete/:userId/:albomId/:imageId", imageDelete);
+  app.delete("/deleteUser/:id", deleteUser);
 }
 
 module.exports = userRouter;

@@ -20,6 +20,8 @@ import AdminGalleriesPage from "../pages/admin/galleriesPage";
 import GalleryDetailPage from "../pages/admin/galleryDetailPage";
 import AllGalleries from "../pages/site/allGalleriesPage";
 import AllGalleriesDetail from "../pages/site/allGalleriesDetail";
+import AdminPanel from "../pages/admin/adminPanel";
+import { useSelector } from "react-redux";
 
 const ROUTES = [
   {
@@ -91,6 +93,10 @@ const ROUTES = [
       {
         path: "business/",
         element: <SettingsPage />,
+      },
+      {
+        path: "adminPanel/",
+        element: <AdminPanel />,
       },
       {
         path: "galleries/",

@@ -34,9 +34,10 @@ const AdminRoot = () => {
           removeCookie("jwt");
           navigate("/login");
         } else {
-          // const response = await axios.get(
-          //   `http://localhost:3000/user/${data.user}`
-          // );
+          // if (userData?.data?.position === "admin") {
+          //   navigate("/admin/adminPanel");
+          // console.log(userData.data.position);
+          // }
           await dispatch(getUserAllDataAction(data.data));
           // dispatch(getAllcountryAction());
         }

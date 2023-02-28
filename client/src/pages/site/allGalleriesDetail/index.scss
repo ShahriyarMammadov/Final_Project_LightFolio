@@ -1,5 +1,5 @@
 .allgalleriesPage {
-  padding: 40px 0;
+  padding: 40px 10px;
 
   .galleryDetail {
     max-width: 1200px;
@@ -87,6 +87,44 @@
           padding: 0;
           text-align: center;
           font-style: italic;
+        }
+      }
+    }
+
+    .businessAbout {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: "PlayFair-display", sans-serif;
+
+      span {
+        font-weight: 800;
+      }
+
+      .about {
+        background-color: white;
+        font-weight: 700;
+      }
+
+      .contact {
+        font-weight: 700;
+        .usContact {
+          p {
+            font-size: 13px;
+          }
+          a {
+            display: block;
+          }
+        }
+
+        .webContact {
+          .sosial {
+            a {
+              cursor: pointer;
+              margin-left: 15px;
+              padding-top: 20px;
+            }
+          }
         }
       }
     }
