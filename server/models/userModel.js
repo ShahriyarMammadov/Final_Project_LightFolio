@@ -74,6 +74,7 @@ const userSchema = new mongoose.Schema(
         galleryDirection: Boolean,
         seoTitle: String,
         seoDescription: String,
+        rating: { type: Number, default: 5 },
       },
     ],
   },

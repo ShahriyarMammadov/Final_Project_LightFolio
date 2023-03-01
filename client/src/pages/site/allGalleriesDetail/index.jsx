@@ -15,7 +15,9 @@ import mediumZoom from "medium-zoom";
 const AllGalleriesDetail = () => {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [toggleWishList, settoggleWishList] = useState(false);
+  const [email, setEmail] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [rating, setRating] = useState(5);
 
   const { id } = useParams();
   // const [images, setImages] = useState({});
@@ -23,12 +25,15 @@ const AllGalleriesDetail = () => {
   const wishData = useSelector((state) => state.favReducer);
   const dispatch = useDispatch();
 
+  let wisharr = JSON.parse(localStorage.getItem("wishList")) ?? [];
+
   const getGalleryData = async () => {
     const response = await axios.get(
       `http://localhost:3000/publicGallery/${id}`
     );
-    await setData(response.data);
-    console.log(response.data);
+    await setData(response?.data);
+    setEmail(`mailto: ${response?.data?.business?.businessEmail}`);
+    setTelephone(`tel: ${response?.data?.business?.businessPhone}`);
     setLoading(false);
   };
 
@@ -36,23 +41,34 @@ const AllGalleriesDetail = () => {
     getGalleryData();
   }, []);
 
-  const handleRating = (rating) => {
-    console.log(rating);
+  console.log(data);
+
+  const handleRating = async (rating, id) => {
+    try {
+      const response = await axios.patch(`http://localhost:3000/rating/${id}`, {
+        newRating: rating,
+      });
+      setRating(response?.data?.result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleWishList = async (galleryData) => {
-    settoggleWishList(!toggleWishList);
+    let newWishList = [...wisharr];
+    const toggle = JSON.parse(localStorage.getItem("wishList")).some(
+      (item) => item?._id === galleryData?._id
+    );
 
-    if (toggleWishList) {
-      dispatch(favoriteAction(galleryData));
-
-      data.galleries.filter((element) => {
-        console.log(element._id !== galleryData._id);
-      });
-      // localStorage.setItem("wishList",JSON.stringify());
-    } else {
+    if (toggle) {
       dispatch(deleteFavoriteAction(galleryData));
+      newWishList = newWishList.filter((item) => item._id !== galleryData._id);
+    } else {
+      dispatch(favoriteAction(galleryData));
+      newWishList.push(galleryData);
     }
+
+    localStorage.setItem("wishList", JSON.stringify(newWishList));
   };
 
   useEffect(() => {
@@ -81,17 +97,28 @@ const AllGalleriesDetail = () => {
                     <div className="rateAndWishList" key={e._id}>
                       <Rate
                         allowHalf
-                        defaultValue={4.5}
-                        onChange={(e) => {
-                          handleRating(e);
+                        defaultValue={rating}
+                        onChange={(rating) => {
+                          handleRating(rating, e._id);
                         }}
                       />
-                      <i
-                        className="fa-solid fa-heart"
-                        onClick={() => {
-                          handleWishList(e);
-                        }}
-                      ></i>
+                      {JSON.parse(localStorage.getItem("wishList")).some(
+                        (item) => item?._id === e?._id
+                      ) ? (
+                        <i
+                          className="fa-solid fa-heart"
+                          onClick={() => {
+                            handleWishList(e);
+                          }}
+                        ></i>
+                      ) : (
+                        <i
+                          className="fa-regular fa-heart"
+                          onClick={() => {
+                            handleWishList(e);
+                          }}
+                        ></i>
+                      )}
                     </div>
                   </div>
 
@@ -118,11 +145,11 @@ const AllGalleriesDetail = () => {
 
                     <div className="contact">
                       <div className="usContact">
-                        <a href="tel:450 3134473">
+                        <a href={telephone}>
                           <span>Phone: </span>
                           {data?.business?.businessPhone}
                         </a>
-                        <a href="mailto: shahriyar@gmail.com">
+                        <a href={email}>
                           <span>Email: </span>
                           {data?.business?.businessEmail}
                         </a>
@@ -130,48 +157,60 @@ const AllGalleriesDetail = () => {
                       </div>
 
                       <div className="webContact">
-                        <a
-                          href={data?.socialMedia?.faceBookUrl}
-                          target="_blank"
-                          className="sosial"
-                        >
-                          <i className="fa-brands fa-facebook"></i>
-                        </a>
-                        <a
-                          href={data?.socialMedia?.instagramUrl}
-                          target="_blank"
-                          className="sosial"
-                        >
-                          <i className="fa-brands fa-instagram"></i>
-                        </a>
-                        <a
-                          href={data?.socialMedia?.pinterestUrl}
-                          target="_blank"
-                          className="sosial"
-                        >
-                          <i className="fa-brands fa-pinterest"></i>
-                        </a>
-                        <a
-                          href={data?.socialMedia?.twitterUrl}
-                          target="_blank"
-                          className="sosial"
-                        >
-                          <i className="fa-brands fa-twitter"></i>
-                        </a>
-                        <a
-                          href={data?.socialMedia?.youtubeUrl}
-                          target="_blank"
-                          className="sosial"
-                        >
-                          <i className="fa-brands fa-youtube"></i>
-                        </a>
-                        <a
-                          href={data?.socialMedia?.tiktokUrl}
-                          target="_blank"
-                          className="sosial"
-                        >
-                          <i className="fa-brands fa-tiktok"></i>
-                        </a>
+                        {data?.socialMedia?.faceBookUrl && (
+                          <a
+                            href={data?.socialMedia?.faceBookUrl}
+                            target="_blank"
+                            className="sosial"
+                          >
+                            <i className="fa-brands fa-facebook"></i>
+                          </a>
+                        )}
+                        {data?.socialMedia?.instagramUrl && (
+                          <a
+                            href={data?.socialMedia?.instagramUrl}
+                            target="_blank"
+                            className="sosial"
+                          >
+                            <i className="fa-brands fa-instagram"></i>
+                          </a>
+                        )}
+                        {data?.socialMedia?.pinterestUrl && (
+                          <a
+                            href={data?.socialMedia?.pinterestUrl}
+                            target="_blank"
+                            className="sosial"
+                          >
+                            <i className="fa-brands fa-pinterest"></i>
+                          </a>
+                        )}
+                        {data?.socialMedia?.twitterUrl && (
+                          <a
+                            href={data?.socialMedia?.twitterUrl}
+                            target="_blank"
+                            className="sosial"
+                          >
+                            <i className="fa-brands fa-twitter"></i>
+                          </a>
+                        )}
+                        {data?.socialMedia?.youtubeUrl && (
+                          <a
+                            href={data?.socialMedia?.youtubeUrl}
+                            target="_blank"
+                            className="sosial"
+                          >
+                            <i className="fa-brands fa-youtube"></i>
+                          </a>
+                        )}
+                        {data?.socialMedia?.tiktokUrl && (
+                          <a
+                            href={data?.socialMedia?.tiktokUrl}
+                            target="_blank"
+                            className="sosial"
+                          >
+                            <i className="fa-brands fa-tiktok"></i>
+                          </a>
+                        )}
                       </div>
 
                       <div className="signature">

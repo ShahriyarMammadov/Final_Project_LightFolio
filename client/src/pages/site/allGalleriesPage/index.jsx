@@ -22,8 +22,6 @@ const AllGalleries = () => {
     getGalleries();
   }, []);
 
-  console.log(data);
-
   return (
     <div id="allGalleries">
       <Helmet>
@@ -33,6 +31,10 @@ const AllGalleries = () => {
         <LoadingComp />
       ) : (
         <>
+          <div className="galleryHeader">
+            <h2>All Galleries</h2>
+            <p>VIEW AND CHOOSE YOUR FAVORITE</p>
+          </div>
           <div className="gallery">
             {data
               ?.slice(0, sliceNumber)

@@ -128,7 +128,19 @@ const Header = () => {
               </div>
             </div>
 
-            <Link to={"/galleries"}>Galleries</Link>
+            <div className="dropdown dropdownGalleries">
+              <Link to={"/galleries"} className="crm">
+                All Galleries <i className="fa-solid fa-chevron-down"></i>
+              </Link>
+              <div className="dropdown-content galleries">
+                <div className="left">
+                  <Link to={"/wishList"}>
+                    <i className="fa-solid fa-list"></i>
+                    <div className="text">WishList</div>
+                  </Link>
+                </div>
+              </div>
+            </div>
           </nav>
         </div>
 

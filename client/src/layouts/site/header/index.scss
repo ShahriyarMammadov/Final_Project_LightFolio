@@ -59,6 +59,14 @@ header {
     .dropdown {
       position: relative;
       display: inline-block;
+
+      &.dropdownGalleries {
+        .galleries {
+          padding: 0;
+          min-width: 180px;
+        }
+      }
+
       .dropdown-content {
         display: none;
         position: absolute;
@@ -67,6 +75,7 @@ header {
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
         min-width: 260px;
         z-index: 1;
+        border-radius: 10px;
 
         a {
           display: flex !important;

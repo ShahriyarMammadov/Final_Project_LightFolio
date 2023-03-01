@@ -11,6 +11,13 @@
       align-items: center;
       justify-content: space-between;
 
+      @media only screen and (max-width: 767px) {
+        flex-direction: column;
+        .imageAndName {
+          flex-direction: column;
+        }
+      }
+
       .rateAndWishList,
       .imageAndName {
         display: flex;
@@ -29,7 +36,7 @@
 
       .imageAndName {
         img {
-          width: 125px;
+          width: 120px;
           height: 120px;
           border-radius: 50%;
         }
@@ -94,8 +101,11 @@
     .businessAbout {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       font-family: "PlayFair-display", sans-serif;
+
+      @media only screen and (max-width: 767px) {
+        flex-direction: column;
+      }
 
       span {
         font-weight: 800;
@@ -113,16 +123,24 @@
             font-size: 13px;
           }
           a {
+            padding: 5px 0;
             display: block;
+            width: fit-content;
           }
         }
 
         .webContact {
-          .sosial {
-            a {
-              cursor: pointer;
-              margin-left: 15px;
-              padding-top: 20px;
+          padding-top: 10px;
+
+          a {
+            cursor: pointer;
+            &.sosial {
+              margin-right: 15px;
+              font-size: 20px;
+            }
+
+            &:hover {
+              color: darkseagreen;
             }
           }
         }

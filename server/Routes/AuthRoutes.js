@@ -19,6 +19,7 @@ const {
   getGalleryById,
   getAllUsersData,
   deleteUser,
+  ratingUpdated,
 } = require("../Controllers/userControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -44,6 +45,7 @@ function userRouter(app) {
   app.patch("/editGalleryName/:id", editGalleryName);
   app.patch("/signature/:id", signatureChanged);
   app.patch("/business/:id", businessDataUpdated);
+  app.patch("/rating/:id", ratingUpdated);
 
   app.post("/profilePhotoUpdate/:id", profilePhotoUpdated);
   app.post("/uploads/:id", imageDownload);

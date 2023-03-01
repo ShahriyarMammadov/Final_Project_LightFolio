@@ -457,3 +457,25 @@ module.exports.deleteUser = async (req, res) => {
   }
 };
 //-------------------------------------------------------------------
+
+//----------------------- Rating Updated ----------------------------
+module.exports.ratingUpdated = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const newRating = req.body.newRating;
+    const user = await userModel.findOne({ "galleries._id": id });
+    let rating = user.galleries.find((g) => g._id == id);
+    rating.rating += newRating;
+
+    await user.save();
+
+    const newMessage = rating.rating / 5;
+
+    res
+      .status(200)
+      .json({ message: "Thank you for rating", result: newMessage });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+//-------------------------------------------------------------------
