@@ -335,6 +335,7 @@
 
     .clientBTn {
       @extend %third-button;
+      padding: 10px;
     }
   }
 }
