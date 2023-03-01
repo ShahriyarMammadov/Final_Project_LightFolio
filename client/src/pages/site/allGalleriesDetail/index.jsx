@@ -62,7 +62,7 @@ const AllGalleriesDetail = () => {
 
     if (toggle) {
       dispatch(deleteFavoriteAction(galleryData));
-      newWishList = newWishList.filter((item) => item._id !== galleryData._id);
+      newWishList = newWishList?.filter((item) => item._id !== galleryData._id);
     } else {
       dispatch(favoriteAction(galleryData));
       newWishList.push(galleryData);
@@ -102,7 +102,7 @@ const AllGalleriesDetail = () => {
                           handleRating(rating, e._id);
                         }}
                       />
-                      {JSON.parse(localStorage.getItem("wishList")).some(
+                      {JSON.parse(localStorage.getItem("wishList"))?.some(
                         (item) => item?._id === e?._id
                       ) ? (
                         <i
