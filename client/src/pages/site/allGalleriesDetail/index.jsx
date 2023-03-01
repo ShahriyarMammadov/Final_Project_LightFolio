@@ -56,7 +56,7 @@ const AllGalleriesDetail = () => {
 
   const handleWishList = async (galleryData) => {
     let newWishList = [...wisharr];
-    const toggle = JSON.parse(localStorage.getItem("wishList")).some(
+    const toggle = JSON.parse(localStorage.getItem("wishList"))?.some(
       (item) => item?._id === galleryData?._id
     );
 
@@ -102,7 +102,7 @@ const AllGalleriesDetail = () => {
                           handleRating(rating, e._id);
                         }}
                       />
-                      {JSON.parse(localStorage.getItem("wishList"))?.some(
+                      {wisharr?.some(
                         (item) => item?._id === e?._id
                       ) ? (
                         <i
