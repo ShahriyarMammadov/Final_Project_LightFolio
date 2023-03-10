@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./index.scss";
 import axios from "axios";
 import Helmet from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LoadingComp from "../../../components/loading/index";
-import { Rate } from "antd";
+import { Rate, Modal, Input } from "antd";
 import {
   deleteFavoriteAction,
   favoriteAction,
 } from "../../../redux/action/favorite.action";
 import { useDispatch, useSelector } from "react-redux";
 import mediumZoom from "medium-zoom";
+import { useToast } from "@chakra-ui/react";
+import { useCookies } from "react-cookie";
 
 const AllGalleriesDetail = () => {
   const [data, setData] = useState({});
@@ -18,9 +20,17 @@ const AllGalleriesDetail = () => {
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
   const [rating, setRating] = useState(5);
+  const [seoTitle, setSeoTitle] = useState("");
+  const [open, setOpen] = useState(false);
+  const [comment, setComment] = useState("");
+  const [commentName, setCommentName] = useState("");
+  const [image, setImage] = useState({});
+  const [commentToggle, setCommentToggle] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [likeToggle, setlikeToggle] = useState(Boolean);
 
   const { id } = useParams();
-  // const [images, setImages] = useState({});
+  const toast = useToast();
 
   const wishData = useSelector((state) => state.favReducer);
   const dispatch = useDispatch();
@@ -39,9 +49,13 @@ const AllGalleriesDetail = () => {
 
   useEffect(() => {
     getGalleryData();
-  }, []);
+  }, [likeToggle]);
 
-  console.log(data);
+  useEffect(() => {
+    data?.galleries?.map((seoTitle) => {
+      setSeoTitle(seoTitle.seoTitle);
+    });
+  }, []);
 
   const handleRating = async (rating, id) => {
     try {
@@ -75,10 +89,108 @@ const AllGalleriesDetail = () => {
     mediumZoom(".gallery img");
   }, [data]);
 
+  //Comment
+  const [commentsArr, setCommentsArr] = useState([]);
+
+  const AddedComment = async () => {
+    try {
+      if (comment.length < 1) {
+        toast({
+          title: `minimum length 1`,
+          position: "bottom-right",
+          status: "warning",
+          isClosable: true,
+        });
+      } else {
+        commentsArr.push({ comment: comment, name: commentName });
+        setCommentToggle(true);
+        const response = await axios.post(
+          `http://localhost:3000/comment/${id}`,
+          {
+            comment: comment,
+            name: commentName,
+            imageId: image.id,
+          }
+        );
+
+        setComment("");
+        setCommentName("");
+
+        toast({
+          title: response.data.message,
+          position: "bottom-right",
+          status: "success",
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      alert(error);
+      toast({
+        title: error,
+        position: "bottom-right",
+        status: "warning",
+        isClosable: true,
+      });
+    }
+  };
+
+  //Share
+  const url = window.location.href;
+
+  const handleClick = async () => {
+    try {
+      await navigator.share({
+        title: "LightFolio",
+        text: `${data.fullName}'s Gallery`,
+        url: url,
+      });
+    } catch (error) {
+      toast({
+        title: `Your Browser Does not Support it`,
+        position: "bottom-right",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
+
+  //User ID
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("jwt="));
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
+      setUserId(decodedToken.id);
+    }
+  }, []);
+
+  // LIKE
+  const navigate = useNavigate();
+
+  const handleLike = async (imageId) => {
+    if (!cookies.jwt) {
+      navigate("/login");
+    } else {
+      const response = await axios.post(
+        `http://localhost:3000/likeImage/${imageId}`,
+        { userId: data._id, galleryId: id },
+        {
+          withCredentials: true,
+        }
+      );
+      if (response?.data?.success) {
+        setlikeToggle(!likeToggle);
+      }
+    }
+  };
+
   return (
     <div id="allGalleriesDetail">
       <Helmet>
-        <title>{data?.galleryName}</title>
+        <title>{seoTitle ? seoTitle : data?.companyName}</title>
       </Helmet>
 
       {loading ? (
@@ -102,7 +214,7 @@ const AllGalleriesDetail = () => {
                           handleRating(rating, e._id);
                         }}
                       />
-                      {wisharr?.some(
+                      {JSON.parse(localStorage.getItem("wishList"))?.some(
                         (item) => item?._id === e?._id
                       ) ? (
                         <i
@@ -126,7 +238,54 @@ const AllGalleriesDetail = () => {
                     {e?.galleryImage.map((image, index) => {
                       return (
                         <div className="gallery" key={index}>
-                          <img src={image.image} alt={`image`} />
+                          <img src={image?.image} alt={`image`} />
+                          <span className="imageNavText">
+                            {image?.likes?.some((like) => like === userId) ? (
+                              <>
+                                <i
+                                  className="fa-solid fa-heart"
+                                  onClick={() => {
+                                    handleLike(image._id);
+                                  }}
+                                  style={{ color: "red" }}
+                                >
+                                  <p>{image?.likes?.length}</p>
+                                </i>
+                              </>
+                            ) : (
+                              <>
+                                <i
+                                  className="fa-regular fa-heart"
+                                  onClick={() => {
+                                    handleLike(image._id);
+                                  }}
+                                >
+                                  <p>{image?.likes?.length}</p>
+                                </i>
+                              </>
+                            )}
+                            <i
+                              className="fa-regular fa-comments left"
+                              onClick={() => {
+                                setImage({
+                                  image: image?.image,
+                                  id: image?._id,
+                                  comments: image?.comments,
+                                });
+                                setOpen(true);
+                              }}
+                            ></i>
+                            <a
+                              href={image?.image}
+                              download={`${data?.companyName}`}
+                            >
+                              <i className="fa-solid fa-cloud-arrow-down left"></i>
+                            </a>
+                            <i
+                              className="fa-solid fa-share-nodes left"
+                              onClick={handleClick}
+                            ></i>
+                          </span>
                         </div>
                       );
                     })}
@@ -222,6 +381,78 @@ const AllGalleriesDetail = () => {
               );
             })}
           </div>
+
+          <Modal
+            title="Add to Comment"
+            open={open}
+            onOk={() => setOpen(false)}
+            onCancel={() => setOpen(false)}
+            width={1000}
+          >
+            <div id="commentModal">
+              <img src={image?.image} alt="image" />
+              <div className="comment">
+                <div className="allComment">
+                  {image?.comments?.map((comment) => {
+                    return (
+                      <>
+                        <h6>{comment?.name}</h6>
+                        <p>{comment?.comment}</p>
+                        <hr />
+                      </>
+                    );
+                  })}
+                  {commentToggle &&
+                    commentsArr?.map((comments) => {
+                      return (
+                        <>
+                          <h6>
+                            {comments?.name ? comments.name : "Anonymous"}
+                          </h6>
+                          <p>{comments?.comment}</p>
+                        </>
+                      );
+                    })}
+                </div>
+                <div className="addComment">
+                  <div>
+                    <Input
+                      showCount
+                      placeholder="Your Comment"
+                      maxLength={50}
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      value={comment}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      className="commentName"
+                      showCount
+                      placeholder="Your Name"
+                      maxLength={10}
+                      onChange={(e) => {
+                        setCommentName(e.target.value);
+                      }}
+                      value={commentName}
+                    />
+                  </div>
+                  <button onClick={AddedComment}>SEND</button>
+                </div>
+                <div className="shareModal">
+                  <i
+                    className="fa-solid fa-share-nodes"
+                    onClick={handleClick}
+                  ></i>
+                  <a href={image?.image} download={`${data?.companyName}`}>
+                    <i className="fa-solid fa-cloud-arrow-down"></i>
+                  </a>
+                  <i className="fa-regular fa-heart"></i>
+                </div>
+              </div>
+            </div>
+          </Modal>
         </div>
       )}
     </div>

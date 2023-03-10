@@ -75,19 +75,33 @@ const AboutMePage = () => {
   }/${current.getFullYear()}/${current.getHours()}:${current.getMinutes()}`;
 
   const userData = useSelector((state) => state.getAllUserDataReducer);
-  console.log(userData);
 
   // Change userData
   const changeData = async (values) => {
-    values.activity = "Name Updated";
-    values.activityDate = date;
-    setLoading(true);
+    try {
+      values.activity = "Name Updated";
+      values.activityDate = date;
+      setLoading(true);
 
-    const { data } = await axios.put(
-      `http://localhost:3000/user/${userData?.data?._id}`,
-      values
-    );
-    setLoading(false);
+      const { data } = await axios.put(
+        `http://localhost:3000/user/${userData?.data?._id}`,
+        values
+      );
+      toast({
+        title: `${data.message}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: `${error}`,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+    }
   };
 
   // react-hook-form
@@ -108,7 +122,6 @@ const AboutMePage = () => {
       delete values.lastName;
       delete values.firstName;
       changeData(values);
-      console.log(values);
       resolve();
     });
   }
@@ -127,7 +140,6 @@ const AboutMePage = () => {
         status: "success",
         isClosable: true,
       });
-      console.log(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -231,6 +243,9 @@ const AboutMePage = () => {
       setLoadedPercent
     );
     setLoading(false);
+    if (loadedPercent === 100) {
+      newImageClose();
+    }
   };
 
   return (
@@ -247,6 +262,7 @@ const AboutMePage = () => {
             isOpen={newImageisOpen}
             onClose={newImageClose}
           >
+            {/* deyisdi?? */}
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Upload to your Profile Photo</ModalHeader>
@@ -302,7 +318,9 @@ const AboutMePage = () => {
                   <p>UPLOAD IMAGE</p>
                   <img
                     src={
-                      userData?.data?.profilePhoto
+                      postImage?.myFile
+                        ? postImage?.myFile
+                        : userData?.data?.profilePhoto
                         ? userData?.data?.profilePhoto
                         : logo
                     }

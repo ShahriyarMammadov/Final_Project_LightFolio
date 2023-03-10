@@ -1,15 +1,17 @@
 import { Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./index.scss";
 import { Link, useNavigate } from "react-router-dom";
 import signupSchema from "./schema/index";
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import emailjs from "@emailjs/browser";
 
 const SignupPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const form = useRef();
 
   const handleSignupAuth = async (values) => {
     try {
@@ -24,6 +26,24 @@ const SignupPage = () => {
 
       if (data?.created) {
         setLoading(false);
+        const sendEmail = () => {
+          emailjs
+            .sendForm(
+              "service_8545699",
+              "template_nd84v7x",
+              form.current,
+              "yBlJtI3RX3LO5fbXF"
+            )
+            .then(
+              (result) => {
+                null;
+              },
+              (error) => {
+                console.log(error.text);
+              }
+            );
+        };
+        sendEmail();
         navigate("/login");
       }
       setError(data.errors);
@@ -32,6 +52,8 @@ const SignupPage = () => {
       console.log(error);
     }
   };
+
+  // welcome email send function emailJS
 
   return (
     <div id="signUpPage">
@@ -56,7 +78,7 @@ const SignupPage = () => {
           }}
         >
           {({ errors, touched }) => (
-            <Form>
+            <Form ref={form}>
               <Field name="companyName" placeholder="Company Name" />
               {errors.companyName && touched.companyName ? (
                 <div>{errors.companyName}</div>

@@ -68,7 +68,13 @@ const userSchema = new mongoose.Schema(
       {
         galleryName: String,
         coverImage: { coverImg: String },
-        galleryImage: [{ image: String }],
+        galleryImage: [
+          {
+            image: String,
+            comments: [{ comment: String, name: String }],
+            likes: [{ type: String }],
+          },
+        ],
         eventDate: String,
         expirationDate: String,
         galleryDirection: Boolean,

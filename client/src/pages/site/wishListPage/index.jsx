@@ -16,32 +16,45 @@ const WishListPage = () => {
             navigate(-1);
           }}
         >
-          BACK
+          <i className="fa-solid fa-circle-left"></i> BACK
         </button>
       </div>
       <div className="gallery">
-        {wishArray
-          ?.slice(0, sliceNumber)
-          .reverse()
-          .map((gallery, i) => {
-            return (
-              <Link to={`/galleriesDetail/${gallery._id}`} key={i}>
-                <div className="imageCard">
-                  <div className="card card1">
-                    <img
-                      src={gallery?.coverImage?.coverImg}
-                      alt={gallery?.galleryName}
-                    />
-                    <div className="text">
-                      <p>
-                        <em>{gallery?.galleryName}</em>
-                      </p>
+        {wishArray.length === 0 ? (
+          <>
+            <h2 className="lenghth2">
+              There is Nothing in Your Favorites Yet, Choose the Gallery you
+              Like
+            </h2>
+            <Link to={"/galleries"} className={"galleriesSend"}>
+              Go to the Galleries{" "}
+              <i className="fa-solid fa-arrow-right-long"></i>
+            </Link>
+          </>
+        ) : (
+          wishArray
+            ?.slice(0, sliceNumber)
+            .reverse()
+            .map((gallery, i) => {
+              return (
+                <Link to={`/galleriesDetail/${gallery._id}`} key={i}>
+                  <div className="imageCard">
+                    <div className="card card1">
+                      <img
+                        src={gallery?.coverImage?.coverImg}
+                        alt={gallery?.galleryName}
+                      />
+                      <div className="text">
+                        <p>
+                          <em>{gallery?.galleryName}</em>
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })
+        )}
       </div>
       {wishArray?.length > 12 && (
         <button

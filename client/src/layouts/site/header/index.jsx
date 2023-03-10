@@ -15,6 +15,8 @@ const Header = () => {
   const [toggle, setToggle] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  let wisharr = JSON.parse(localStorage.getItem("wishList")) ?? [];
+
   return (
     <header
       style={{
@@ -128,23 +130,18 @@ const Header = () => {
               </div>
             </div>
 
-            <div className="dropdown dropdownGalleries">
-              <Link to={"/galleries"} className="crm">
-                All Galleries <i className="fa-solid fa-chevron-down"></i>
-              </Link>
-              <div className="dropdown-content galleries">
-                <div className="left">
-                  <Link to={"/wishList"}>
-                    <i className="fa-solid fa-list"></i>
-                    <div className="text">WishList</div>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <Link to={"/galleries"} className="crm">
+              All Galleries
+            </Link>
           </nav>
         </div>
 
         <div className="signupLogin">
+          <Link to={"/wishList"} title="Your Favorite galleries">
+            {" "}
+            <i className="fa-solid fa-heart"></i>
+            {wisharr.length}
+          </Link>
           <Link to={"/login"}>LOGIN</Link>
           <Link to={"/signup"} className="signUp">
             Sign Up
@@ -170,19 +167,19 @@ const Header = () => {
               <Link to={"/"} className="home">
                 HOME
               </Link>
-              <Link to={"/"}>PRICING</Link>
-              <Link to={"/"}>THEMES</Link>
-              <Link to={"/"}>FEATURES</Link>
-              <Link to={"/"}>PROOFING</Link>
-              <Link to={"/"}>CRM</Link>
-              <Link to={"/"}>CONTRACTS</Link>
-              <Link to={"/"}>INVOICES</Link>
-              <Link to={"/"}>MINI SESSIONS</Link>
-              <Link to={"/"}>BOOKING SITE</Link>
-              <Link to={"/"}>FORMS</Link>
-              <Link to={"/"}>PHOTO RELEASES</Link>
+              <Link to={"/pricing"}>PRICING</Link>
+              <Link to={"/galleries"}>ALL GALLERIES</Link>
+              <Link to={"/photo-proofing"}>PROOFING</Link>
+              <Link to={"/deliver-photos-to-client"}>DIGITAL DOWNLOADS</Link>
+              <Link to={"/visitor-analytics"}>VISITOR ANALYTICS</Link>
+              <Link to={"/online-store"}>ONLINE STORE</Link>
+              <Link to={"/gallery-directories"}>GALLERY DIRECTORIES</Link>
+              <Link to={"/themes"}>THEMES</Link>
+              <Link to={"/crm-for-photographers"}>CRM</Link>
+              <Link to={"/wishList"}>YOUR WISH LIST</Link>
+              <Link to={"/login"}>LOGIN</Link>
+              <Link to={"/signup"}>SIGN UP</Link>
               <Link to={"/"}>WEBSITES</Link>
-              <Link to={"/"}>SIGN UP</Link>
             </ModalBody>
           </ModalContent>
         </Modal>

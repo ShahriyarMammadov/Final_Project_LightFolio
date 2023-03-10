@@ -20,6 +20,9 @@ const {
   getAllUsersData,
   deleteUser,
   ratingUpdated,
+  imageCommentAdded,
+  commentDelete,
+  likeGalleryImage,
 } = require("../Controllers/userControllers");
 const { checkUser } = require("../middlewares/authMiddlewares");
 
@@ -38,6 +41,8 @@ function userRouter(app) {
 
   app.post("/galleryCreate/:id", newGallery);
   app.post("/coverImage/:id", coverImageUpload);
+  app.post("/comment/:id", imageCommentAdded);
+  app.post("/likeImage/:id", likeGalleryImage);
 
   app.patch("/email/:id", emailChanged);
   app.patch("/password/:id", passwordChanged);
@@ -55,6 +60,7 @@ function userRouter(app) {
   app.delete("/galleryDelete/:userId/:albomId", galleryDeleteByid);
   app.delete("/imageDelete/:userId/:albomId/:imageId", imageDelete);
   app.delete("/deleteUser/:id", deleteUser);
+  app.delete("/commentDelete/:id", commentDelete);
 }
 
 module.exports = userRouter;

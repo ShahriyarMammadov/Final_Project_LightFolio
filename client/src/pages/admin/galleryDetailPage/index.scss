@@ -165,6 +165,7 @@
       column-gap: 1.5rem;
       width: 100%;
       margin: 0 auto;
+      position: relative;
 
       .draggableGallery {
         width: 150px;
@@ -177,14 +178,48 @@
         border-radius: 5px;
         cursor: pointer;
 
-        .fa-trash {
+        .fa-trash,
+        .fa-comments,
+        .fa-cloud-arrow-down {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
           display: none;
-          color: rgb(156, 155, 155);
+          color: grey;
+
+          pre {
+            display: inline;
+            font-size: 16px;
+            padding-left: 5px;
+          }
+
+          &:hover {
+            color: red;
+          }
+        }
+
+        #noNone {
+          display: inline;
+          color: white;
+
+          &:hover {
+            color: red;
+          }
+        }
+
+        .fa-cloud-arrow-down {
+          left: 70px;
+        }
+
+        .left {
+          margin-left: 25px;
         }
 
         &:hover {
           border-color: coral;
-          .fa-trash {
+          .fa-trash,
+          .fa-comments,
+          .fa-cloud-arrow-down {
             display: inline;
           }
         }
@@ -231,4 +266,55 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.commentModal {
+  .commentsText {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .modalTrash {
+      cursor: pointer;
+      display: none;
+    }
+
+    &:hover {
+      .modalTrash {
+        display: inline !important;
+      }
+    }
+    p {
+      padding-top: 10px !important;
+      font-size: 16px;
+    }
+
+    h6 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+}
+
+.commentModalFooter {
+  .addComment {
+    width: 100%;
+
+    .commentName {
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      background-color: #468ac0;
+      padding: 10px 0;
+      width: 120px;
+      border-radius: 10px;
+
+      &.closeBtnComment {
+        background-color: cadetblue;
+        margin-left: 120px;
+      }
+    }
+  }
 }

@@ -14,6 +14,35 @@
     }
   }
 
+  .lenghth2 {
+    color: teal;
+    font-size: 35px !important;
+  }
+
+  .galleriesSend {
+    padding: 10px;
+    color: white;
+    background-color: teal;
+    border-radius: 40px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+      rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    transition: all 0.5s;
+    margin: 0 auto;
+    margin-top: 40px;
+
+    i {
+      transition: all 0.5s;
+      padding-left: 10px;
+    }
+
+    &:hover {
+      background-color: rgba(0, 128, 128, 0.875);
+      i {
+        padding-left: 20px;
+      }
+    }
+  }
+
   .sliceButton {
     display: block;
     margin: 0 auto;

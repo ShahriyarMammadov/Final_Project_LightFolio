@@ -95,7 +95,7 @@ const HomePage = () => {
               </Link>
               <div className="text">
                 <p>
-                  <em>London // Pins</em> 
+                  <em>London // Pins</em>
                 </p>
               </div>
             </div>

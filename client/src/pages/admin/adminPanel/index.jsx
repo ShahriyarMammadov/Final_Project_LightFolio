@@ -25,7 +25,6 @@ const AdminPanel = () => {
       if (userDataRedux?.data?.position !== "admin") {
         navigate(-1);
       } else {
-        console.log(userDataRedux?.data?.position);
         null;
       }
     }
@@ -137,13 +136,9 @@ const AdminPanel = () => {
 
   const handleSortAscending = () => {
     let newData = userData.sort((a, b) => a.fullName - b.fullName);
-
-    console.log(newData);
   };
   const handleSortDescending = () => {
     let newData = userData.sort((a, b) => b.fullName - a.fullName);
-
-    console.log(newData);
   };
 
   const items = [

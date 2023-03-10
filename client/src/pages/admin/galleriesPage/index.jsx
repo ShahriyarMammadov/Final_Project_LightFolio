@@ -25,6 +25,9 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 
+
+// "salam"
+
 const GalleriesPage = () => {
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(false);

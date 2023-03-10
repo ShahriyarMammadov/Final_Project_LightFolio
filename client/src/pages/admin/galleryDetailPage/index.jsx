@@ -34,12 +34,18 @@ import { convertToBase64, createPost } from "../../../services";
 import { useToast } from "@chakra-ui/react";
 import ProgressBar from "../../../components/progressBar";
 import { useForm } from "react-hook-form";
+// import { Modal } from "antd";
 
 const GalleryDetailPage = () => {
   const userData = useSelector((state) => state.getAllUserDataReducer);
+  const [commentToggle, setCommentToggle] = useState(false);
+  const [comment, setComment] = useState("");
+  const [commentName, setCommentName] = useState("");
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
   const [images, setImages] = useState([]);
+  const [image, setImage] = useState({});
   const { id } = useParams();
   const [postImage, setPostImage] = useState({
     myFile: "",
@@ -47,6 +53,7 @@ const GalleryDetailPage = () => {
   const toast = useToast();
   const [toggle, setToggle] = useState(false);
   const [loadedPercent, setLoadedPercent] = useState(0);
+  const [personalAndPublic, setPersonalAndPublic] = useState(Boolean);
 
   // Modal State
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,6 +71,11 @@ const GalleryDetailPage = () => {
     isOpen: editGalleryisOpen,
     onOpen: editGalleryonOpen,
     onClose: editGalleryonClose,
+  } = useDisclosure();
+  const {
+    isOpen: commentisOpen,
+    onOpen: commentonOpen,
+    onClose: commentonClose,
   } = useDisclosure();
 
   const navigate = useNavigate();
@@ -83,7 +95,6 @@ const GalleryDetailPage = () => {
     setLoading(false);
     setData(data);
     setImages(data.galleryImage);
-    console.log(data);
   };
 
   useEffect(() => {
@@ -93,6 +104,8 @@ const GalleryDetailPage = () => {
   // Gallery Public or Personal
   const directionEdit = async () => {
     try {
+      setPersonalAndPublic(!personalAndPublic);
+
       const response = await axios.patch(
         `http://localhost:3000/galleryDirection/${userData.data._id}/${data._id}`,
         { direction: !data.galleryDirection }
@@ -162,12 +175,9 @@ const GalleryDetailPage = () => {
         userData.data._id,
         setLoadedPercent
       );
-      // toast({
-      //   title: `${response.data.message}`,
-      //   position: "bottom-right",
-      //   status: "success",
-      //   isClosable: true,
-      // });
+
+      images.push({ image: postImage.myFile });
+
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -213,15 +223,9 @@ const GalleryDetailPage = () => {
         text: `${userData.data.fullName}'s Gallery`,
         url: url,
       });
-      toast({
-        title: `SHARE SUCCESS`,
-        position: "bottom-right",
-        status: "success",
-        isClosable: true,
-      });
     } catch (error) {
       toast({
-        title: `${error}`,
+        title: `Your Browser Does not Support it`,
         position: "bottom-right",
         status: "success",
         isClosable: true,
@@ -295,6 +299,71 @@ const GalleryDetailPage = () => {
   //   var url = URL.createObjectURL(blob);
   //   setBlob(url);
   // };
+
+  //Comment
+  const [commentsArr, setCommentsArr] = useState([]);
+  const [comments, setComments] = useState([]);
+
+  const AddedComment = async () => {
+    try {
+      if (comment.length < 1) {
+        toast({
+          title: `minimum length 1`,
+          position: "bottom-right",
+          status: "warning",
+          isClosable: true,
+        });
+      } else {
+        commentsArr.push({ comment: comment, name: commentName });
+        setCommentToggle(true);
+        const response = await axios.post(
+          `http://localhost:3000/comment/${id}`,
+          {
+            comment: comment,
+            name: commentName,
+            imageId: image.id,
+          }
+        );
+
+        setComment("");
+        setCommentName("");
+
+        toast({
+          title: response.data.message,
+          position: "bottom-right",
+          status: "success",
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      alert(error);
+      toast({
+        title: error,
+        position: "bottom-right",
+        status: "warning",
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleCommentDeleteByAdmin = async (id) => {
+    try {
+      let filteredComments = comments?.filter((comment) => comment?._id != id);
+      setComments(filteredComments);
+
+      const response = await axios.delete(
+        `http://localhost:3000/commentDelete/${id}`
+      );
+      toast({
+        title: response?.data?.message,
+        position: "bottom-right",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   return (
     <div id="galleryDetail">
@@ -406,6 +475,29 @@ const GalleryDetailPage = () => {
                             imageDelete(image._id);
                           }}
                         ></i>
+                        <i
+                          className="fa-regular fa-comments left"
+                          id={image?.comments?.length != 0 && "noNone"}
+                          onClick={() => {
+                            setImage({
+                              image: image?.image,
+                              id: image?._id,
+                            });
+                            setComments(image?.comments);
+                            commentonOpen();
+                          }}
+                        >
+                          <pre>
+                            {image?.comments?.length != 0 &&
+                              image?.comments?.length}
+                          </pre>
+                        </i>
+                        <a
+                          href={image?.image}
+                          download={`${data?.galleryName}`}
+                        >
+                          <i className="fa-solid fa-cloud-arrow-down"></i>
+                        </a>
                       </div>
                     </Draggable>
                   );
@@ -415,7 +507,6 @@ const GalleryDetailPage = () => {
           )}
         </div>
       )}
-
       {/* Cover Image Modal */}
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -457,8 +548,81 @@ const GalleryDetailPage = () => {
         </ModalContent>
       </Modal>
 
-      {/* New Image Modal */}
+      {/* Image Comment Modal */}
+      <Modal
+        onClose={commentonOpen}
+        isOpen={commentisOpen}
+        scrollBehavior={"inside"}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add a comment to your photo</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody className="commentModal">
+            {comments?.map((comment) => {
+              return (
+                <>
+                  <div className="commentsText">
+                    <div className="text">
+                      <h6>{comment?.name}</h6>
+                      <p>{comment?.comment}</p>
+                    </div>
+                    <i
+                      className="fa-solid fa-trash modalTrash"
+                      onClick={() => {
+                        handleCommentDeleteByAdmin(comment._id);
+                      }}
+                    ></i>
+                  </div>
+                  <hr />
+                </>
+              );
+            })}
+            {commentToggle &&
+              commentsArr?.map((comments) => {
+                return (
+                  <>
+                    <h6>{comments?.name ? comments.name : "Anonymous"}</h6>
+                    <p>{comments?.comment}</p>
+                  </>
+                );
+              })}
+          </ModalBody>
+          <ModalFooter className="commentModalFooter">
+            <div className="addComment">
+              <div>
+                <Input
+                  showCount
+                  placeholder="Your Comment"
+                  maxLength={50}
+                  onChange={(e) => {
+                    setComment(e.target.value);
+                  }}
+                  value={comment}
+                />
+              </div>
+              <div>
+                <Input
+                  className="commentName"
+                  showCount
+                  placeholder="Your Name"
+                  maxLength={10}
+                  onChange={(e) => {
+                    setCommentName(e.target.value);
+                  }}
+                  value={commentName}
+                />
+              </div>
+              <button onClick={AddedComment}>SEND</button>
+              <button className="closeBtnComment" onClick={commentonClose}>
+                CLOSE
+              </button>
+            </div>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
+      {/* New Image Modal */}
       <Modal
         closeOnOverlayClick={false}
         isOpen={newImageisOpen}

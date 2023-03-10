@@ -105,6 +105,7 @@ const LoginPage = () => {
               ) : null}
               {<div>{error?.password}</div>}
 
+              <Link to={"/signup"}>Sign Up</Link>
               <button type="submit">
                 {" "}
                 {loading ? (

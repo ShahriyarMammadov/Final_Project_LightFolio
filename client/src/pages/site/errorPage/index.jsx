@@ -14,10 +14,17 @@ const ErrorPage = () => {
       </p>
       <section className="error-container">
         <span>
+
+
+
+
+          
           <span>4</span>
         </span>
         <span>0</span>
         <span>
+
+          
           <span>4</span>
         </span>
       </section>

@@ -47,6 +47,11 @@ header {
         color: black;
         text-underline-offset: 10px;
 
+        i {
+          color: #af9453;
+          font-size: 18px;
+        }
+
         &:hover {
           text-decoration: underline;
         }

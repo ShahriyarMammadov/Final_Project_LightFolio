@@ -479,3 +479,131 @@ module.exports.ratingUpdated = async (req, res) => {
   }
 };
 //-------------------------------------------------------------------
+
+//----------------------- Rating Updated ----------------------------
+module.exports.imageCommentAdded = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const imageId = req.body.imageId;
+
+    if (!req.body.name) {
+      req.body.name = "Anonymous";
+    }
+
+    await userModel.updateOne(
+      {
+        "galleries._id": id,
+        "galleries.galleryImage._id": imageId,
+      },
+      {
+        $push: {
+          "galleries.$[galleryElem].galleryImage.$[imageElem].comments": {
+            comment: req.body.comment,
+            name: req.body.name,
+          },
+        },
+      },
+      {
+        arrayFilters: [{ "galleryElem._id": id }, { "imageElem._id": imageId }],
+      }
+    );
+    res.status(200).json({ message: "Thank You For Your Comment" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error });
+  }
+};
+//-------------------------------------------------------------------
+
+module.exports.commentDelete = async (req, res) => {
+  const { id } = req.params;
+  try {
+    userModel.findOneAndUpdate(
+      { "galleries.galleryImage.comments._id": id },
+      {
+        $pull: {
+          "galleries.$[].galleryImage.$[].comments": { _id: id },
+        },
+      },
+      function (err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(200).json({ message: "Comment Deleted" });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error });
+  }
+};
+//-------------------------------------------------------------------
+
+//----------------------- Handle Like -------------------------------
+module.exports.likeGalleryImage = async (req, res, next) => {
+  try {
+    const token = req.cookies.jwt;
+    const { id } = req.params;
+    const galleryId = req.body.galleryId;
+    const userId = req.body.userId;
+
+    if (token) {
+      jwt.verify(token, "secret", async (err, decodedToken) => {
+        if (err) {
+          res.json({ err });
+          console.log("error:", err);
+        } else {
+          const user = await userModel.findById(userId);
+          if (user) {
+            const galleryImage = user.galleries
+              .flatMap((gallery) => gallery.galleryImage)
+              .find((image) => image._id.equals(id));
+
+            if (galleryImage) {
+              if (!galleryImage.likes.includes(decodedToken.id)) {
+                const result = await userModel.findOneAndUpdate(
+                  { _id: userId, "galleries.galleryImage._id": id },
+                  {
+                    $push: {
+                      "galleries.$.galleryImage.$[image].likes":
+                        decodedToken.id,
+                    },
+                  },
+                  { arrayFilters: [{ "image._id": id }] }
+                );
+                res.status(201).json({ success: true });
+              } else {
+                const result = await userModel.findOneAndUpdate(
+                  { _id: userId, "galleries.galleryImage._id": id },
+                  {
+                    $pull: {
+                      "galleries.$.galleryImage.$[image].likes":
+                        decodedToken.id,
+                    },
+                  },
+                  { arrayFilters: [{ "image._id": id }] }
+                );
+                res.status(201).json({ success: true });
+              }
+            } else {
+              res
+                .status(404)
+                .json({ success: false, message: "Gallery image not found." });
+            }
+          } else {
+            res
+              .status(404)
+              .json({ success: false, message: "User not found." });
+          }
+        }
+      });
+    } else {
+      res.status(404).json({ status: false });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+//-------------------------------------------------------------------

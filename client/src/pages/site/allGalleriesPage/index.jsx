@@ -7,6 +7,9 @@ import Helmet from "react-helmet";
 
 const AllGalleries = () => {
   const [data, setData] = useState([]);
+
+
+
   const [loading, setLoading] = useState(true);
   const [sliceNumber, setSliceNumber] = useState(12);
 
