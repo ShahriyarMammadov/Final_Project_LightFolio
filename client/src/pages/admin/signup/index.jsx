@@ -11,6 +11,9 @@ const SignupPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [randomNumber, setRandomNumber] = useState(0);
+  const [formChanged, setFormChanged] = useState(true);
+  const [finish, setFinish] = useState(false);
   const form = useRef();
 
   const handleSignupAuth = async (values) => {
@@ -44,7 +47,7 @@ const SignupPage = () => {
             );
         };
         sendEmail();
-        navigate("/login");
+        setFormChanged(false);
       }
       setError(data.errors);
       setLoading(false);
@@ -53,7 +56,27 @@ const SignupPage = () => {
     }
   };
 
-  // welcome email send function emailJS
+  if (finish) {
+    navigate("/login");
+  } else {
+    null;
+  }
+  console.log(finish);
+
+  const randomVerificationNumber = () => {
+    const randomNum = Math.floor(Math.random() * 9000) + 1000;
+    setRandomNumber(randomNum);
+  };
+
+  const verificationController = (code) => {
+    console.log(code);
+    if (+code === randomNumber) {
+      console.log(randomNumber);
+      setFinish(true);
+    }
+  };
+
+  console.log(randomNumber);
 
   return (
     <div id="signUpPage">
@@ -77,33 +100,58 @@ const SignupPage = () => {
             handleSignupAuth(values);
           }}
         >
-          {({ errors, touched }) => (
-            <Form ref={form}>
-              <Field name="companyName" placeholder="Company Name" />
-              {errors.companyName && touched.companyName ? (
-                <div>{errors.companyName}</div>
-              ) : null}
+          {formChanged ? (
+            ({ errors, touched }) => (
+              <Form ref={form}>
+                <Field name="companyName" placeholder="Company Name" />
+                {errors.companyName && touched.companyName ? (
+                  <div>{errors.companyName}</div>
+                ) : null}
 
-              <Field name="email" type="email" placeholder="Email" />
-              {errors.email && touched.email ? <div>{errors.email}</div> : null}
-              {error && (
-                <div>
-                  {error.email} <Link to={"/login"}>Login</Link>
-                </div>
-              )}
+                <Field name="email" type="email" placeholder="Email" />
+                {errors.email && touched.email ? (
+                  <div>{errors.email}</div>
+                ) : null}
+                {error && (
+                  <div>
+                    {error.email} <Link to={"/login"}>Login</Link>
+                  </div>
+                )}
 
-              <Field name="fullName" placeholder="Your Full Name" />
-              {errors.fullName && touched.fullName ? (
-                <div>{errors.fullName}</div>
-              ) : null}
+                <Field name="fullName" placeholder="Your Full Name" />
+                {errors.fullName && touched.fullName ? (
+                  <div>{errors.fullName}</div>
+                ) : null}
 
-              <Field name="password" placeholder="Password" type={"password"} />
-              {errors.password && touched.password ? (
-                <div>{errors.password}</div>
-              ) : null}
-              <button type="submit">
-                {loading ? <span className="loader"></span> : "Let's Do It"}
-              </button>
+                <Field
+                  name="password"
+                  placeholder="Password"
+                  type={"password"}
+                />
+                {errors.password && touched.password ? (
+                  <div>{errors.password}</div>
+                ) : null}
+                <Field
+                  name="verificationCode"
+                  placeholder="verificationCode"
+                  type={"password"}
+                  style={{ display: "none" }}
+                  value={randomNumber}
+                />
+                <button type="submit" onClick={randomVerificationNumber}>
+                  {loading ? <span className="loader"></span> : "Let's Do It"}
+                </button>
+              </Form>
+            )
+          ) : (
+            <Form>
+              <input
+                type="number"
+                placeholder="verification code"
+                onChange={(e) => {
+                  verificationController(e.target.value);
+                }}
+              />
             </Form>
           )}
         </Formik>
