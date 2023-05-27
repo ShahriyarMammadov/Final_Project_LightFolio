@@ -18,7 +18,6 @@ const SignupPage = () => {
 
   const handleSignupAuth = async (values) => {
     try {
-      setLoading(true);
       let { data } = await axios.post(
         "http://localhost:3000/register",
         values,
@@ -28,7 +27,7 @@ const SignupPage = () => {
       );
 
       if (data?.created) {
-        setLoading(false);
+        navigate("/login");
         const sendEmail = () => {
           emailjs
             .sendForm(
@@ -39,7 +38,7 @@ const SignupPage = () => {
             )
             .then(
               (result) => {
-                null;
+                console.log(result);
               },
               (error) => {
                 console.log(error.text);
@@ -47,41 +46,59 @@ const SignupPage = () => {
             );
         };
         sendEmail();
-        setFormChanged(false);
+      } else {
+        setError(`email is already registered!!`);
+        alert("email is already registered!!");
+        navigate("/login");
       }
-      setError(data.errors);
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (finish) {
-    navigate("/login");
-  } else {
-    null;
-  }
-  console.log(finish);
-
   const randomVerificationNumber = () => {
+    setLoading(true);
     const randomNum = Math.floor(Math.random() * 9000) + 1000;
     setRandomNumber(randomNum);
+
+    var templateParams = {
+      email: form.current[1].value,
+      verificationCode: randomNum.toString(),
+    };
+
+    emailjs
+      .send(
+        "service_8545699",
+        "template_nd84v7x",
+        templateParams,
+        "yBlJtI3RX3LO5fbXF"
+      )
+      .then(
+        function (response) {
+          console.log("SUCCESS!", response.status, response.text);
+          setFormChanged(false);
+          setLoading(false);
+        },
+        function (error) {
+          alert("FAILED...", error);
+          setLoading(false);
+        }
+      );
   };
 
   const verificationController = (code) => {
-    console.log(code);
     if (+code === randomNumber) {
-      console.log(randomNumber);
       setFinish(true);
+    } else {
+      setError("verification code is not correct");
     }
   };
-
-  console.log(randomNumber);
 
   return (
     <div id="signUpPage">
       <Helmet>
         <title>Create your free account - LightFolio</title>
+        <meta name="description" content="photoGraphers studio photo" />
       </Helmet>
       <div className="form">
         <div className="headerTxt">
@@ -97,7 +114,7 @@ const SignupPage = () => {
           }}
           validationSchema={signupSchema}
           onSubmit={(values) => {
-            handleSignupAuth(values);
+            finish ? handleSignupAuth(values) : null;
           }}
         >
           {formChanged ? (
@@ -131,13 +148,6 @@ const SignupPage = () => {
                 {errors.password && touched.password ? (
                   <div>{errors.password}</div>
                 ) : null}
-                <Field
-                  name="verificationCode"
-                  placeholder="verificationCode"
-                  type={"password"}
-                  style={{ display: "none" }}
-                  value={randomNumber}
-                />
                 <button type="submit" onClick={randomVerificationNumber}>
                   {loading ? <span className="loader"></span> : "Let's Do It"}
                 </button>
@@ -152,6 +162,7 @@ const SignupPage = () => {
                   verificationController(e.target.value);
                 }}
               />
+              {error && <div>{error}</div>}
             </Form>
           )}
         </Formik>
