@@ -1,3 +1,4 @@
+const { whatsNewAdded } = require("../Controllers/adminController");
 const { register, login } = require("../controllers/authControllers");
 const {
   getUserById,
@@ -54,6 +55,9 @@ function userRouter(app) {
 
   app.post("/profilePhotoUpdate/:id", profilePhotoUpdated);
   app.post("/uploads/:id", imageDownload);
+
+  // ADMIN PANEL
+  app.post("/whatsNew", whatsNewAdded);
 
   app.put("/user/:id", updateUserData);
 

@@ -12,6 +12,54 @@
   .ant-col {
     margin-top: 40px;
   }
+
+  #newArea {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .whatsNewArea {
+
+      button {
+        padding: 10px;
+        font-weight: 700;
+        border: 6px solid black;
+        border-radius: 20px;
+        transition: all 1s;
+
+        &:hover {
+          background-color: green;
+          color: white;
+        }
+      }
+
+      input,
+      textarea {
+        border: 3px solid gray;
+        border-radius: 10px;
+        padding: 10px 5px;
+        margin: 20px 0;
+      }
+
+      .timeInput {
+        width: 25%;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      .new {
+        input {
+          width: 60%;
+          margin: 0 60px 0 0;
+          font-weight: 700;
+        }
+
+        textarea {
+          font-weight: 500;
+          width: 80%;
+        }
+      }
+    }
+  }
 }
 
 // .ant-table-wrapper {

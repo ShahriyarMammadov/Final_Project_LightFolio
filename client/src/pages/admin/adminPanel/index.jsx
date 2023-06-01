@@ -5,11 +5,16 @@ import "./index.scss";
 import { Input, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
-import { Col, Row, Statistic, Button, Dropdown } from "antd";
+import { Col, Row, Statistic, Button, Dropdown, Select, Space } from "antd";
+import moment from "moment";
 
 const AdminPanel = () => {
   let [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newTime, setNewTime] = useState("");
+  const [newHeaderText, setNewHeaderText] = useState("");
+  const [author, setAuthor] = useState("");
+  const [newAboutText, setNewAboutText] = useState("");
 
   const toast = useToast();
 
@@ -134,23 +139,32 @@ const AdminPanel = () => {
     },
   ];
 
-  const handleSortAscending = () => {
-    let newData = userData.sort((a, b) => a.fullName - b.fullName);
+  // const handleSortAscending = () => {
+  //   let newData = userData.sort((a, b) => a.fullName - b.fullName);
+  // };
+  // const handleSortDescending = () => {
+  //   let newData = userData.sort((a, b) => b.fullName - a.fullName);
+  // };
+
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
   };
-  const handleSortDescending = () => {
-    let newData = userData.sort((a, b) => b.fullName - a.fullName);
+  const onSearchNew = (value) => {
+    console.log("search:", value);
   };
 
-  const items = [
-    {
-      key: "1",
-      label: <a onClick={handleSortAscending}>Sort By Ascending</a>,
-    },
-    {
-      key: "2",
-      label: <a onClick={handleSortDescending}>Sort By Descending</a>,
-    },
-  ];
+  const newDataSender = async () => {
+    try {
+      const { data } = await axios.post("http://localhost:3000/whatsNew", {
+        author: author,
+        newAboutText: newAboutText,
+        newHeaderText: newHeaderText,
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div id="adminPanel">
@@ -179,15 +193,62 @@ const AdminPanel = () => {
           }}
         />
       </div>
-      <Dropdown
-        menu={{
-          items,
-        }}
-        placement="bottomRight"
-        arrow
-      >
-        <Button>Sort By Full Name</Button>
-      </Dropdown>
+
+      <div id="newArea">
+        <h3>What's new today</h3>
+
+        <div className="whatsNewArea">
+          <input
+            className="timeInput"
+            type="text"
+            value={moment().format("MMMM Do YYYY, h:mm:ss a")}
+          />
+          <div className="new">
+            <input
+              type="text"
+              placeholder="new Basliq"
+              onChange={(e) => {
+                setNewHeaderText(e.target.value);
+              }}
+            />
+            <Select
+              showSearch
+              placeholder="Select a person"
+              optionFilterProp="children"
+              onChange={onChange}
+              onSearch={onSearchNew}
+              filterOption={(input, option) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              }
+              options={[
+                {
+                  value: "Admin",
+                  label: "Admin",
+                },
+                {
+                  value: "Shahriyar Mammadov",
+                  label: "Shahriyar Mammadov",
+                },
+              ]}
+            />
+            <div>
+              <textarea
+                name="newText"
+                id="newText"
+                rows="10"
+                placeholder="Whats new??"
+                onChange={(e) => {
+                  setNewAboutText(e.target.value);
+                }}
+              ></textarea>
+            </div>
+
+            <button onClick={newDataSender}>Added</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

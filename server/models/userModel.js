@@ -83,6 +83,14 @@ const userSchema = new mongoose.Schema(
         rating: { type: Number, default: 5 },
       },
     ],
+    whatsNew: [
+      {
+        newHeaderText: String,
+        newAboutText: String,
+        author: String,
+        date: String,
+      },
+    ],
   },
   { timestamps: true }
 );
