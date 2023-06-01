@@ -15,7 +15,7 @@ const AdminRoot = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.getAllUserDataReducer);
+  // const userData = useSelector((state) => state.getAllUserDataReducer);
 
   useEffect(() => {
     const verifyUser = async () => {

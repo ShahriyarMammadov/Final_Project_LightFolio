@@ -147,7 +147,7 @@ const AdminPanel = () => {
   // };
 
   const onChange = (value) => {
-    console.log(`selected ${value}`);
+    setAuthor(value);
   };
   const onSearchNew = (value) => {
     console.log("search:", value);
@@ -212,8 +212,8 @@ const AdminPanel = () => {
               }}
             />
             <Select
-              showSearch
-              placeholder="Select a person"
+              // showSearch
+              placeholder="Select Author"
               optionFilterProp="children"
               onChange={onChange}
               onSearch={onSearchNew}

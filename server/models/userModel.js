@@ -89,6 +89,7 @@ const userSchema = new mongoose.Schema(
         newAboutText: String,
         author: String,
         date: String,
+        reading: { type: Boolean, default: false },
       },
     ],
   },

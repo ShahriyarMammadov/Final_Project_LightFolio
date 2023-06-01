@@ -1,8 +1,31 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./index.scss";
+import { useSelector } from "react-redux";
+import { Badge } from "antd";
+import axios from "axios";
 
 const AdminLeftNav = () => {
+  const userData = useSelector((state) => state.getAllUserDataReducer);
+  console.log(userData);
+
+  const readingUpdated = async () => {
+    try {
+      const { data } = await axios.patch(
+        `http://localhost:3000/readingUpdate`,
+        { id: userData?.data._id }
+      );
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const unreadCount = userData?.data?.whatsNew?.filter(
+    (item) => !item.reading
+  )?.length;
+
   return (
     <div>
       <div className="leftNav">
@@ -38,9 +61,11 @@ const AdminLeftNav = () => {
         </NavLink>
         {/* <div className="studioNav">123456789</div> */}
 
-        <div className="whatsNew">
+        <div className="whatsNew" onClick={readingUpdated}>
           <i className="fa-solid fa-bell"></i>
-          <h5>What's New</h5>
+          <Badge count={unreadCount}>
+            <h5>What's New</h5>
+          </Badge>
         </div>
       </div>
     </div>

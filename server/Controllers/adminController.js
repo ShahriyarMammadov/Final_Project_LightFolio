@@ -25,3 +25,19 @@ module.exports.whatsNewAdded = async (req, res) => {
     console.log(error);
   }
 };
+
+module.exports.readingUpdate = async (req, res) => {
+  const userId = req.body.id;
+  console.log(userId)
+
+  try {
+    const result = await LightFolioUsers.updateOne(
+      { _id: userId },
+      { $set: { "whatsNew.$[].reading": true } }
+    );
+    res.status(200).json({ success: true, message: "Updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "error" });
+  }
+};
