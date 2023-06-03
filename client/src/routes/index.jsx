@@ -23,6 +23,7 @@ import AllGalleriesDetail from "../pages/site/allGalleriesDetail";
 import AdminPanel from "../pages/admin/adminPanel";
 import { useSelector } from "react-redux";
 import WishListPage from "../pages/site/wishListPage";
+import WhatsNewPage from "../pages/admin/whatsNewPage";
 
 const ROUTES = [
   {
@@ -110,6 +111,10 @@ const ROUTES = [
       {
         path: "galleries/galleriesDetail/:id/",
         element: <GalleryDetailPage />,
+      },
+      {
+        path: "whatsNew/",
+        element: <WhatsNewPage />,
       },
       {
         path: "*",

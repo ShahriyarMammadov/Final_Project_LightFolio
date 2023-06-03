@@ -473,7 +473,7 @@ const DashboardPage = () => {
                     <h4>No recent notifications</h4>
                   </div>
                 ) : (
-                  userData?.data?.activity?.map((element, index) => {
+                  userData?.data?.activity?.reverse().map((element, index) => {
                     return (
                       <Link to={"/crm/dashboard"} key={index}>
                         <div className="card">
@@ -482,6 +482,10 @@ const DashboardPage = () => {
                               <i className="fa-solid fa-unlock"></i>
                             ) : element.activityName === "Email Changed" ? (
                               <i className="fa-solid fa-envelope-open-text"></i>
+                            ) : element.activityName === "Name Updated" ? (
+                              <i className="fa-solid fa-pen-nib"></i>
+                            ) : element.activityName === "Name Updated" ? (
+                              <i className="fa-solid fa-signature"></i>
                             ) : (
                               <i className="fa-solid fa-signature"></i>
                             )}

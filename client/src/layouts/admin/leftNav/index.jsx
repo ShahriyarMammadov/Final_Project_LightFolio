@@ -1,15 +1,18 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useFetchers, useNavigate } from "react-router-dom";
 import "./index.scss";
 import { useSelector } from "react-redux";
 import { Badge } from "antd";
 import axios from "axios";
 
 const AdminLeftNav = () => {
+  const [reading, setReading] = useState(Boolean);
   const userData = useSelector((state) => state.getAllUserDataReducer);
-  console.log(userData);
+
+  const navigate = useNavigate();
 
   const readingUpdated = async () => {
+    setReading(false);
     try {
       const { data } = await axios.patch(
         `http://localhost:3000/readingUpdate`,
@@ -61,7 +64,13 @@ const AdminLeftNav = () => {
         </NavLink>
         {/* <div className="studioNav">123456789</div> */}
 
-        <div className="whatsNew" onClick={readingUpdated}>
+        <div
+          className="whatsNew"
+          onClick={() => {
+            readingUpdated();
+            navigate("/admin/whatsNew");
+          }}
+        >
           <i className="fa-solid fa-bell"></i>
           <Badge count={unreadCount}>
             <h5>What's New</h5>
