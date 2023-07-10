@@ -11,6 +11,9 @@ import moment from "moment";
 const AdminPanel = () => {
   let [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newDate, setNewDate] = useState(
+    moment().format("MMMM Do YYYY, h:mm:ss a")
+  );
   const [newTime, setNewTime] = useState("");
   const [newHeaderText, setNewHeaderText] = useState("");
   const [author, setAuthor] = useState("");
@@ -155,12 +158,17 @@ const AdminPanel = () => {
 
   const newDataSender = async () => {
     try {
-      const { data } = await axios.post("http://localhost:3000/whatsNew", {
-        author: author,
-        newAboutText: newAboutText,
-        newHeaderText: newHeaderText,
-      });
-      console.log(data);
+      if (newAboutText != "" && newHeaderText != "") {
+        const { data } = await axios.post("http://localhost:3000/whatsNew", {
+          author: author,
+          newAboutText: newAboutText,
+          newHeaderText: newHeaderText,
+          newDate: newDate,
+        });
+        console.log(data);
+      } else {
+        alert("please added ");
+      }
     } catch (error) {
       console.log(error);
     }

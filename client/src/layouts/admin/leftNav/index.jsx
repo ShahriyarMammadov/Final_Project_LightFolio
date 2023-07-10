@@ -25,7 +25,7 @@ const AdminLeftNav = () => {
     }
   };
 
-  const unreadCount = userData?.data?.whatsNew?.filter(
+  var unreadCount = userData?.data?.whatsNew?.filter(
     (item) => !item.reading
   )?.length;
 

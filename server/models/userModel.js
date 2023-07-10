@@ -88,7 +88,7 @@ const userSchema = new mongoose.Schema(
         newHeaderText: String,
         newAboutText: String,
         author: String,
-        date: String,
+        newDate: String,
         reading: { type: Boolean, default: false },
       },
     ],

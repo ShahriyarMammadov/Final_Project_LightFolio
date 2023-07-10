@@ -9,12 +9,20 @@ const WhatsNewPage = () => {
   return (
     <div id="whatsNew">
       <div className="whatsNew">
-        {userDataRedux?.data?.whatsNew?.map((element) => {
+        {userDataRedux?.data?.whatsNew?.map((element, index) => {
           return (
             <>
-              <p>{element.author}</p>
-              <p>{element.newHeaderText}</p>
-              <p>{element.newAboutText}</p>
+              <div className="card" key={index}>
+                <div>
+                  <h6>{element.newHeaderText}</h6>
+                  <p>{element.author}</p>
+                </div>
+                <div>
+                  <p>{element?.newDate}</p>
+                  <p>{element.newAboutText}</p>
+                </div>
+              </div>
+              <hr />
             </>
           );
         })}
